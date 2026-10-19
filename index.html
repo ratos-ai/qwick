@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Северный Кавказ | Путеводитель</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner" onclick="location.hash = ''">
+      <h1>🏔 Северный Кавказ</h1>
+      <p>Достопримечательности, заведения, туры и билеты в одном путеводителе</p>
+    </div>
+    <button class="account-btn" id="accountBtn">👤 Личный кабинет</button>
+  </header>
+
+  <!-- ======================= СПИСОК ======================= -->
+  <div class="container" id="mainView">
+
+    <div class="region-filter">
+      <label for="regionSelect">Регион:</label>
+      <select id="regionSelect">
+        <option value="all">Все регионы</option>
+        <option value="rso">Северная Осетия — Алания</option>
+        <option value="kbr">Кабардино-Балкария</option>
+        <option value="kchr">Карачаево-Черкесия</option>
+        <option value="stav">Ставропольский край</option>
+        <option value="ing">Ингушетия</option>
+        <option value="che">Чечня</option>
+        <option value="dag">Дагестан</option>
+      </select>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="attractions" role="tab">📍 Достопримечательности</button>
+      <button class="tab-btn" data-tab="places" role="tab">🍽 Заведения</button>
+      <button class="tab-btn" data-tab="tours" role="tab">🎫 Туры и билеты</button>
+      <button class="tab-btn" data-tab="favorites" role="tab">
+        ⭐ Избранное <span class="badge" id="favCount">0</span>
+      </button>
+    </div>
+
+    <div class="tab-panel active" id="panel-attractions">
+      <div class="cards-grid" id="attractionsGrid"></div>
+    </div>
+
+    <div class="tab-panel" id="panel-places">
+      <div class="cards-grid" id="placesGrid"></div>
+    </div>
+
+    <div class="tab-panel" id="panel-tours">
+      <div class="cards-grid" id="toursGrid"></div>
+    </div>
+
+    <div class="tab-panel" id="panel-favorites">
+      <div class="cards-grid" id="favoritesGrid">
+        <div class="empty-state" id="favEmpty">
+          <span class="icon">💫</span>
+          Пока ничего не добавлено в избранное.<br>
+          Нажмите на сердечко у любого места, чтобы сохранить его здесь.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= ДЕТАЛЬНАЯ СТРАНИЦА ======================= -->
+  <div class="container detail-page" id="detailView"></div>
+
+  <!-- ======================= ЛИЧНЫЙ КАБИНЕТ ======================= -->
+  <div class="container account-page" id="accountView">
+    <button class="back-btn" id="accountBack">← На главную</button>
+    <div id="accountContent"></div>
+  </div>
+
+  <!-- ======================= МОДАЛЬНОЕ ОКНО ЗАКАЗА ======================= -->
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <h2 id="modalTitle">Оформление заказа</h2>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <footer>
+    Северный Кавказ · Путеводитель · Данные о ценах носят справочный характер
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
