@@ -9,6 +9,7 @@ BASE_DIR = Path(__file__).parent.parent
 class Auth(BaseModel):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 90
+    REFRESH_TOKEN_COOKIE_SECURE: bool = True
     ALGORITHM: str = "RS256"
     PRIVATE_KEY_PATH: str = "certs/private-key.pem"
     PUBLIC_KEY_PATH: str = "certs/public-key.pem"
