@@ -12,7 +12,5 @@ class UserCreate(UserBase):
 
 class UserResponse(UserBase):
     id: int
-    username: str
-    email: EmailStr
 
     model_config = ConfigDict(from_attributes=True)
