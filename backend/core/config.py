@@ -36,7 +36,9 @@ class Settings(BaseSettings):
 
     auth: Auth = Auth()
 
-    model_config = SettingsConfigDict(env_nested_delimiter="__", env_file=".env")
+    model_config = SettingsConfigDict(
+        env_nested_delimiter="__", env_file=".env", extra="ignore"
+    )
 
 
 settings = Settings()

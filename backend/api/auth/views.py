@@ -144,4 +144,4 @@ async def logout(
             await session.commit()
 
     response.delete_cookie(key="refresh_token")
-    return {"detail": "Успешный выход из системы"}
+    return {"detail": "Successful logout"}
