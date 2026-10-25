@@ -1336,8 +1336,8 @@ async function apiRequest(url, options = {}) {
     // 3. Если токен протух (401), пробуем обновить его через Refresh Token
     if (
         response.status === 401 &&
-        url !== "/auth/refresh" &&
-        url !== "/auth/login"
+        url !== "/api/auth/refresh" &&
+        url !== "/api/auth/login"
     ) {
         const refreshSuccess = await tryRefreshToken()
         if (refreshSuccess) {
@@ -1356,7 +1356,7 @@ async function apiRequest(url, options = {}) {
 // Функция попытки обновления токена
 async function tryRefreshToken() {
     try {
-        const response = await fetch("/auth/refresh", {
+        const response = await fetch("/api/auth/refresh", {
             method: "POST",
             credentials: "include", // Отправляем куку
         })
@@ -1860,7 +1860,7 @@ function renderAccount() {
                 formData.append("password", password)
 
                 try {
-                    const response = await fetch("/auth/login", {
+                    const response = await fetch("/api/auth/login", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/x-www-form-urlencoded",
@@ -1895,7 +1895,7 @@ function renderAccount() {
                 const errorEl = document.getElementById("regError")
 
                 try {
-                    const response = await fetch("/auth/register", {
+                    const response = await fetch("/api/auth/register", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ username, email, password }),
@@ -1965,7 +1965,7 @@ function renderAccount() {
     document.getElementById("logoutBtn").addEventListener("click", async () => {
         try {
             // Стучимся на бэкенд, чтобы он удалил Refresh Token из БД и стер куку
-            await fetch("/auth/logout", {
+            await fetch("/api/auth/logout", {
                 method: "POST",
                 credentials: "include",
             })
@@ -2032,6 +2032,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initRegionFilter()
     renderAll()
     renderRoute()
+    initAuth()
     window.addEventListener("hashchange", renderRoute)
 
     // Кнопка личного кабинета
