@@ -11,7 +11,7 @@ class Favorite(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE", index=True)
+        ForeignKey("users.id", ondelete="CASCADE"), index=True
     )
     item_id: Mapped[str] = mapped_column(String, index=True)
     item_type: Mapped[str] = mapped_column(String(20))
@@ -19,6 +19,6 @@ class Favorite(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-    __table_args__ = UniqueConstraint(
-        "user_id", "item_id", "item_type", name="uq_user_favorite"
+    __table_args__ = (
+        UniqueConstraint("user_id", "item_id", "item_type", name="uq_user_favorite"),
     )
