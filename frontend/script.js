@@ -1813,43 +1813,144 @@ function closeModal() {
 }
 
 // ============================================================
-// ЛИЧНЫЙ КАБИНЕТ
+// ЛИЧНЫЙ КАБИНЕТ И АВТОРИЗАЦИЯ
 // ============================================================
 
 function renderAccount() {
-    const user = getUser()
     const content = document.getElementById("accountContent")
 
-    if (!user) {
-        // Форма «входа» (демо: просто имя + контакт)
+    // Если пользователь НЕ авторизован (нет токена)
+    if (!accessToken) {
         content.innerHTML = `
-      <h2 style="color:#0b3b5c; margin-bottom:1rem;">Вход в личный кабинет</h2>
-      <p style="color:#7a8ea3; margin-bottom:1.5rem;">Введите имя и контакт — они будут использоваться для оформления заказов.</p>
-      <form class="auth-form" id="authForm">
-        <label>Ваше имя</label>
-        <input type="text" id="authName" placeholder="Иван" required>
-        <label>Телефон или email</label>
-        <input type="text" id="authContact" placeholder="+7 999 123-45-67" required>
+      <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid #d0dae6; padding-bottom: 0.5rem;">
+        <button class="tab-btn active" id="tabLogin" style="box-shadow: none;">Вход</button>
+        <button class="tab-btn" id="tabRegister" style="box-shadow: none;">Регистрация</button>
+      </div>
+
+      <!-- Форма входа -->
+      <form class="auth-form" id="loginForm">
+        <label>Имя пользователя (username)</label>
+        <input type="text" id="loginUsername" required>
+        <label>Пароль</label>
+        <input type="password" id="loginPassword" required>
         <button class="submit-btn" type="submit">Войти</button>
+        <p id="loginError" style="color: #e74c3c; margin-top: 0.5rem; display: none;"></p>
+      </form>
+
+      <!-- Форма регистрации (скрыта по умолчанию) -->
+      <form class="auth-form" id="registerForm" style="display: none;">
+        <label>Имя пользователя (username)</label>
+        <input type="text" id="regUsername" required>
+        <label>Email</label>
+        <input type="email" id="regEmail" required>
+        <label>Пароль</label>
+        <input type="password" id="regPassword" required>
+        <button class="submit-btn" type="submit">Зарегистрироваться</button>
+        <p id="regError" style="color: #e74c3c; margin-top: 0.5rem; display: none;"></p>
       </form>
     `
 
-        document.getElementById("authForm").addEventListener("submit", (e) => {
-            e.preventDefault()
-            const name = document.getElementById("authName").value.trim()
-            const contact = document.getElementById("authContact").value.trim()
-            if (!name || !contact) return
-            setUser({ name, contact })
-            renderAccount()
+        // Логика переключения вкладок Вход/Регистрация
+        document.getElementById("tabLogin").addEventListener("click", () => {
+            document.getElementById("tabLogin").classList.add("active")
+            document.getElementById("tabRegister").classList.remove("active")
+            document.getElementById("loginForm").style.display = "block"
+            document.getElementById("registerForm").style.display = "none"
         })
+        document.getElementById("tabRegister").addEventListener("click", () => {
+            document.getElementById("tabRegister").classList.add("active")
+            document.getElementById("tabLogin").classList.remove("active")
+            document.getElementById("registerForm").style.display = "block"
+            document.getElementById("loginForm").style.display = "none"
+        })
+
+        // Обработка формы ВХОДА
+        document
+            .getElementById("loginForm")
+            .addEventListener("submit", async (e) => {
+                e.preventDefault()
+                const username = document.getElementById("loginUsername").value
+                const password = document.getElementById("loginPassword").value
+                const errorEl = document.getElementById("loginError")
+
+                // FastAPI OAuth2 ожидает данные в формате x-www-form-urlencoded
+                const formData = new URLSearchParams()
+                formData.append("username", username)
+                formData.append("password", password)
+
+                try {
+                    const response = await fetch("/auth/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: formData,
+                        credentials: "include", // Получаем HttpOnly куку
+                    })
+
+                    const data = await response.json()
+
+                    if (response.ok) {
+                        accessToken = data.access_token // Сохраняем токен в памяти
+                        renderAccount() // Перерисовываем страницу (теперь покажет профиль)
+                    } else {
+                        errorEl.textContent = data.detail || "Ошибка входа"
+                        errorEl.style.display = "block"
+                    }
+                } catch (err) {
+                    errorEl.textContent = "Ошибка сети"
+                    errorEl.style.display = "block"
+                }
+            })
+
+        // Обработка формы РЕГИСТРАЦИИ
+        document
+            .getElementById("registerForm")
+            .addEventListener("submit", async (e) => {
+                e.preventDefault()
+                const username = document.getElementById("regUsername").value
+                const email = document.getElementById("regEmail").value
+                const password = document.getElementById("regPassword").value
+                const errorEl = document.getElementById("regError")
+
+                try {
+                    const response = await fetch("/auth/register", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, email, password }),
+                    })
+
+                    const data = await response.json()
+
+                    if (response.ok) {
+                        // Если регистрация успешна, автоматически логинимся
+                        document.getElementById("tabLogin").click()
+                        document.getElementById("loginUsername").value =
+                            username
+                        document.getElementById("loginPassword").value =
+                            password
+                        // Можно автоматически вызвать submit, но пусть пользователь сам нажмет "Войти"
+                    } else {
+                        errorEl.textContent =
+                            data.detail || "Ошибка регистрации"
+                        errorEl.style.display = "block"
+                    }
+                } catch (err) {
+                    errorEl.textContent = "Ошибка сети"
+                    errorEl.style.display = "block"
+                }
+            })
+
         return
     }
 
-    const orders = getOrders()
+    // --- ЕСЛИ ПОЛЬЗОВАТЕЛЬ АВТОРИЗОВАН ---
+
+    const orders = getOrders() // Пока оставляем заказы в localStorage, так как бэкенда для них нет
 
     let ordersHtml = ""
     if (orders.length === 0) {
-        ordersHtml = `<div class="empty-state"><span class="icon">🧾</span>У вас пока нет заказов.<br>Выберите тур или билет во вкладке «Туры и билеты».</div>`
+        ordersHtml = `<div class="empty-state"><span class="icon">🧾</span>У вас пока нет заказов.</div>`
     } else {
         ordersHtml = orders
             .map(
@@ -1857,9 +1958,7 @@ function renderAccount() {
       <div class="order-card">
         <div class="order-title">${o.tourTitle}</div>
         <div class="order-meta">${o.region} · ${o.date} · ${o.qty} чел.</div>
-        <div class="order-meta">Заказ ${o.id} от ${o.createdAt}</div>
         <div class="order-price">${o.total.toLocaleString("ru-RU")} ₽</div>
-        <span class="order-status">${o.status}</span>
       </div>
     `,
             )
@@ -1869,8 +1968,8 @@ function renderAccount() {
     content.innerHTML = `
     <div class="account-header">
       <div>
-        <h2>👤 ${user.name}</h2>
-        <p style="color:#7a8ea3; font-size:0.9rem;">${user.contact}</p>
+        <h2>👤 Личный кабинет</h2>
+        <p style="color:#27ae60; font-size:0.9rem;">Вы успешно авторизованы</p>
       </div>
       <button class="logout-btn" id="logoutBtn">Выйти</button>
     </div>
@@ -1879,12 +1978,24 @@ function renderAccount() {
     <div class="orders-list">${ordersHtml}</div>
 
     <h3 style="color:#0b3b5c; margin:2rem 0 1rem;">⭐ Избранное (${favorites.length})</h3>
-    <p style="color:#7a8ea3; margin-bottom:1rem;">Избранные места доступны на главной вкладке «Избранное».</p>
   `
 
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-        logoutUser()
-        renderAccount()
+    // Обработка кнопки ВЫХОДА
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+        try {
+            // Стучимся на бэкенд, чтобы он удалил Refresh Token из БД и стер куку
+            await fetch("/auth/logout", {
+                method: "POST",
+                credentials: "include",
+            })
+        } catch (e) {
+            console.error("Ошибка при выходе", e)
+        }
+
+        // Очищаем локальные данные
+        accessToken = null
+        currentUser = null
+        renderAccount() // Перерисовываем (покажет форму входа)
     })
 }
 
