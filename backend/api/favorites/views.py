@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.api.auth import get_current_user
 from backend.core.database import get_db
 from backend.models import User
-from backend.schemas import UserFavoriteResponse
+from backend.schemas import UserFavoriteCreate, UserFavoriteResponse
 
 from .crud import add_user_favorite, delete_user_favorite, get_user_favorites
 
@@ -24,7 +24,7 @@ async def get_user_favorites_view(
 @router.post("/", response_model=UserFavoriteResponse, status_code=201)
 async def add_user_favorite_view(
     user: Annotated[User, Depends(get_current_user)],
-    new_fav: UserFavoriteResponse,
+    new_fav: UserFavoriteCreate,
     session: Annotated[AsyncSession, Depends(get_db)],
 ) -> UserFavoriteResponse:
     return await add_user_favorite(

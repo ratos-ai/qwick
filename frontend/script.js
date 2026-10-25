@@ -1362,9 +1362,25 @@ async function tryRefreshToken() {
     }
 }
 
+async function loadFavoritesFromBackend() {
+    if (!accessToken) return
+    try {
+        const response = await apiRequest("/api/favorites/")
+        if (response.ok) {
+            const data = await response.json()
+            favorites = data.map((fav) => fav.item_id)
+            saveFavorites(favorites)
+            renderAll()
+        }
+    } catch (error) {
+        console.error("Ошибка загрузки избранного:", error)
+    }
+}
+
 async function initAuth() {
     await tryRefreshToken()
     if (accessToken) {
+        await loadFavoritesFromBackend()
         renderAccount()
     }
 }
@@ -1419,16 +1435,51 @@ function findTour(id) {
 function isFavorite(id) {
     return favorites.includes(id)
 }
-function toggleFavorite(id) {
-    if (isFavorite(id)) favorites = favorites.filter((f) => f !== id)
-    else favorites.push(id)
+async function toggleFavorite(id, type) {
+    const isFav = isFavorite(id)
+
+    if (isFav) {
+        favorites = favorites.filter((f) => f !== id)
+    } else {
+        favorites.push(id)
+    }
     saveFavorites(favorites)
     renderAll()
+
     if (
         location.hash.startsWith("#/attraction/") ||
         location.hash.startsWith("#/place/")
-    )
+    ) {
         renderRoute()
+    }
+
+    if (accessToken) {
+        try {
+            if (isFav) {
+                await apiRequest(`/api/favorites/${id}`, { method: "DELETE" })
+            } else {
+                await apiRequest("/api/favorites/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ item_id: id, item_type: type }),
+                })
+            }
+        } catch (error) {
+            console.error("Ошибка синхронизации избранного:", error)
+            if (isFav) favorites.push(id)
+            else favorites = favorites.filter((f) => f !== id)
+
+            saveFavorites(favorites)
+            renderAll()
+            if (
+                location.hash.startsWith("#/attraction/") ||
+                location.hash.startsWith("#/place/")
+            ) {
+                renderRoute()
+            }
+            alert("Не удалось сохранить избранное. Проверьте соединение.")
+        }
+    }
 }
 
 // ============================================================
@@ -1478,7 +1529,7 @@ function createCard(item) {
 
     card.querySelector(".fav-btn").addEventListener("click", (e) => {
         e.stopPropagation()
-        toggleFavorite(item.id)
+        toggleFavorite(item.id, item.type)
     })
     card.addEventListener("click", () => {
         location.hash = `#/${item.type}/${item.id}`
@@ -1674,7 +1725,7 @@ function renderDetailPage(type, id) {
     })
     document
         .getElementById("heroFav")
-        .addEventListener("click", () => toggleFavorite(item.id))
+        .addEventListener("click", () => toggleFavorite(item.id, item.type))
 
     // Кнопки покупки в блоке туров
     detailView.querySelectorAll(".buy-btn[data-tour-id]").forEach((btn) => {
@@ -1837,7 +1888,6 @@ function renderAccount() {
                 const password = document.getElementById("loginPassword").value
                 const errorEl = document.getElementById("loginError")
 
-                // FastAPI OAuth2 ожидает данные в формате x-www-form-urlencoded
                 const formData = new URLSearchParams()
                 formData.append("username", username)
                 formData.append("password", password)
@@ -1856,6 +1906,7 @@ function renderAccount() {
 
                     if (response.ok) {
                         accessToken = data.access_token
+                        await loadFavoritesFromBackend()
                         renderAccount()
                     } else {
                         errorEl.textContent = data.detail || "Ошибка входа"
@@ -1951,6 +2002,10 @@ function renderAccount() {
 
         accessToken = null
         currentUser = null
+
+        favorites = loadFavorites()
+
+        renderAll()
         renderAccount()
     })
 }
