@@ -1406,20 +1406,6 @@ let favorites = loadFavorites()
 // ПОЛЬЗОВАТЕЛЬ И ЗАКАЗЫ
 // ============================================================
 
-function getUser() {
-    try {
-        return JSON.parse(localStorage.getItem(STORAGE_USER))
-    } catch {
-        return null
-    }
-}
-function setUser(user) {
-    localStorage.setItem(STORAGE_USER, JSON.stringify(user))
-}
-function logoutUser() {
-    localStorage.removeItem(STORAGE_USER)
-}
-
 function getOrders() {
     try {
         return JSON.parse(localStorage.getItem(STORAGE_ORDERS)) || []
@@ -1780,11 +1766,6 @@ function openOrderModal(tourId) {
         const orders = getOrders()
         orders.unshift(order)
         saveOrders(orders)
-
-        // Если пользователь не авторизован — запомним имя/контакт для будущих заказов
-        if (!getUser()) {
-            setUser({ name, contact })
-        }
 
         body.innerHTML = `
       <div class="success-msg">
