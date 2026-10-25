@@ -1317,23 +1317,17 @@ const tours = [
 // РАБОТА С API И АВТОРИЗАЦИЕЙ
 // ============================================================
 
-let accessToken = null // Храним токен только в оперативной памяти!
-let currentUser = null // Здесь будем хранить данные пользователя
+let accessToken = null
+let currentUser = null
 
-// Базовая функция для запросов к API
 async function apiRequest(url, options = {}) {
-    // 1. Подставляем заголовки
     options.headers = options.headers || {}
     if (accessToken) {
         options.headers["Authorization"] = `Bearer ${accessToken}`
     }
-    // ВАЖНО: credentials: 'include' заставляет браузер отправлять HttpOnly куку с Refresh Token
     options.credentials = "include"
 
-    // 2. Делаем запрос
     let response = await fetch(url, options)
-
-    // 3. Если токен протух (401), пробуем обновить его через Refresh Token
     if (
         response.status === 401 &&
         url !== "/api/auth/refresh" &&
@@ -1341,11 +1335,9 @@ async function apiRequest(url, options = {}) {
     ) {
         const refreshSuccess = await tryRefreshToken()
         if (refreshSuccess) {
-            // Если обновились — повторяем исходный запрос с новым токеном
             options.headers["Authorization"] = `Bearer ${accessToken}`
             response = await fetch(url, options)
         } else {
-            // Если обновить не удалось — разлогиниваем
             logoutUser()
         }
     }
@@ -1353,12 +1345,11 @@ async function apiRequest(url, options = {}) {
     return response
 }
 
-// Функция попытки обновления токена
 async function tryRefreshToken() {
     try {
         const response = await fetch("/api/auth/refresh", {
             method: "POST",
-            credentials: "include", // Отправляем куку
+            credentials: "include",
         })
         if (response.ok) {
             const data = await response.json()
@@ -1371,12 +1362,9 @@ async function tryRefreshToken() {
     }
 }
 
-// При загрузке страницы пытаемся обновить токен (вдруг кука еще жива)
 async function initAuth() {
     await tryRefreshToken()
     if (accessToken) {
-        // Если токен обновился, можно запросить данные юзера (если у тебя есть эндпоинт /users/me)
-        // Пока просто отрисуем кабинет
         renderAccount()
     }
 }
@@ -1782,8 +1770,6 @@ function openOrderModal(tourId) {
             closeModal()
             location.hash = "#/account"
         })
-
-        // Обновим счётчик, если открыт кабинет
         if (location.hash === "#/account") renderAccount()
     })
 }
@@ -1800,7 +1786,6 @@ function closeModal() {
 function renderAccount() {
     const content = document.getElementById("accountContent")
 
-    // Если пользователь НЕ авторизован (нет токена)
     if (!accessToken) {
         content.innerHTML = `
       <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid #d0dae6; padding-bottom: 0.5rem;">
@@ -1831,7 +1816,6 @@ function renderAccount() {
       </form>
     `
 
-        // Логика переключения вкладок Вход/Регистрация
         document.getElementById("tabLogin").addEventListener("click", () => {
             document.getElementById("tabLogin").classList.add("active")
             document.getElementById("tabRegister").classList.remove("active")
@@ -1845,7 +1829,6 @@ function renderAccount() {
             document.getElementById("loginForm").style.display = "none"
         })
 
-        // Обработка формы ВХОДА
         document
             .getElementById("loginForm")
             .addEventListener("submit", async (e) => {
@@ -1866,14 +1849,14 @@ function renderAccount() {
                             "Content-Type": "application/x-www-form-urlencoded",
                         },
                         body: formData,
-                        credentials: "include", // Получаем HttpOnly куку
+                        credentials: "include",
                     })
 
                     const data = await response.json()
 
                     if (response.ok) {
-                        accessToken = data.access_token // Сохраняем токен в памяти
-                        renderAccount() // Перерисовываем страницу (теперь покажет профиль)
+                        accessToken = data.access_token
+                        renderAccount()
                     } else {
                         errorEl.textContent = data.detail || "Ошибка входа"
                         errorEl.style.display = "block"
@@ -1884,7 +1867,6 @@ function renderAccount() {
                 }
             })
 
-        // Обработка формы РЕГИСТРАЦИИ
         document
             .getElementById("registerForm")
             .addEventListener("submit", async (e) => {
@@ -1904,13 +1886,11 @@ function renderAccount() {
                     const data = await response.json()
 
                     if (response.ok) {
-                        // Если регистрация успешна, автоматически логинимся
                         document.getElementById("tabLogin").click()
                         document.getElementById("loginUsername").value =
                             username
                         document.getElementById("loginPassword").value =
                             password
-                        // Можно автоматически вызвать submit, но пусть пользователь сам нажмет "Войти"
                     } else {
                         errorEl.textContent =
                             data.detail || "Ошибка регистрации"
@@ -1925,9 +1905,7 @@ function renderAccount() {
         return
     }
 
-    // --- ЕСЛИ ПОЛЬЗОВАТЕЛЬ АВТОРИЗОВАН ---
-
-    const orders = getOrders() // Пока оставляем заказы в localStorage, так как бэкенда для них нет
+    const orders = getOrders()
 
     let ordersHtml = ""
     if (orders.length === 0) {
@@ -1961,10 +1939,8 @@ function renderAccount() {
     <h3 style="color:#0b3b5c; margin:2rem 0 1rem;">⭐ Избранное (${favorites.length})</h3>
   `
 
-    // Обработка кнопки ВЫХОДА
     document.getElementById("logoutBtn").addEventListener("click", async () => {
         try {
-            // Стучимся на бэкенд, чтобы он удалил Refresh Token из БД и стер куку
             await fetch("/api/auth/logout", {
                 method: "POST",
                 credentials: "include",
@@ -1973,10 +1949,9 @@ function renderAccount() {
             console.error("Ошибка при выходе", e)
         }
 
-        // Очищаем локальные данные
         accessToken = null
         currentUser = null
-        renderAccount() // Перерисовываем (покажет форму входа)
+        renderAccount()
     })
 }
 
@@ -1990,7 +1965,6 @@ function renderRoute() {
     const accountView = document.getElementById("accountView")
     const hash = location.hash
 
-    // Детальная страница
     const detailMatch = hash.match(/^#\/(attraction|place)\/([a-z0-9]+)$/i)
     if (detailMatch) {
         mainView.classList.add("page-hidden")
@@ -2001,7 +1975,6 @@ function renderRoute() {
         return
     }
 
-    // Личный кабинет
     if (hash === "#/account") {
         mainView.classList.add("page-hidden")
         detailView.classList.remove("active")
@@ -2011,7 +1984,6 @@ function renderRoute() {
         return
     }
 
-    // Главная
     detailView.classList.remove("active")
     accountView.classList.remove("active")
     mainView.classList.remove("page-hidden")
@@ -2035,18 +2007,15 @@ document.addEventListener("DOMContentLoaded", () => {
     initAuth()
     window.addEventListener("hashchange", renderRoute)
 
-    // Кнопка личного кабинета
     document.getElementById("accountBtn").addEventListener("click", () => {
         location.hash = "#/account"
     })
 
-    // Закрытие модального окна
     document.getElementById("modalClose").addEventListener("click", closeModal)
     document.getElementById("orderModal").addEventListener("click", (e) => {
         if (e.target === document.getElementById("orderModal")) closeModal()
     })
 
-    // Назад из кабинета
     document.getElementById("accountBack").addEventListener("click", () => {
         location.hash = ""
     })
