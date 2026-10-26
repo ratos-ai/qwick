@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.api.auth import get_current_admin
@@ -20,7 +20,9 @@ async def get_attractions_view(
     return await get_attractions(region=region, session=session)
 
 
-@router.post("/", response_model=AttractionResponse, status_code=201)
+@router.post(
+    "/", response_model=AttractionResponse, status_code=status.HTTP_201_CREATED
+)
 async def create_attraction_view(
     attraction: AttractionCreate,
     session: Annotated[AsyncSession, Depends(get_db)],
