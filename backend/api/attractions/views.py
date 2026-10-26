@@ -15,7 +15,7 @@ router = APIRouter(prefix="/attractions", tags=["Attractions"])
 
 @router.get("/", response_model=list[AttractionResponse])
 async def get_attractions_view(
-    region: str | None, session: Annotated[AsyncSession, Depends(get_db)]
+    session: Annotated[AsyncSession, Depends(get_db)], region: str | None = None
 ) -> list[AttractionResponse]:
     return await get_attractions(region=region, session=session)
 
