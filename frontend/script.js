@@ -16,532 +16,7 @@ const REGIONS = {
 // ДОСТОПРИМЕЧАТЕЛЬНОСТИ (сокращённо — полные данные как в предыдущей версии)
 // ============================================================
 
-const attractions = [
-    // RSO
-    {
-        id: "a1",
-        type: "attraction",
-        region: "rso",
-        title: "Аланский Свято-Успенский монастырь",
-        category: "Религия · Архитектура",
-        emoji: "⛪",
-        shortDesc: "Самая высокогорная православная обитель России.",
-        meta: "📍 Куртатинское ущелье",
-        facts: [
-            { label: "Высота", value: "1300 м" },
-            { label: "Основан", value: "2000 год" },
-        ],
-        sections: [
-            {
-                heading: "История",
-                text: "Основан в 2000 году. Первая монашеская община Северной Осетии после перерыва.",
-            },
-            {
-                heading: "Архитектура",
-                text: "Византийское зодчество, белоснежные стены, золотые купола.",
-            },
-        ],
-    },
-    {
-        id: "a2",
-        type: "attraction",
-        region: "rso",
-        title: "Город мёртвых Даргавс",
-        category: "История · Некрополь",
-        emoji: "🏚",
-        shortDesc: "Загадочный некрополь с каменными склепами.",
-        meta: "📍 70 км от Владикавказа",
-        facts: [
-            { label: "Возраст", value: "XIV–XVIII века" },
-            { label: "Склепов", value: "около 100" },
-        ],
-        sections: [
-            {
-                heading: "Легенды",
-                text: "Во время чумы здоровые уходили в склепы, чтобы не заражать родных.",
-            },
-            {
-                heading: "Архитектура",
-                text: "Склепы без раствора, пирамидальные крыши, высота до 10 м.",
-            },
-        ],
-    },
-    {
-        id: "a3",
-        type: "attraction",
-        region: "rso",
-        title: "Цейское ущелье и ледник «Сказка»",
-        category: "Природа · Горы",
-        emoji: "🏔",
-        shortDesc: "Живописное ущелье с канатной дорогой к леднику.",
-        meta: "📍 Алагирский район",
-        facts: [
-            { label: "Высота", value: "1900–3000 м" },
-            { label: "Канатка", value: "~1,6 км" },
-        ],
-        sections: [
-            {
-                heading: "Канатная дорога",
-                text: "Поднимает к леднику на высоту 2200 м, поездка ~15 минут.",
-            },
-            {
-                heading: "Треккинг",
-                text: "Маршруты к водопадам и святилищу Реком.",
-            },
-        ],
-    },
-    {
-        id: "a4",
-        type: "attraction",
-        region: "rso",
-        title: "Водопад «Кольцо»",
-        category: "Природа · Водопад",
-        emoji: "💧",
-        shortDesc: "Река пробила отверстие в скале и падает через кольцо.",
-        meta: "📍 Куртатинское ущелье",
-        facts: [
-            { label: "Высота", value: "~2 м" },
-            { label: "Река", value: "Карцадон" },
-        ],
-        sections: [
-            {
-                heading: "Уникальность",
-                text: "Естественная каменная арка диаметром около 2 метров.",
-            },
-        ],
-    },
-    {
-        id: "a5",
-        type: "attraction",
-        region: "rso",
-        title: "Кармадонское ущелье",
-        category: "Природа · Ущелье",
-        emoji: "🌄",
-        shortDesc: "Живописное ущелье, известное трагедией 2002 года.",
-        meta: "📍 Пригородный район",
-        facts: [
-            { label: "Длина", value: "~15 км" },
-            { label: "Река", value: "Геналдон" },
-        ],
-        sections: [
-            {
-                heading: "Трагедия",
-                text: "В 2002 году сошёл ледник Колка, погибли более 100 человек.",
-            },
-        ],
-    },
-    {
-        id: "a6",
-        type: "attraction",
-        region: "rso",
-        title: "Замок-крепость Ханаз",
-        category: "История · Крепость",
-        emoji: "🏰",
-        shortDesc: "Средневековая цитадель в Дигорском ущелье.",
-        meta: "📍 Дигорское ущелье",
-        facts: [
-            { label: "Возраст", value: "XIV–XVII века" },
-            { label: "Высота", value: "~10 м" },
-        ],
-        sections: [
-            {
-                heading: "История",
-                text: "Оборонительное сооружение местных феодалов.",
-            },
-        ],
-    },
-    {
-        id: "a7",
-        type: "attraction",
-        region: "rso",
-        title: "Мидаграбинские водопады",
-        category: "Природа · Водопад",
-        emoji: "💦",
-        shortDesc: "Главный водопад падает с высоты 750 метров.",
-        meta: "📍 Даргавская долина",
-        facts: [
-            { label: "Высота", value: "~750 м" },
-            { label: "Количество", value: "более 8" },
-        ],
-        sections: [
-            {
-                heading: "Зрелище",
-                text: "Одни из самых высоких водопадов Европы.",
-            },
-        ],
-    },
-    {
-        id: "a8",
-        type: "attraction",
-        region: "rso",
-        title: "Национальный парк «Алания»",
-        category: "Природа · Заповедник",
-        emoji: "🌿",
-        shortDesc: "Охраняемая территория с маршрутами в Дигорском ущелье.",
-        meta: "📍 Дигорское ущелье",
-        facts: [
-            { label: "Площадь", value: "~55 000 га" },
-            { label: "Основан", value: "1998 год" },
-        ],
-        sections: [
-            {
-                heading: "Маршруты",
-                bullets: [
-                    "Водопад Галдоридон",
-                    "Водопад Шагацикомдон",
-                    "Ледник Цейского массива",
-                ],
-            },
-        ],
-    },
-    // KBR
-    {
-        id: "kbr1",
-        type: "attraction",
-        region: "kbr",
-        title: "Чегемские водопады",
-        category: "Природа · Водопад",
-        emoji: "💧",
-        shortDesc: "Каскад водопадов в Чегемском ущелье.",
-        meta: "📍 ~50 км от Нальчика",
-        facts: [{ label: "Высота", value: "до 30–50 м" }],
-        sections: [
-            {
-                heading: "Что рядом",
-                bullets: [
-                    "Серебряное озеро",
-                    "Голубое озеро",
-                    "Туристическая база «Чегем»",
-                ],
-            },
-        ],
-    },
-    {
-        id: "kbr2",
-        type: "attraction",
-        region: "kbr",
-        title: "Голубые озёра",
-        category: "Природа · Озёра",
-        emoji: "💙",
-        shortDesc: "Пять карстовых озёр с бирюзовой водой.",
-        meta: "📍 ~30 км от Нальчика",
-        facts: [
-            { label: "Количество", value: "5 озёр" },
-            { label: "Главное", value: "Церик-Кель" },
-        ],
-        sections: [
-            {
-                heading: "Особенность",
-                text: "Вода не замерзает зимой из-за минерального состава.",
-            },
-        ],
-    },
-    {
-        id: "kbr3",
-        type: "attraction",
-        region: "kbr",
-        title: "Эльбрус (Приэльбрусье)",
-        category: "Природа · Горы",
-        emoji: "🏔",
-        shortDesc: "Высочайшая вершина Европы и горнолыжный курорт.",
-        meta: "📍 Приэльбрусье",
-        facts: [
-            { label: "Высота", value: "5642 м" },
-            { label: "Канатки", value: "до 3847 м" },
-        ],
-        sections: [
-            {
-                heading: "Курорт",
-                text: "Круглогодичный курорт: лыжи, треккинг, виды на вершины.",
-            },
-        ],
-    },
-    // KCHR
-    {
-        id: "kchr1",
-        type: "attraction",
-        region: "kchr",
-        title: "Домбай",
-        category: "Природа · Горы · Курорт",
-        emoji: "🏔",
-        shortDesc: "Горнолыжный и туристический центр с живописными полянами.",
-        meta: "📍 Карачаевский район",
-        facts: [
-            { label: "Высота", value: "1600–3000 м" },
-            { label: "Главная вершина", value: "Домбай-Ульген (4042 м)" },
-        ],
-        sections: [
-            {
-                heading: "Что посмотреть",
-                bullets: ["Домбайская поляна", "Белалакая", "Ущелье Аманауз"],
-            },
-        ],
-    },
-    {
-        id: "kchr2",
-        type: "attraction",
-        region: "kchr",
-        title: "Архыз",
-        category: "Природа · Горы · Курорт",
-        emoji: "🌲",
-        shortDesc: "Курорт с аланскими храмами и обсерваторией.",
-        meta: "📍 Зеленчукский район",
-        facts: [
-            { label: "Курорт", value: "«Архыз»" },
-            {
-                label: "Достопримечательности",
-                value: "Софийские озёра, аланские храмы",
-            },
-        ],
-        sections: [
-            {
-                heading: "История",
-                text: "Нижнеархызское городище X–XI веков, Лик Христа на скале.",
-            },
-        ],
-    },
-    {
-        id: "kchr3",
-        type: "attraction",
-        region: "kchr",
-        title: "Тебердинский заповедник",
-        category: "Природа · Заповедник",
-        emoji: "🌿",
-        shortDesc: "Один из старейших заповедников России.",
-        meta: "📍 Теберда",
-        facts: [
-            { label: "Основан", value: "1936 год" },
-            { label: "Площадь", value: "~85 000 га" },
-        ],
-        sections: [
-            {
-                heading: "Что посмотреть",
-                bullets: ["Клухорское озеро", "Водопады", "Музей природы"],
-            },
-        ],
-    },
-    // STAV
-    {
-        id: "stav1",
-        type: "attraction",
-        region: "stav",
-        title: "Гора Машук и Провал",
-        category: "Природа · История",
-        emoji: "⛰",
-        shortDesc: "Гора-лакколит с гротом Провал и панорамным видом.",
-        meta: "📍 Пятигорск",
-        facts: [
-            { label: "Высота", value: "993 м" },
-            { label: "Главное", value: "Грот Провал" },
-        ],
-        sections: [
-            {
-                heading: "Что посмотреть",
-                bullets: [
-                    "Грот Провал",
-                    "Эолова арфа",
-                    "Место дуэли Лермонтова",
-                ],
-            },
-        ],
-    },
-    {
-        id: "stav2",
-        type: "attraction",
-        region: "stav",
-        title: "Курортный парк Кисловодска",
-        category: "Природа · Парк",
-        emoji: "🌳",
-        shortDesc: "Один из крупнейших парков Европы с нарзанной галереей.",
-        meta: "📍 Кисловодск",
-        facts: [
-            { label: "Площадь", value: "~950 га" },
-            { label: "Главное", value: "Нарзанная галерея" },
-        ],
-        sections: [
-            {
-                heading: "Что посмотреть",
-                bullets: [
-                    "Нарзанная галерея",
-                    "Каскадная лестница",
-                    "Долина роз",
-                ],
-            },
-        ],
-    },
-    {
-        id: "stav3",
-        type: "attraction",
-        region: "stav",
-        title: "Музей-заповедник М.Ю. Лермонтова",
-        category: "История · Музей",
-        emoji: "🏛",
-        shortDesc: "Дом поэта и место его дуэли.",
-        meta: "📍 Пятигорск",
-        facts: [{ label: "Экспозиция", value: "Личные вещи, рукописи" }],
-        sections: [
-            {
-                heading: "Память о поэте",
-                text: "Здесь прошли последние дни Лермонтова.",
-            },
-        ],
-    },
-    // ING
-    {
-        id: "ing1",
-        type: "attraction",
-        region: "ing",
-        title: "Джейрахское ущелье",
-        category: "История · Природа",
-        emoji: "🏞",
-        shortDesc: "Музей под открытым небом с башнями и склепами.",
-        meta: "📍 Джейрахский район",
-        facts: [{ label: "Объектов", value: "более 100" }],
-        sections: [
-            {
-                heading: "Что посмотреть",
-                bullets: ["Вовнушки", "Эрзи", "Эгикал", "Тхаба-Ерды"],
-            },
-        ],
-    },
-    {
-        id: "ing2",
-        type: "attraction",
-        region: "ing",
-        title: "Башенный комплекс Вовнушки",
-        category: "История · Архитектура",
-        emoji: "🏰",
-        shortDesc:
-            "Средневековые башни на скалах, финалист «Семи чудес России».",
-        meta: "📍 Джейрахское ущелье",
-        facts: [
-            { label: "Возраст", value: "Средневековье" },
-            { label: "Статус", value: "Федеральный памятник" },
-        ],
-        sections: [
-            {
-                heading: "Легендарные башни",
-                text: "Один из самых ярких памятников ингушской архитектуры.",
-            },
-        ],
-    },
-    // CHE
-    {
-        id: "che1",
-        type: "attraction",
-        region: "che",
-        title: "Мечеть «Сердце Чечни»",
-        category: "Религия · Архитектура",
-        emoji: "🕌",
-        shortDesc: "Одна из крупнейших мечетей Европы в Грозном.",
-        meta: "📍 Грозный",
-        facts: [
-            { label: "Открыта", value: "2008 год" },
-            { label: "Вместимость", value: "более 10 000" },
-        ],
-        sections: [
-            {
-                heading: "Символ Грозного",
-                text: "Выполнена в османском стиле, ночью подсвечивается.",
-            },
-        ],
-    },
-    {
-        id: "che2",
-        type: "attraction",
-        region: "che",
-        title: "Озеро Кезеной-Ам",
-        category: "Природа · Озеро",
-        emoji: "💧",
-        shortDesc: "Высокогорное бирюзовое озеро на границе с Дагестаном.",
-        meta: "📍 Граница Чечни и Дагестана",
-        facts: [
-            { label: "Высота", value: "1869 м" },
-            { label: "Глубина", value: "до 72 м" },
-        ],
-        sections: [
-            {
-                heading: "Жемчужина Чечни",
-                text: "Самое высокогорное озеро республики.",
-            },
-        ],
-    },
-    {
-        id: "che3",
-        type: "attraction",
-        region: "che",
-        title: "Аргунское ущелье",
-        category: "Природа · История",
-        emoji: "🌄",
-        shortDesc: "Живописное ущелье с башнями и резиденцией Шамиля.",
-        meta: "📍 Веденский район",
-        facts: [{ label: "Река", value: "Аргун" }],
-        sections: [
-            {
-                heading: "История",
-                text: "Здесь находилась резиденция имама Шамиля.",
-            },
-        ],
-    },
-    // DAG
-    {
-        id: "dag1",
-        type: "attraction",
-        region: "dag",
-        title: "Сулакский каньон",
-        category: "Природа · Каньон",
-        emoji: "🏞",
-        shortDesc: "Самый глубокий каньон Европы с бирюзовой водой.",
-        meta: "📍 Долина реки Сулак",
-        facts: [
-            { label: "Глубина", value: "до 1920 м" },
-            { label: "Смотровая", value: "пос. Дубки" },
-        ],
-        sections: [
-            {
-                heading: "Грандиозный каньон",
-                text: "Один из глубочайших каньонов мира.",
-            },
-        ],
-    },
-    {
-        id: "dag2",
-        type: "attraction",
-        region: "dag",
-        title: "Гуниб",
-        category: "История · Природа",
-        emoji: "🏔",
-        shortDesc: "Аул с крепостными стенами времён Кавказской войны.",
-        meta: "📍 Гунибский район",
-        facts: [
-            { label: "История", value: "XIX век" },
-            { label: "Рядом", value: "Карадахская теснина" },
-        ],
-        sections: [
-            {
-                heading: "Историческое место",
-                text: "Сохранились крепостные стены времён Кавказской войны.",
-            },
-        ],
-    },
-    {
-        id: "dag3",
-        type: "attraction",
-        region: "dag",
-        title: "Самурский лиановый лес",
-        category: "Природа · Лес",
-        emoji: "🌿",
-        shortDesc: "Единственный в России субтропический лиановый лес.",
-        meta: "📍 Магарамкентский район",
-        facts: [
-            { label: "Тип", value: "Лиановый лес" },
-            { label: "Уникальность", value: "единственный в России" },
-        ],
-        sections: [
-            { heading: "Экосистема", text: "Лианы, пробковое дерево, лотосы." },
-        ],
-    },
-]
+let attractions = []
 
 // ============================================================
 // ЗАВЕДЕНИЯ (сокращённо)
@@ -1368,7 +843,7 @@ async function loadFavoritesFromBackend() {
         const response = await apiRequest("/api/favorites/")
         if (response.ok) {
             const data = await response.json()
-            favorites = data.map((fav) => fav.item_id)
+            favorites = data.map((fav) => String(fav.item_id))
             saveFavorites(favorites)
             renderAll()
         }
@@ -1377,11 +852,41 @@ async function loadFavoritesFromBackend() {
     }
 }
 
+async function updateHeaderUI() {
+    const accountBtn = document.getElementById("accountBtn")
+    const adminBtn = document.getElementById("adminBtn")
+
+    if (accessToken) {
+        try {
+            const res = await apiRequest("/api/auth/me")
+            if (res.ok) {
+                const user = await res.json()
+
+                accountBtn.textContent = `👤 ${user.username}`
+
+                if (user.is_superuser) {
+                    adminBtn.style.display = "inline-block"
+                } else {
+                    adminBtn.style.display = "none"
+                }
+            }
+        } catch (e) {
+            console.error("Ошибка загрузки профиля", e)
+        }
+    } else {
+        accountBtn.textContent = "👤 Личный кабинет"
+        adminBtn.style.display = "none"
+    }
+}
+
 async function initAuth() {
     await tryRefreshToken()
     if (accessToken) {
         await loadFavoritesFromBackend()
+        await updateHeaderUI()
         renderAccount()
+    } else {
+        updateHeaderUI()
     }
 }
 
@@ -1461,7 +966,10 @@ async function toggleFavorite(id, type) {
                 await apiRequest("/api/favorites/", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ item_id: id, item_type: type }),
+                    body: JSON.stringify({
+                        item_id: String(id),
+                        item_type: type,
+                    }),
                 })
             }
         } catch (error) {
@@ -1592,7 +1100,7 @@ function renderFavorites() {
     grid.querySelectorAll(".card").forEach((c) => c.remove())
     const allItems = [...attractions, ...places]
     const favItems = favorites
-        .map((id) => allItems.find((i) => i.id === id))
+        .map((id) => allItems.find((i) => String(i.id) === String(id)))
         .filter(Boolean)
     if (favItems.length === 0) {
         empty.style.display = "block"
@@ -1765,9 +1273,9 @@ function openOrderModal(tourId) {
     <label>Количество человек</label>
     <input type="number" id="orderQty" value="1" min="1" max="20">
     <label>Ваше имя</label>
-    <input type="text" id="orderName" placeholder="Иван" value="${getUser()?.name || ""}">
+    <input type="text" id="orderName" placeholder="Иван" value="">
     <label>Телефон или email</label>
-    <input type="text" id="orderContact" placeholder="+7..." value="${getUser()?.contact || ""}">
+    <input type="text" id="orderContact" placeholder="+7..." value="">
     <button class="confirm-btn" id="confirmOrderBtn">Подтвердить заказ</button>
   `
 
@@ -1907,6 +1415,7 @@ function renderAccount() {
                     if (response.ok) {
                         accessToken = data.access_token
                         await loadFavoritesFromBackend()
+                        await updateHeaderUI()
                         renderAccount()
                     } else {
                         errorEl.textContent = data.detail || "Ошибка входа"
@@ -2002,9 +1511,9 @@ function renderAccount() {
 
         accessToken = null
         currentUser = null
-
         favorites = loadFavorites()
 
+        updateHeaderUI()
         renderAll()
         renderAccount()
     })
@@ -2054,12 +1563,35 @@ function renderRoute() {
 // ЗАПУСК
 // ============================================================
 
-document.addEventListener("DOMContentLoaded", () => {
+async function loadAttractions() {
+    try {
+        const response = await fetch("/api/attractions/")
+        if (response.ok) {
+            const data = await response.json()
+            attractions = data.map((item) => ({
+                ...item,
+                id: String(item.id),
+                type: "attraction",
+                shortDesc: item.short_desc,
+            }))
+
+            renderAll()
+        }
+    } catch (error) {
+        console.error("Error loading attractions:", error)
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
     initTabs()
     initRegionFilter()
-    renderAll()
+
+    await loadAttractions()
+    await initAuth()
+
     renderRoute()
-    initAuth()
+    renderAll()
+
     window.addEventListener("hashchange", renderRoute)
 
     document.getElementById("accountBtn").addEventListener("click", () => {

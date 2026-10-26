@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Админ-панель | Добавление мест</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        background: #f2f4f8;
+        padding: 2rem;
+        color: #1e2a3a;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #0b3b5c;
+        margin-bottom: 1.5rem;
+      }
+      label {
+        display: block;
+        font-weight: bold;
+        margin-top: 1rem;
+        margin-bottom: 0.3rem;
+        color: #4a5d73;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid #d0dae6;
+        border-radius: 6px;
+        font-family: inherit;
+      }
+      textarea {
+        height: 100px;
+        resize: vertical;
+      }
+      button {
+        margin-top: 1.5rem;
+        width: 100%;
+        padding: 0.8rem;
+        background: #1d6a96;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0b3b5c;
+      }
+      #message {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 6px;
+        display: none;
+      }
+      .success {
+        background: #e8f8ef;
+        color: #27ae60;
+        border: 1px solid #27ae60;
+      }
+      .error {
+        background: #fdf0ef;
+        color: #c0392b;
+        border: 1px solid #c0392b;
+      }
+      .hint {
+        font-size: 0.8rem;
+        color: #7a8ea3;
+        margin-top: 0.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="max-width: 600px; margin: 0 auto 1rem auto">
+      <a
+        href="/"
+        style="
+          color: #1d6a96;
+          text-decoration: none;
+          font-weight: bold;
+          font-size: 1rem;
+        "
+      >
+        ← На главную
+      </a>
+    </div>
+
+    <div class="container">
+      <h1>Добавление достопримечательности</h1>
+
+      <form id="addForm">
+        <label>Название</label>
+        <input
+          type="text"
+          id="title"
+          required
+          placeholder="Например: Эльбрус"
+        />
+
+        <label>Регион (код)</label>
+        <select id="region" required>
+          <option value="rso">Северная Осетия</option>
+          <option value="kbr">Кабардино-Балкария</option>
+          <option value="kchr">Карачаево-Черкесия</option>
+          <option value="stav">Ставропольский край</option>
+          <option value="ing">Ингушетия</option>
+          <option value="che">Чечня</option>
+          <option value="dag">Дагестан</option>
+        </select>
+
+        <label>Категория</label>
+        <input
+          type="text"
+          id="category"
+          required
+          placeholder="Природа · Горы"
+        />
+
+        <label>Эмодзи (иконка)</label>
+        <input type="text" id="emoji" required value="🏔" maxlength="5" />
+
+        <label>Краткое описание</label>
+        <input
+          type="text"
+          id="short_desc"
+          required
+          placeholder="Высочайшая вершина Европы."
+        />
+
+        <label>Локация (meta)</label>
+        <input type="text" id="meta" required placeholder="📍 Приэльбрусье" />
+
+        <label>Факты (в формате JSON-массива)</label>
+        <textarea id="facts" required>
+[{"label": "Высота", "value": "5642 м"}]</textarea
+        >
+        <div class="hint">Формат: [{"label": "...", "value": "..."}]</div>
+
+        <label>Секции (в формате JSON-массива)</label>
+        <textarea id="sections" required>
+[{"heading": "Курорт", "text": "Круглогодичный курорт."}]</textarea
+        >
+        <div class="hint">Формат: [{"heading": "...", "text": "..."}]</div>
+
+        <button type="submit">Добавить в базу данных</button>
+      </form>
+
+      <div id="message"></div>
+    </div>
+
+    <script>
+      let token = null;
+      const msgDiv = document.getElementById("message");
+
+      async function initAuth() {
+        try {
+          // 1. Получаем токен по куке
+          const res = await fetch("/api/auth/refresh", {
+            method: "POST",
+            credentials: "include",
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            token = data.access_token;
+
+            // 2. Спрашиваем у сервера: "Кто я?"
+            const userRes = await fetch("/api/auth/me", {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (userRes.ok) {
+              const userData = await userRes.json();
+
+              // 3. Проверяем, админ ли я
+              if (!userData.is_superuser) {
+                // Если не админ — выкидываем на главную
+                alert("У вас нет прав для доступа к этой странице.");
+                window.location.href = "/";
+              } else {
+                console.log("Добро пожаловать, Админ!");
+              }
+            }
+          } else {
+            showMessage(
+              "Вы не авторизованы. Сначала войдите на главной странице.",
+              "error",
+            );
+            // Можно тоже редиректнуть: window.location.href = '/';
+          }
+        } catch (e) {
+          showMessage("Ошибка соединения с сервером", "error");
+        }
+      }
+
+      // 2. Обработка формы
+      document
+        .getElementById("addForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          if (!token) {
+            showMessage(
+              "Нет доступа. Войдите как администратор на главной странице.",
+              "error",
+            );
+            return;
+          }
+
+          // Собираем данные
+          const payload = {
+            title: document.getElementById("title").value,
+            region: document.getElementById("region").value,
+            category: document.getElementById("category").value,
+            emoji: document.getElementById("emoji").value,
+            short_desc: document.getElementById("short_desc").value,
+            meta: document.getElementById("meta").value,
+            // Парсим JSON из текстовых полей
+            facts: JSON.parse(document.getElementById("facts").value || "[]"),
+            sections: JSON.parse(
+              document.getElementById("sections").value || "[]",
+            ),
+          };
+
+          try {
+            const res = await fetch("/api/attractions/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(payload),
+            });
+
+            if (res.status === 201) {
+              showMessage(
+                "Достопримечательность успешно добавлена!",
+                "success",
+              );
+              document.getElementById("addForm").reset();
+            } else if (res.status === 403) {
+              showMessage(
+                "Ошибка 403: У вас нет прав администратора.",
+                "error",
+              );
+            } else if (res.status === 401) {
+              showMessage(
+                "Ошибка 401: Сессия истекла. Обновите страницу и войдите заново.",
+                "error",
+              );
+            } else {
+              const err = await res.json();
+              showMessage(`Ошибка: ${JSON.stringify(err.detail)}`, "error");
+            }
+          } catch (error) {
+            showMessage(
+              "Ошибка при отправке данных. Проверьте консоль (F12).",
+              "error",
+            );
+            console.error(error);
+          }
+        });
+
+      function showMessage(text, type) {
+        msgDiv.textContent = text;
+        msgDiv.className = type;
+        msgDiv.style.display = "block";
+      }
+
+      // Запуск
+      initAuth();
+    </script>
+  </body>
+</html>
