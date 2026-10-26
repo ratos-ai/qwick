@@ -12,5 +12,6 @@ class UserCreate(UserBase):
 
 class UserResponse(UserBase):
     id: int
+    is_superuser: bool
 
     model_config = ConfigDict(from_attributes=True)
