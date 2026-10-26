@@ -1,3 +1,4 @@
+from sqlalchemy import text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .base import Base
@@ -10,3 +11,6 @@ class User(Base):
     username: Mapped[str] = mapped_column(index=True, unique=True)
     password_hash: Mapped[str]
     email: Mapped[str] = mapped_column(index=True, unique=True)
+    is_superuser: Mapped[bool] = mapped_column(
+        default=False, server_default=text("false")
+    )

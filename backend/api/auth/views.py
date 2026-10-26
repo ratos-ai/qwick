@@ -13,7 +13,16 @@ from backend.core.database import get_db
 from backend.models import RefreshToken, User
 from backend.schemas import Token, UserCreate, UserResponse
 
+from .deps import get_current_user
+
 router = APIRouter(prefix="/auth", tags=["Authorization"])
+
+
+@router.get("/me", response_model=UserResponse)
+async def get_me(
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> UserResponse:
+    return current_user
 
 
 @router.post(
