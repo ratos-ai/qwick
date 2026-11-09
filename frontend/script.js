@@ -1018,8 +1018,12 @@ function createCard(item) {
     card.className = "card"
     const regionName = REGIONS[item.region] || ""
 
+    const imageHtml = item.imageUrl
+        ? `<img src="${item.imageUrl}" alt="${item.title}" class="card-img-real" />`
+        : `<div class="card-img">${item.emoji || "📍"}</div>`
+
     card.innerHTML = `
-    <div class="card-img">${item.emoji || "📍"}</div>
+    ${imageHtml} 
     <div class="card-body">
       <div class="card-region">${regionName}</div>
       <div class="card-category">${item.category}</div>
@@ -1158,10 +1162,16 @@ function renderDetailPage(type, id) {
     const item = findItem(type, id)
     const detailView = document.getElementById("detailView")
 
+    // 1. Если объекта нет — показываем ошибку и ВЫХОДИМ из функции
     if (!item) {
         detailView.innerHTML = `<a href="#" class="back-btn">← Назад</a><div class="empty-state"><span class="icon">🤷</span>Не найдено.</div>`
         return
     }
+
+    // 2. Если объект есть, теперь безопасно создаем картинку или эмодзи
+    const heroImageHtml = item.imageUrl
+        ? `<img src="${item.imageUrl}" alt="${item.title}" class="hero-img-real" />`
+        : `<div class="hero-emoji">${item.emoji || "📍"}</div>`
 
     const fav = isFavorite(item.id)
     const regionName = REGIONS[item.region] || ""
@@ -1207,10 +1217,11 @@ function renderDetailPage(type, id) {
     `
     }
 
+    // 3. Рендерим страницу, вставляя heroImageHtml
     detailView.innerHTML = `
     <a href="#" class="back-btn" id="backBtn">← Назад к списку</a>
     <div class="detail-hero">
-      <div class="hero-emoji">${item.emoji || "📍"}</div>
+      ${heroImageHtml} <!-- ВСТАВЛЯЕМ НАШУ ПЕРЕМЕННУЮ СЮДА -->
       <div class="hero-text">
         <div class="hero-region">${regionName}</div>
         <div class="hero-cat">${item.category}</div>
@@ -1592,6 +1603,7 @@ async function loadAttractions() {
                 id: String(item.id),
                 type: "attraction",
                 shortDesc: item.short_desc,
+                imageUrl: item.image_url,
             }))
 
             renderAll()
