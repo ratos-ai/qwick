@@ -18,6 +18,7 @@ services:
       - "8000:8000"
     volumes:
       - ".:/app"
+      - "./uploads:/app/uploads"
 
   db:
     image: postgres:16-alpine
@@ -64,6 +65,7 @@ services:
     volumes:
       - "./nginx/default.conf:/etc/nginx/conf.d/default.conf"
       - "./frontend:/usr/share/nginx/html"
+      - "./uploads:/usr/share/nginx/html/uploads"
     depends_on:
       - backend
 
