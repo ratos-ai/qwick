@@ -1288,49 +1288,61 @@ function openOrderModal(tourId) {
         totalEl.innerHTML = `<span>Итого</span><span>${(tour.price * qty).toLocaleString("ru-RU")} ₽</span>`
     })
 
-    document.getElementById("confirmOrderBtn").addEventListener("click", () => {
-        const date = document.getElementById("orderDate").value
-        const qty = Math.max(1, Math.min(20, parseInt(qtyInput.value) || 1))
-        const name =
-            document.getElementById("orderName").value.trim() || "Гость"
-        const contact =
-            document.getElementById("orderContact").value.trim() || "—"
+    document
+        .getElementById("confirmOrderBtn")
+        .addEventListener("click", async () => {
+            const date = document.getElementById("orderDate").value
+            const qty = Math.max(1, Math.min(20, parseInt(qtyInput.value) || 1))
+            const name =
+                document.getElementById("orderName").value.trim() || "Гость"
+            const contact =
+                document.getElementById("orderContact").value.trim() || "—"
 
-        const order = {
-            id: "ORD-" + Date.now(),
-            tourId: tour.id,
-            tourTitle: tour.title,
-            region: REGIONS[tour.region],
-            date,
-            qty,
-            total: tour.price * qty,
-            name,
-            contact,
-            createdAt: new Date().toLocaleString("ru-RU"),
-            status: "Подтверждён",
-        }
+            // Формируем данные для отправки на сервер
+            const payload = {
+                tour_id: String(tour.id),
+                tour_title: tour.title,
+                region: REGIONS[tour.region],
+                date: date,
+                quantity: qty,
+                total_price: tour.price * qty,
+                name: name,
+                contact: contact,
+                is_paid: false,
+            }
 
-        const orders = getOrders()
-        orders.unshift(order)
-        saveOrders(orders)
+            try {
+                const res = await apiRequest("/api/orders/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                })
 
-        body.innerHTML = `
-      <div class="success-msg">
-        <span class="big-icon">✅</span>
-        <h3 style="color:#0b3b5c; margin-bottom:0.4rem;">Заказ оформлен!</h3>
-        <p style="color:#4a5d73;">Номер: <strong>${order.id}</strong></p>
-        <p style="color:#4a5d73;">${tour.title} · ${date} · ${qty} чел.</p>
-        <p style="color:#c0392b; font-weight:700; font-size:1.2rem;">${order.total.toLocaleString("ru-RU")} ₽</p>
-        <button class="back-btn" style="margin-top:1rem;" id="goToAccount">Перейти в личный кабинет</button>
-      </div>
-    `
-
-        document.getElementById("goToAccount").addEventListener("click", () => {
-            closeModal()
-            location.hash = "#/account"
+                if (res.status === 201) {
+                    // Успешный ответ (показываем окошко успеха)
+                    body.innerHTML = `
+              <div class="success-msg">
+                <span class="big-icon">✅</span>
+                <h3 style="color:#0b3b5c; margin-bottom:0.4rem;">Заказ оформлен!</h3>
+                <p style="color:#4a5d73;">${tour.title} · ${date} · ${qty} чел.</p>
+                <p style="color:#c0392b; font-weight:700; font-size:1.2rem;">${payload.total_price.toLocaleString("ru-RU")} ₽</p>
+                <button class="back-btn" style="margin-top:1rem;" id="goToAccount">Перейти в личный кабинет</button>
+              </div>
+            `
+                    document
+                        .getElementById("goToAccount")
+                        .addEventListener("click", () => {
+                            closeModal()
+                            location.hash = "#/account"
+                        })
+                } else {
+                    alert("Ошибка при создании заказа. Попробуйте позже.")
+                }
+            } catch (e) {
+                console.error(e)
+                alert("Ошибка сети")
+            }
         })
-        if (location.hash === "#/account") renderAccount()
-    })
 }
 
 function closeModal() {
@@ -1342,7 +1354,7 @@ function closeModal() {
 // ЛИЧНЫЙ КАБИНЕТ И АВТОРИЗАЦИЯ
 // ============================================================
 
-function renderAccount() {
+async function renderAccount() {
     const content = document.getElementById("accountContent")
 
     if (!accessToken) {
@@ -1465,23 +1477,30 @@ function renderAccount() {
         return
     }
 
-    const orders = getOrders()
-
     let ordersHtml = ""
-    if (orders.length === 0) {
-        ordersHtml = `<div class="empty-state"><span class="icon">🧾</span>У вас пока нет заказов.</div>`
-    } else {
-        ordersHtml = orders
-            .map(
-                (o) => `
-      <div class="order-card">
-        <div class="order-title">${o.tourTitle}</div>
-        <div class="order-meta">${o.region} · ${o.date} · ${o.qty} чел.</div>
-        <div class="order-price">${o.total.toLocaleString("ru-RU")} ₽</div>
-      </div>
-    `,
-            )
-            .join("")
+    try {
+        const ordersRes = await apiRequest("/api/orders/")
+        const orders = await ordersRes.json()
+
+        if (orders.length === 0) {
+            ordersHtml = `<div class="empty-state"><span class="icon">🧾</span>У вас пока нет заказов.</div>`
+        } else {
+            ordersHtml = orders
+                .map(
+                    (o) => `
+                <div class="order-card">
+                    <div class="order-title">${o.tour_title}</div>
+                    <div class="order-meta">${o.region} · ${o.date} · ${o.quantity} чел.</div>
+                    <div class="order-price">${o.total_price.toLocaleString("ru-RU")} ₽</div>
+                    <button class="logout-btn" onclick="deleteOrder(${o.id})" style="margin-top:10px; padding: 5px 10px; font-size: 0.8rem;">Отменить</button>
+                </div>
+            `,
+                )
+                .join("")
+        }
+    } catch (e) {
+        console.error(e)
+        ordersHtml = `<div class="empty-state"><span class="icon">⚠️</span>Не удалось загрузить заказы.</div>`
     }
 
     content.innerHTML = `
@@ -1579,6 +1598,22 @@ async function loadAttractions() {
         }
     } catch (error) {
         console.error("Error loading attractions:", error)
+    }
+}
+
+async function deleteOrder(orderId) {
+    if (!confirm("Вы уверены, что хотите отменить заказ?")) return
+    try {
+        const res = await apiRequest(`/api/orders/${orderId}`, {
+            method: "DELETE",
+        })
+        if (res.status === 204) {
+            renderAccount()
+        } else {
+            alert("Ошибка при удалении")
+        }
+    } catch (e) {
+        console.error(e)
     }
 }
 
