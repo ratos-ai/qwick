@@ -15,6 +15,7 @@ class Attraction(Base):
     emoji: Mapped[str] = mapped_column(String(10), default="📍")
     short_desc: Mapped[str] = mapped_column(Text)
     meta: Mapped[str] = mapped_column(String(255))
+    image_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
     facts: Mapped[list[dict]] = mapped_column(JSONB, default=list)
     sections: Mapped[list[dict]] = mapped_column(JSONB, default=list)

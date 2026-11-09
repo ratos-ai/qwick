@@ -8,6 +8,7 @@ class AttractionBase(BaseModel):
     emoji: str = "📍"
     short_desc: str
     meta: str
+    image_url: str | None = None
     facts: list[dict] = []
     sections: list[dict] = []
 
