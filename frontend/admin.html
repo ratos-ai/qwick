@@ -120,6 +120,11 @@
               </div>
             </div>
 
+            <div class="form-group full-width">
+              <label>Фотография (необязательно)</label>
+              <input type="file" id="imageFile" accept="image/*" />
+            </div>
+
             <button type="submit" class="submit-btn">
               Сохранить в базу данных
             </button>
@@ -215,6 +220,33 @@
           e.preventDefault();
           if (!token) return showMessage("Нет доступа.", "error");
 
+          // 1. Сначала загружаем картинку (если она выбрана)
+          const fileInput = document.getElementById("imageFile");
+          let imageUrl = null;
+
+          if (fileInput.files.length > 0) {
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            try {
+              const uploadRes = await fetch("/api/attractions/upload", {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+              });
+
+              if (uploadRes.ok) {
+                const uploadData = await uploadRes.json();
+                imageUrl = uploadData.image_url; // Получили путь вида /uploads/xxx.jpg
+              } else {
+                return showMessage("Ошибка загрузки картинки", "error");
+              }
+            } catch (err) {
+              return showMessage("Ошибка сети при загрузке картинки", "error");
+            }
+          }
+
+          // 2. Отправляем данные достопримечательности в БД
           const payload = {
             title: document.getElementById("title").value,
             region: document.getElementById("region").value,
@@ -222,6 +254,7 @@
             emoji: document.getElementById("emoji").value,
             short_desc: document.getElementById("short_desc").value,
             meta: document.getElementById("meta").value,
+            image_url: imageUrl, // <--- Передаем полученный URL
             facts: JSON.parse(document.getElementById("facts").value || "[]"),
             sections: JSON.parse(
               document.getElementById("sections").value || "[]",
