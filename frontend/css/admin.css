@@ -1,0 +1,277 @@
+/* ================= ОБЩИЕ СТИЛИ ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, system-ui, sans-serif;
+  background: #f4f7f6;
+  color: #333;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ================= БОКОВОЕ МЕНЮ (SIDEBAR) ================= */
+.sidebar {
+  width: 260px;
+  background: #0b3b5c;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+  padding: 2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-nav {
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 1rem 1.2rem;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.nav-btn.active {
+  background: #1d6a96;
+  color: #fff;
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.back-link {
+  color: #f39c12;
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #e67e22;
+}
+
+/* ================= ОСНОВНОЙ КОНТЕНТ ================= */
+.main-content {
+  margin-left: 260px;
+  padding: 3rem;
+  width: calc(100% - 260px);
+}
+
+.page-title {
+  color: #0b3b5c;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+/* ================= ФОРМА ================= */
+.form-card {
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-weight: 600;
+  color: #4a5d73;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+input,
+select,
+textarea {
+  padding: 0.8rem;
+  border: 1px solid #d0dae6;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #1d6a96;
+  box-shadow: 0 0 0 3px rgba(29, 106, 150, 0.1);
+}
+
+textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: #7a8ea3;
+  margin-top: 0.3rem;
+}
+
+.submit-btn {
+  margin-top: 2rem;
+  width: 100%;
+  padding: 1rem;
+  background: #1d6a96;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submit-btn:hover {
+  background: #0b3b5c;
+}
+
+/* ================= ТАБЛИЦА ЗАКАЗОВ ================= */
+.table-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 1.2rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid #edf2f7;
+}
+
+th {
+  background: #f8fafc;
+  color: #4a5d73;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+td {
+  font-size: 0.95rem;
+  color: #1e2a3a;
+}
+
+tr:hover {
+  background: #f8fafc;
+}
+
+.status-badge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-paid {
+  background: #e8f8ef;
+  color: #27ae60;
+}
+.status-unpaid {
+  background: #fdf0ef;
+  color: #c0392b;
+}
+
+.btn-delete {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-delete:hover {
+  background: #c0392b;
+}
+
+/* ================= СООБЩЕНИЯ ================= */
+#message {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  display: none;
+  font-weight: 500;
+}
+.success {
+  background: #e8f8ef;
+  color: #27ae60;
+  border: 1px solid #27ae60;
+}
+.error {
+  background: #fdf0ef;
+  color: #c0392b;
+  border: 1px solid #c0392b;
+}
