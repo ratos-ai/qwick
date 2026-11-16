@@ -30,6 +30,8 @@ class Auth(BaseModel):
 class Settings(BaseSettings):
     API_HOST: str = "127.0.0.1"
     API_PORT: int = 8000
+    API_RELOAD: bool = False
+    API_CORS_ORIGINS: list[str] = ["http://localhost", "http://localhost:5500"]
 
     DB_URL: str
     DB_ECHO: bool = False

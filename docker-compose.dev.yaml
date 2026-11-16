@@ -1,0 +1,27 @@
+services:
+  backend:
+    volumes:
+      - ".:/app"
+      - "./uploads:/app/uploads"
+    ports:
+      - "8000:8000"
+
+  db:
+    ports:
+      - "5432:5432"
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
+
+  pgadmin:
+    ports:
+      - "5050:80"
+    volumes:
+      - "pgadmin_data:/var/lib/pgadmin"
+
+  nginx:
+    ports:
+      - "80:80"
+
+volumes:
+  postgres_data:
+  pgadmin_data:
