@@ -9,6 +9,8 @@ class AttractionBase(BaseModel):
     short_desc: str
     meta: str
     image_url: str | None = None
+    item_type: str = "attraction"
+    price: float | None = None
     facts: list[dict] = []
     sections: list[dict] = []
 
