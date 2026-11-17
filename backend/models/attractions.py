@@ -1,4 +1,4 @@
-from sqlalchemy import String, Text
+from sqlalchemy import Numeric, String, Text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -19,3 +19,8 @@ class Attraction(Base):
 
     facts: Mapped[list[dict]] = mapped_column(JSONB, default=list)
     sections: Mapped[list[dict]] = mapped_column(JSONB, default=list)
+
+    item_type: Mapped[str] = mapped_column(
+        String(20), default="attraction", server_default="attraction"
+    )
+    price: Mapped[float | None] = mapped_column(Numeric(10, 2), nullable=True)
