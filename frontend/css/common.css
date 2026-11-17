@@ -1,0 +1,254 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --glacier: #F7F9FC;
+    --snow: #FFFFFF;
+    --slate: #0F172A;
+    --cobalt: #0047AB;
+    --mist: #E2E8F0;
+    --stone: #64748B;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --gutter: clamp(1.5rem, 4vw, 4rem);
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: var(--sans);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--slate);
+    background-color: var(--glacier);
+}
+
+a {
+    color: var(--cobalt);
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+a:hover {
+    opacity: 0.7;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    object-fit: cover;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 4rem var(--gutter);
+}
+
+.nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem var(--gutter);
+    background: transparent;
+    transition: all 0.4s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.nav-bar.scrolled {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 1rem var(--gutter);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-light .nav-logo,
+.nav-light .nav-links a,
+.nav-light .account-btn {
+    color: var(--slate);
+}
+
+.nav-light .nav-toggle span {
+    background: var(--slate);
+}
+
+.nav-light.scrolled .nav-logo,
+.nav-light.scrolled .nav-links a,
+.nav-light.scrolled .account-btn,
+.nav-light.scrolled .nav-user-name,
+.nav-light.scrolled .nav-logout-btn {
+    color: var(--snow);
+}
+
+.nav-light.scrolled .nav-toggle span {
+    background: var(--snow);
+}
+
+.nav-logo {
+    font-family: var(--serif);
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--snow);
+    text-transform: uppercase;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-links a, .account-btn {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover, .account-btn:hover {
+    color: var(--snow);
+}
+
+.admin-link {
+    color: #F59E0B !important;
+}
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 200;
+}
+
+.nav-toggle span {
+    width: 24px;
+    height: 1.5px;
+    background: var(--snow);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.site-footer {
+    padding: 5rem var(--gutter) 2rem;
+    background: var(--slate);
+    color: var(--snow);
+}
+
+.footer-top {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+    gap: var(--gutter);
+    padding-bottom: 4rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-brand-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+}
+
+.footer-brand-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.5);
+    max-width: 32ch;
+}
+
+.footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 2rem;
+}
+
+.footer-copy {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .nav-toggle {
+        display: flex;
+    }
+
+    .nav-links--desktop {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--slate);
+        flex-direction: column;
+        padding: 2rem;
+        gap: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links--desktop.active {
+        display: flex;
+    }
+
+    .nav-links--simple {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .nav-logo {
+        font-size: 1rem;
+    }
+
+    .nav-links--simple a,
+    .nav-links--simple button {
+        font-size: 0.75rem;
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}
