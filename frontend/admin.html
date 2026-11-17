@@ -17,7 +17,7 @@
           id="tabBtnAttractions"
           title="Достопримечательности"
         >
-          📍 Достопримечательности
+          📍 Контент
         </button>
         <button class="nav-btn" id="tabBtnOrders">
           🧾 Управление заказами
@@ -30,19 +30,24 @@
 
     <main class="main-content">
       <div id="sectionAttractions">
-        <h1 class="page-title">Добавление достопримечательности</h1>
+        <h1 class="page-title">Добавление нового контента</h1>
 
         <div class="form-card">
           <form id="addForm">
             <div class="form-grid">
+              
+              <div class="form-group full-width" style="margin-bottom: 0.5rem;">
+                <label style="font-size: 1.1rem; color: #1d6a96; font-weight: 700;">Что вы хотите добавить?</label>
+                <select id="itemType" required style="font-size: 1.05rem; padding: 0.9rem; border: 2px solid #1d6a96; background-color: #f8fafc; font-weight: 600; color: #0b3b5c; cursor: pointer;">
+                  <option value="attraction">📍 Достопримечательность</option>
+                  <option value="place">🍽 Заведение (Ресторан/Кафе)</option>
+                  <option value="tour">🎫 Тур / Экскурсия</option>
+                </select>
+              </div>
+
               <div class="form-group">
                 <label>Название</label>
-                <input
-                  type="text"
-                  id="title"
-                  required
-                  placeholder="Например: Эльбрус"
-                />
+                <input type="text" id="title" required placeholder="Например: Эльбрус" />
               </div>
 
               <div class="form-group">
@@ -60,63 +65,39 @@
 
               <div class="form-group">
                 <label>Категория</label>
-                <input
-                  type="text"
-                  id="category"
-                  required
-                  placeholder="Природа · Горы"
-                />
+                <input type="text" id="category" required placeholder="Природа · Горы" />
               </div>
 
               <div class="form-group">
                 <label>Эмодзи (иконка)</label>
-                <input
-                  type="text"
-                  id="emoji"
-                  required
-                  value="🏔"
-                  maxlength="5"
-                />
+                <input type="text" id="emoji" required value="🏔" maxlength="5" />
               </div>
 
               <div class="form-group full-width">
                 <label>Краткое описание</label>
-                <input
-                  type="text"
-                  id="short_desc"
-                  required
-                  placeholder="Высочайшая вершина Европы."
-                />
+                <input type="text" id="short_desc" required placeholder="Высочайшая вершина Европы." />
               </div>
 
               <div class="form-group full-width">
                 <label>Локация (meta)</label>
-                <input
-                  type="text"
-                  id="meta"
-                  required
-                  placeholder="📍 Приэльбрусье"
-                />
+                <input type="text" id="meta" required placeholder="📍 Приэльбрусье" />
+              </div>
+
+              <div class="form-group full-width" id="priceGroup" style="display: none;">
+                <label>Цена (в рублях)</label>
+                <input type="number" id="price" step="0.01" placeholder="Например: 2500" />
               </div>
 
               <div class="form-group full-width">
                 <label>Факты (JSON)</label>
-                <textarea id="facts" required>
-[{"label": "Высота", "value": "5642 м"}]</textarea
-                >
-                <div class="hint">
-                  Формат: [{"label": "...", "value": "..."}]
-                </div>
+                <textarea id="facts" required>[{"label": "Высота", "value": "5642 м"}]</textarea>
+                <div class="hint">Формат: [{"label": "...", "value": "..."}]</div>
               </div>
 
               <div class="form-group full-width">
                 <label>Секции (JSON)</label>
-                <textarea id="sections" required>
-[{"heading": "Курорт", "text": "Круглогодичный курорт."}]</textarea
-                >
-                <div class="hint">
-                  Формат: [{"heading": "...", "text": "..."}]
-                </div>
+                <textarea id="sections" required>[{"heading": "Курорт", "text": "Круглогодичный курорт."}]</textarea>
+                <div class="hint">Формат: [{"heading": "...", "text": "..."}]</div>
               </div>
             </div>
 
@@ -125,9 +106,7 @@
               <input type="file" id="imageFile" accept="image/*" />
             </div>
 
-            <button type="submit" class="submit-btn">
-              Сохранить в базу данных
-            </button>
+            <button type="submit" class="submit-btn">Сохранить в базу данных</button>
           </form>
           <div id="message"></div>
         </div>
@@ -150,9 +129,7 @@
             </thead>
             <tbody id="adminOrdersBody">
               <tr>
-                <td colspan="7" style="text-align: center; padding: 2rem">
-                  Загрузка...
-                </td>
+                <td colspan="7" style="text-align: center; padding: 2rem">Загрузка...</td>
               </tr>
             </tbody>
           </table>
@@ -163,6 +140,18 @@
     <script>
       let token = null;
       const msgDiv = document.getElementById("message");
+
+      const itemTypeSelect = document.getElementById("itemType");
+      const priceGroup = document.getElementById("priceGroup");
+
+      itemTypeSelect.addEventListener("change", () => {
+        if (itemTypeSelect.value === "tour") {
+          priceGroup.style.display = "block";
+        } else {
+          priceGroup.style.display = "none";
+          document.getElementById("price").value = "";
+        }
+      });
 
       async function initAuth() {
         try {
@@ -184,10 +173,7 @@
               }
             }
           } else {
-            showMessage(
-              "Вы не авторизованы. Войдите на главной странице.",
-              "error",
-            );
+            showMessage("Вы не авторизованы. Войдите на главной странице.", "error");
           }
         } catch (e) {
           showMessage("Ошибка соединения с сервером", "error");
@@ -214,82 +200,75 @@
         loadAdminOrders();
       });
 
-      document
-        .getElementById("addForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-          if (!token) return showMessage("Нет доступа.", "error");
+      document.getElementById("addForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!token) return showMessage("Нет доступа.", "error");
 
-          // 1. Сначала загружаем картинку (если она выбрана)
-          const fileInput = document.getElementById("imageFile");
-          let imageUrl = null;
+        const fileInput = document.getElementById("imageFile");
+        let imageUrl = null;
 
-          if (fileInput.files.length > 0) {
-            const formData = new FormData();
-            formData.append("file", fileInput.files[0]);
-
-            try {
-              const uploadRes = await fetch("/api/attractions/upload", {
-                method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
-                body: formData,
-              });
-
-              if (uploadRes.ok) {
-                const uploadData = await uploadRes.json();
-                imageUrl = uploadData.image_url; // Получили путь вида /uploads/xxx.jpg
-              } else {
-                return showMessage("Ошибка загрузки картинки", "error");
-              }
-            } catch (err) {
-              return showMessage("Ошибка сети при загрузке картинки", "error");
-            }
-          }
-
-          // 2. Отправляем данные достопримечательности в БД
-          const payload = {
-            title: document.getElementById("title").value,
-            region: document.getElementById("region").value,
-            category: document.getElementById("category").value,
-            emoji: document.getElementById("emoji").value,
-            short_desc: document.getElementById("short_desc").value,
-            meta: document.getElementById("meta").value,
-            image_url: imageUrl, // <--- Передаем полученный URL
-            facts: JSON.parse(document.getElementById("facts").value || "[]"),
-            sections: JSON.parse(
-              document.getElementById("sections").value || "[]",
-            ),
-          };
+        if (fileInput.files.length > 0) {
+          const formData = new FormData();
+          formData.append("file", fileInput.files[0]);
 
           try {
-            const res = await fetch("/api/attractions/", {
+            const uploadRes = await fetch("/api/attractions/upload", {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify(payload),
+              headers: { Authorization: `Bearer ${token}` },
+              body: formData,
             });
 
-            if (res.status === 201) {
-              showMessage(
-                "Достопримечательность успешно добавлена!",
-                "success",
-              );
-              document.getElementById("addForm").reset();
+            if (uploadRes.ok) {
+              const uploadData = await uploadRes.json();
+              imageUrl = uploadData.image_url;
             } else {
-              const err = await res.json();
-              showMessage(`Ошибка: ${JSON.stringify(err.detail)}`, "error");
+              return showMessage("Ошибка загрузки картинки", "error");
             }
-          } catch (error) {
-            showMessage("Ошибка при отправке данных.", "error");
+          } catch (err) {
+            return showMessage("Ошибка сети при загрузке картинки", "error");
           }
-        });
+        }
+
+        const payload = {
+          title: document.getElementById("title").value,
+          region: document.getElementById("region").value,
+          category: document.getElementById("category").value,
+          emoji: document.getElementById("emoji").value,
+          short_desc: document.getElementById("short_desc").value,
+          meta: document.getElementById("meta").value,
+          image_url: imageUrl,
+          item_type: document.getElementById("itemType").value,
+          price: parseFloat(document.getElementById("price").value) || null,
+          facts: JSON.parse(document.getElementById("facts").value || "[]"),
+          sections: JSON.parse(document.getElementById("sections").value || "[]"),
+        };
+
+        try {
+          const res = await fetch("/api/attractions/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (res.status === 201) {
+            showMessage("Контент успешно добавлен!", "success");
+            document.getElementById("addForm").reset();
+            itemTypeSelect.dispatchEvent(new Event('change'));
+          } else {
+            const err = await res.json();
+            showMessage(`Ошибка: ${JSON.stringify(err.detail)}`, "error");
+          }
+        } catch (error) {
+          showMessage("Ошибка при отправке данных.", "error");
+        }
+      });
 
       async function loadAdminOrders() {
         const tbody = document.getElementById("adminOrdersBody");
-        tbody.innerHTML =
-          "<tr><td colspan='7' style='text-align:center;'>Загрузка...</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>Загрузка...</td></tr>";
 
         try {
           const res = await fetch("/api/orders/admin/all", {
@@ -299,14 +278,11 @@
           if (res.ok) {
             const orders = await res.json();
             if (orders.length === 0) {
-              tbody.innerHTML =
-                "<tr><td colspan='7' style='text-align:center;'>В системе пока нет заказов.</td></tr>";
+              tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>В системе пока нет заказов.</td></tr>";
               return;
             }
 
-            tbody.innerHTML = orders
-              .map(
-                (o) => `
+            tbody.innerHTML = orders.map((o) => `
               <tr>
                 <td>#${o.id}</td>
                 <td><b>${o.tour_title}</b><br><small style="color:#7a8ea3">${o.region}</small></td>
@@ -322,16 +298,12 @@
                   <button class="btn-delete" onclick="deleteAdminOrder(${o.id})">Удалить</button>
                 </td>
               </tr>
-            `,
-              )
-              .join("");
+            `).join("");
           } else {
-            tbody.innerHTML =
-              "<tr><td colspan='7' style='color:red; text-align:center;'>Ошибка загрузки.</td></tr>";
+            tbody.innerHTML = "<tr><td colspan='7' style='color:red; text-align:center;'>Ошибка загрузки.</td></tr>";
           }
         } catch (e) {
-          tbody.innerHTML =
-            "<tr><td colspan='7' style='color:red; text-align:center;'>Ошибка сети.</td></tr>";
+          tbody.innerHTML = "<tr><td colspan='7' style='color:red; text-align:center;'>Ошибка сети.</td></tr>";
         }
       }
 

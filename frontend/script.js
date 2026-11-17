@@ -1,7 +1,3 @@
-// ============================================================
-// РЕГИОНЫ
-// ============================================================
-
 const REGIONS = {
     rso: "Северная Осетия — Алания",
     kbr: "Кабардино-Балкария",
@@ -12,785 +8,9 @@ const REGIONS = {
     dag: "Дагестан",
 }
 
-// ============================================================
-// ДОСТОПРИМЕЧАТЕЛЬНОСТИ (сокращённо — полные данные как в предыдущей версии)
-// ============================================================
-
 let attractions = []
-
-// ============================================================
-// ЗАВЕДЕНИЯ (сокращённо)
-// ============================================================
-
-const places = [
-    {
-        id: "p1",
-        type: "place",
-        region: "rso",
-        title: "Кафе «Фыдджынтæ»",
-        category: "Национальная кухня",
-        emoji: "🥧",
-        shortDesc: "Легендарное кафе с осетинскими пирогами.",
-        meta: "📍 пр. Коста, 178",
-        facts: [
-            { label: "Кухня", value: "Осетинская" },
-            { label: "Чек", value: "400–700 ₽" },
-        ],
-        sections: [
-            {
-                heading: "О заведении",
-                text: "Работает с советских времён, главное блюдо — фыджын.",
-            },
-        ],
-    },
-    {
-        id: "p2",
-        type: "place",
-        region: "rso",
-        title: "Ресторан «Къона»",
-        category: "Национальная кухня · Музей",
-        emoji: "🍽",
-        shortDesc: "Ресторан-музей с национальной музыкой.",
-        meta: "📍 пр. Коста, 258",
-        facts: [
-            { label: "Кухня", value: "Осетинская" },
-            { label: "Чек", value: "800–1500 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Концепция",
-                text: "Официанты в национальных костюмах, живая музыка.",
-            },
-        ],
-    },
-    {
-        id: "p3",
-        type: "place",
-        region: "rso",
-        title: "Ресторан «Жемчужина»",
-        category: "Европейская · Грузинская кухня",
-        emoji: "💎",
-        shortDesc: "Ресторан в курортной зоне Владикавказа.",
-        meta: "📍 пр. Коста, 11А",
-        facts: [
-            { label: "Кухня", value: "Европейская, грузинская" },
-            { label: "Чек", value: "1000–2000 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Расположение",
-                text: "Рядом с мемориалом Славы, вид на Терек.",
-            },
-        ],
-    },
-    {
-        id: "p4",
-        type: "place",
-        region: "rso",
-        title: "Ресторан «Этно»",
-        category: "Национальная кухня",
-        emoji: "🍷",
-        shortDesc: "Атмосферное заведение с осетинской кухней.",
-        meta: "📍 ул. Маяковского, 19",
-        facts: [
-            { label: "Кухня", value: "Осетинская" },
-            { label: "Чек", value: "900–1600 ₽" },
-        ],
-        sections: [
-            {
-                heading: "О ресторане",
-                text: "Акцент на аутентичность и национальные напитки.",
-            },
-        ],
-    },
-    {
-        id: "p5",
-        type: "place",
-        region: "rso",
-        title: "Кафе «Старый мост»",
-        category: "Национальная кухня",
-        emoji: "🌉",
-        shortDesc: "Уютное кафе с пирогами и десертом с мороженым.",
-        meta: "📍 ул. Пашковского, 2А",
-        facts: [
-            { label: "Кухня", value: "Осетинская, европейская" },
-            { label: "Чек", value: "500–900 ₽" },
-        ],
-        sections: [
-            {
-                heading: "О кафе",
-                text: "Популярно у местных, удобная остановка в центре.",
-            },
-        ],
-    },
-    {
-        id: "p6",
-        type: "place",
-        region: "rso",
-        title: "Пекарня на Маркова, 24/2",
-        category: "Выпечка · На вынос",
-        emoji: "🥖",
-        shortDesc: "Свежие осетинские пироги рядом с вокзалом.",
-        meta: "📍 ул. Маркова, 24/2",
-        facts: [
-            { label: "Формат", value: "На вынос" },
-            { label: "Чек", value: "200–500 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Аутентичная выпечка",
-                text: "Пекут по домашним рецептам, часто ещё горячим.",
-            },
-        ],
-    },
-    // KBR
-    {
-        id: "kbrp1",
-        type: "place",
-        region: "kbr",
-        title: "Ресторан «Тамга»",
-        category: "Национальная кухня",
-        emoji: "🍽",
-        shortDesc: "Ресторан этнической кухни в Нальчике.",
-        meta: "📍 Нальчик",
-        facts: [
-            { label: "Кухня", value: "Кабардинская" },
-            { label: "Чек", value: "800–1500 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Этническая кухня",
-                text: "Современная подача кабардинских блюд.",
-            },
-        ],
-    },
-    {
-        id: "kbrp2",
-        type: "place",
-        region: "kbr",
-        title: "Кафе «Барашка»",
-        category: "Национальная кухня",
-        emoji: "🐑",
-        shortDesc: "Недорогое кафе с хичинами и шашлыком.",
-        meta: "📍 Нальчик",
-        facts: [
-            { label: "Кухня", value: "Национальная" },
-            { label: "Чек", value: "300–600 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Доступно и вкусно",
-                text: "Популярно за хичины и чебуреки.",
-            },
-        ],
-    },
-    {
-        id: "kbrp3",
-        type: "place",
-        region: "kbr",
-        title: "Ресторан «Дудукуш»",
-        category: "Национальная · Авторская кухня",
-        emoji: "👨‍🍳",
-        shortDesc: "Авторская кабардинская кухня от шеф-повара.",
-        meta: "📍 Нальчик",
-        facts: [
-            { label: "Кухня", value: "Кабардинская, авторская" },
-            { label: "Чек", value: "1000–1800 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Современная кухня",
-                text: "Шеф Илья Крутов сочетает традиции и современные техники.",
-            },
-        ],
-    },
-    // KCHR
-    {
-        id: "kchrp1",
-        type: "place",
-        region: "kchr",
-        title: "Ресторан «Форельное»",
-        category: "Рыбная · Европейская кухня",
-        emoji: "🐟",
-        shortDesc: "Ресторан в Домбае, специализирующийся на форели.",
-        meta: "📍 Домбай",
-        facts: [
-            { label: "Кухня", value: "Рыбная, карачаевская" },
-            { label: "Чек", value: "800–1500 ₽" },
-        ],
-        sections: [
-            { heading: "Форель", text: "Свежая форель и местная кухня." },
-        ],
-    },
-    {
-        id: "kchrp2",
-        type: "place",
-        region: "kchr",
-        title: "Кафе «Тамара»",
-        category: "Кавказская кухня",
-        emoji: "🥟",
-        shortDesc: "Уютное кафе в Архызе с традиционной кухней.",
-        meta: "📍 Архыз",
-        facts: [
-            { label: "Кухня", value: "Кавказская" },
-            { label: "Чек", value: "500–900 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Домашняя атмосфера",
-                text: "Хычины, шашлыки, приветливый персонал.",
-            },
-        ],
-    },
-    {
-        id: "kchrp3",
-        type: "place",
-        region: "kchr",
-        title: "Кафе «Таулу»",
-        category: "Национальная кухня",
-        emoji: "🍖",
-        shortDesc: "Блюда на мангале, хинкали и хычины.",
-        meta: "📍 Архыз",
-        facts: [
-            { label: "Кухня", value: "Карачаевская" },
-            { label: "Чек", value: "600–1000 ₽" },
-        ],
-        sections: [
-            { heading: "Мангал", text: "Щедрые порции, умеренные цены." },
-        ],
-    },
-    // STAV
-    {
-        id: "stavp1",
-        type: "place",
-        region: "stav",
-        title: "Ресторан «Золотой мангал»",
-        category: "Кавказская кухня",
-        emoji: "🍢",
-        shortDesc: "Шашлык и кавказские блюда в Кисловодске.",
-        meta: "📍 Кисловодск",
-        facts: [
-            { label: "Кухня", value: "Кавказская" },
-            { label: "Чек", value: "800–1500 ₽" },
-        ],
-        sections: [{ heading: "Шашлык", text: "Большие порции, свежее мясо." }],
-    },
-    {
-        id: "stavp2",
-        type: "place",
-        region: "stav",
-        title: "Кофейня Гукасова",
-        category: "Кофейня · Десерты",
-        emoji: "☕",
-        shortDesc: "Известная кофейня в Пятигорске.",
-        meta: "📍 Пятигорск",
-        facts: [
-            { label: "Тип", value: "Кофейня" },
-            { label: "Чек", value: "300–600 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Кофе и десерты",
-                text: "Популярное место для завтрака.",
-            },
-        ],
-    },
-    {
-        id: "stavp3",
-        type: "place",
-        region: "stav",
-        title: "Ресторан «Караван-Сарай»",
-        category: "Кавказская · Европейская кухня",
-        emoji: "🏛",
-        shortDesc: "Ресторан в Кисловодске с восточной атмосферой.",
-        meta: "📍 Кисловодск",
-        facts: [
-            { label: "Кухня", value: "Кавказская, европейская" },
-            { label: "Чек", value: "800–1500 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Атмосфера",
-                text: "Восточный интерьер, веранда летом.",
-            },
-        ],
-    },
-    // ING
-    {
-        id: "ingp1",
-        type: "place",
-        region: "ing",
-        title: "Этно-кафе «Обанхой»",
-        category: "Национальная кухня",
-        emoji: "🍽",
-        shortDesc: "Кафе в Магасе с этническим интерьером.",
-        meta: "📍 Магас",
-        facts: [
-            { label: "Кухня", value: "Ингушская" },
-            { label: "Чек", value: "500–1000 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Этнический колорит",
-                text: "Старинные предметы быта, национальные блюда.",
-            },
-        ],
-    },
-    {
-        id: "ingp2",
-        type: "place",
-        region: "ing",
-        title: "Кафе «Айлам»",
-        category: "Национальная кухня",
-        emoji: "🥘",
-        shortDesc: "Кафе в центре Магаса с доступными ценами.",
-        meta: "📍 Магас",
-        facts: [
-            { label: "Кухня", value: "Ингушская" },
-            { label: "Чек", value: "400–800 ₽" },
-        ],
-        sections: [
-            { heading: "Национальная кухня", text: "Ч1апилг, домашние супы." },
-        ],
-    },
-    // CHE
-    {
-        id: "chep1",
-        type: "place",
-        region: "che",
-        title: "Ресторан «Нашха»",
-        category: "Чеченская кухня",
-        emoji: "🍲",
-        shortDesc: "Аутентичные вайнахские блюда в Грозном.",
-        meta: "📍 Грозный",
-        facts: [
-            { label: "Кухня", value: "Чеченская" },
-            { label: "Чек", value: "800–1500 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Жижиг-галнаш",
-                text: "Главное блюдо, подаётся с томлёным ребром.",
-            },
-        ],
-    },
-    {
-        id: "chep2",
-        type: "place",
-        region: "che",
-        title: "Grill House Grozny",
-        category: "Чеченская · Европейская кухня",
-        emoji: "🔥",
-        shortDesc: "Ресторан с широким меню и блюдами на гриле.",
-        meta: "📍 Грозный",
-        facts: [
-            { label: "Кухня", value: "Чеченская, европейская" },
-            { label: "Чек", value: "1000–2000 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Многообразие",
-                text: "Национальные блюда и стейки на гриле.",
-            },
-        ],
-    },
-    {
-        id: "chep3",
-        type: "place",
-        region: "che",
-        title: "Ресторан «Жижиг & Galnash»",
-        category: "Чеченская кухня",
-        emoji: "🥣",
-        shortDesc: "Сетевой ресторан с доступными ценами.",
-        meta: "📍 Грозный",
-        facts: [
-            { label: "Кухня", value: "Чеченская" },
-            { label: "Чек", value: "500–1000 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Доступно",
-                text: "Большие порции, быстрое обслуживание.",
-            },
-        ],
-    },
-    // DAG
-    {
-        id: "dagp1",
-        type: "place",
-        region: "dag",
-        title: "Ресторан «Папаха»",
-        category: "Дагестанская кухня",
-        emoji: "🍽",
-        shortDesc: "Ресторан национальной кухни в Махачкале.",
-        meta: "📍 Махачкала",
-        facts: [
-            { label: "Кухня", value: "Дагестанская" },
-            { label: "Чек", value: "1500–2000 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Гостеприимство",
-                text: "Проект Хабиба Нурмагомедова, хинкал, чуду, курзе.",
-            },
-        ],
-    },
-    {
-        id: "dagp2",
-        type: "place",
-        region: "dag",
-        title: "Дом дагестанской кухни",
-        category: "Дагестанская кухня",
-        emoji: "🏠",
-        shortDesc: "Уютный ресторан-двор с национальными блюдами.",
-        meta: "📍 Махачкала",
-        facts: [
-            { label: "Кухня", value: "Дагестанская" },
-            { label: "Чек", value: "800–1500 ₽" },
-        ],
-        sections: [
-            {
-                heading: "Домашняя кухня",
-                text: "Хинкал, чуду, курзе, сладости.",
-            },
-        ],
-    },
-    {
-        id: "dagp3",
-        type: "place",
-        region: "dag",
-        title: "Кафе Hinkal Brothers",
-        category: "Дагестанская кухня",
-        emoji: "🥟",
-        shortDesc: "Специализация на хинкале и доступные цены.",
-        meta: "📍 Махачкала",
-        facts: [
-            { label: "Кухня", value: "Дагестанская" },
-            { label: "Чек", value: "500–800 ₽" },
-        ],
-        sections: [{ heading: "Хинкал", text: "Быстрый и сытный обед." }],
-    },
-]
-
-// ============================================================
-// ТУРЫ И БИЛЕТЫ
-// ============================================================
-
-const tours = [
-    // ---------- РСО-АЛАНИЯ ----------
-    {
-        id: "t-rso-1",
-        type: "tour",
-        region: "rso",
-        title: "Золотое кольцо Осетии: Кармадон + Даргавс + Аланский монастырь",
-        attractionId: "a2",
-        price: 2700,
-        duration: "1 день (10–12 часов)",
-        includes: ["Трансфер", "Услуги гида", "Входные билеты"],
-        description:
-            "Однодневная экскурсия из Владикавказа по трём главным достопримечательностям: Кармадонское ущелье, Город мёртвых Даргавс и Аланский монастырь.",
-    },
-    {
-        id: "t-rso-2",
-        type: "tour",
-        region: "rso",
-        title: "Цейское ущелье: канатка + ледник «Сказка»",
-        attractionId: "a3",
-        price: 2200,
-        duration: "1 день (8–10 часов)",
-        includes: ["Трансфер", "Гид", "Билет на канатную дорогу (900 ₽)"],
-        description:
-            "Поездка в Цейское ущелье с подъёмом по канатной дороге к леднику и свободным временем для прогулки.",
-    },
-    {
-        id: "t-rso-3",
-        type: "tour",
-        region: "rso",
-        title: "Дигорское ущелье и замок Ханаз",
-        attractionId: "a6",
-        price: 2500,
-        duration: "1 день (10 часов)",
-        includes: ["Трансфер", "Гид", "Лёгкий треккинг"],
-        description:
-            "Путешествие в Дигорское ущелье с посещением средневековой крепости Ханаз и национального парка «Алания».",
-    },
-    {
-        id: "t-rso-4",
-        type: "tour",
-        region: "rso",
-        title: "Мидаграбинские водопады (джип-тур)",
-        attractionId: "a7",
-        price: 3500,
-        duration: "1 день (8–9 часов)",
-        includes: ["Внедорожник", "Гид", "Пикник"],
-        description:
-            "Джип-тур к одним из самых высоких водопадов Европы. Включает переезд по грунтовым дорогам и пешую прогулку.",
-    },
-    {
-        id: "t-rso-5",
-        type: "ticket",
-        region: "rso",
-        title: "Канатная дорога в Цейском ущелье (1 подъём)",
-        attractionId: "a3",
-        price: 900,
-        duration: "Разовый билет",
-        includes: ["Подъём и спуск"],
-        description:
-            "Прогулочный билет на канатно-кресельный подъёмник в Цее. Действует в день покупки.",
-    },
-    {
-        id: "t-rso-6",
-        type: "ticket",
-        region: "rso",
-        title: "Вход в Национальный парк «Алания»",
-        attractionId: "a8",
-        price: 300,
-        duration: "Разовый билет",
-        includes: ["Вход на территорию парка"],
-        description:
-            "Экологический сбор за посещение национального парка «Алания» в Дигорском ущелье.",
-    },
-
-    // ---------- КАБАРДИНО-БАЛКАРИЯ ----------
-    {
-        id: "t-kbr-1",
-        type: "tour",
-        region: "kbr",
-        title: "Чегемские водопады + Голубые озёра",
-        attractionId: "kbr1",
-        price: 2000,
-        duration: "1 день (8 часов)",
-        includes: ["Трансфер из Нальчика", "Гид"],
-        description:
-            "Обзорная экскурсия по Чегемскому ущелью с посещением водопадов и Голубых озёр.",
-    },
-    {
-        id: "t-kbr-2",
-        type: "tour",
-        region: "kbr",
-        title: "Эльбрус: подъём на канатной дороге",
-        attractionId: "kbr3",
-        price: 2700,
-        duration: "1 день (10–12 часов)",
-        includes: ["Трансфер", "Гид", "Билет на канатную дорогу"],
-        description:
-            "Поездка в Приэльбрусье с подъёмом по канатной дороге до станции «Мир» (3500 м) или выше.",
-    },
-    {
-        id: "t-kbr-3",
-        type: "ticket",
-        region: "kbr",
-        title: "Канатная дорога на Эльбрус (прогулочный билет)",
-        attractionId: "kbr3",
-        price: 2700,
-        duration: "Разовый билет",
-        includes: ["Подъём и спуск (Азау – Мир)"],
-        description:
-            "Туристический билет на канатную дорогу в Приэльбрусье. Взрослый.",
-    },
-
-    // ---------- КАРАЧАЕВО-ЧЕРКЕСИЯ ----------
-    {
-        id: "t-kchr-1",
-        type: "tour",
-        region: "kchr",
-        title: "Домбай: канатные дороги и Мусса-Ачитара",
-        attractionId: "kchr1",
-        price: 2400,
-        duration: "1 день",
-        includes: ["Трансфер", "Гид", "Билет на 1-ю и 2-ю канатки"],
-        description:
-            "Экскурсия на Домбайскую поляну с подъёмом на гору Мусса-Ачитара (открывается панорама на Эльбрус).",
-    },
-    {
-        id: "t-kchr-2",
-        type: "tour",
-        region: "kchr",
-        title: "Архыз: Софийские озёра и аланские храмы",
-        attractionId: "kchr2",
-        price: 2300,
-        duration: "1 день (10 часов)",
-        includes: ["Трансфер", "Гид", "Вход в городище"],
-        description:
-            "Поездка в Архыз с посещением Нижнеархызского городища и подъёмом к Софийским озёрам (по желанию — канатка).",
-    },
-    {
-        id: "t-kchr-3",
-        type: "ticket",
-        region: "kchr",
-        title: "Канатная дорога «Домбай» (1-я очередь)",
-        attractionId: "kchr1",
-        price: 1200,
-        duration: "Разовый билет",
-        includes: ["Подъём и спуск"],
-        description:
-            "Билет на первую очередь канатной дороги в Домбае. Взрослый.",
-    },
-    {
-        id: "t-kchr-4",
-        type: "ticket",
-        region: "kchr",
-        title: "Канатная дорога «Архыз» (прогулочный)",
-        attractionId: "kchr2",
-        price: 1000,
-        duration: "Разовый билет",
-        includes: ["Подъём до смотровой (2240 м)"],
-        description:
-            "Прогулочный подъём на канатной дороге курорта «Архыз». Взрослый.",
-    },
-
-    // ---------- СТАВРОПОЛЬСКИЙ КРАЙ ----------
-    {
-        id: "t-stav-1",
-        type: "tour",
-        region: "stav",
-        title: "Пятигорск: гора Машук, Провал и места Лермонтова",
-        attractionId: "stav1",
-        price: 1800,
-        duration: "5 часов",
-        includes: ["Гид", "Подъём на Машук (электрокары)"],
-        description:
-            "Обзорная экскурсия по Пятигорску с посещением грота Провал, Эоловой арфы и места дуэли Лермонтова.",
-    },
-    {
-        id: "t-stav-2",
-        type: "tour",
-        region: "stav",
-        title: "Кисловодск: Курортный парк и нарзанная галерея",
-        attractionId: "stav2",
-        price: 1500,
-        duration: "4 часа",
-        includes: ["Гид", "Дегустация нарзана"],
-        description:
-            "Прогулка по Курортному парку с посещением Нарзанной галереи и Долины роз.",
-    },
-    {
-        id: "t-stav-3",
-        type: "ticket",
-        region: "stav",
-        title: "Музей-заповедник М.Ю. Лермонтова (комплексный билет)",
-        attractionId: "stav3",
-        price: 300,
-        duration: "Разовый билет",
-        includes: ["Домик Лермонтова", "Литературный музей"],
-        description:
-            "Входной билет во весь комплекс музея-заповедника. Взрослый.",
-    },
-
-    // ---------- ИНГУШЕТИЯ ----------
-    {
-        id: "t-ing-1",
-        type: "tour",
-        region: "ing",
-        title: "Джейрахское ущелье: Вовнушки + Эрзи + Эгикал",
-        attractionId: "ing1",
-        price: 3500,
-        duration: "1 день (8–10 часов)",
-        includes: [
-            "Трансфер из Магаса/Грозного",
-            "Гид",
-            "Входные билеты в заповедник",
-        ],
-        description:
-            "Погружение в историю Ингушетии: древние башенные комплексы, склепы и святилища.",
-    },
-    {
-        id: "t-ing-2",
-        type: "ticket",
-        region: "ing",
-        title: "Вход в заповедник «Эрзи» (Вовнушки)",
-        attractionId: "ing2",
-        price: 150,
-        duration: "Разовый билет",
-        includes: ["Экологический сбор"],
-        description:
-            "Въезд на территорию Джейрахского района и заповедника «Эрзи».",
-    },
-
-    // ---------- ЧЕЧНЯ ----------
-    {
-        id: "t-che-1",
-        type: "tour",
-        region: "che",
-        title: "Грозный: Сердце Чечни + Грозный-Сити",
-        attractionId: "che1",
-        price: 3500,
-        duration: "3–4 часа",
-        includes: ["Гид", "Трансфер по городу"],
-        description:
-            "Обзорная экскурсия по Грозному с посещением мечети «Сердце Чечни» и смотровой площадки «Грозный-Сити».",
-    },
-    {
-        id: "t-che-2",
-        type: "tour",
-        region: "che",
-        title: "Озеро Кезеной-Ам (из Грозного)",
-        attractionId: "che2",
-        price: 4000,
-        duration: "1 день (10–12 часов)",
-        includes: ["Трансфер", "Гид", "Обед"],
-        description:
-            "Поездка к высокогорному озеру Кезеной-Ам на границе с Дагестаном.",
-    },
-    {
-        id: "t-che-3",
-        type: "ticket",
-        region: "che",
-        title: "Смотровая площадка «Грозный-Сити»",
-        attractionId: "che1",
-        price: 520,
-        duration: "Разовый билет",
-        includes: ["Подъём на смотровую (140 м)"],
-        description:
-            "Билет на смотровую площадку одного из небоскрёбов комплекса «Грозный-Сити».",
-    },
-
-    // ---------- ДАГЕСТАН ----------
-    {
-        id: "t-dag-1",
-        type: "tour",
-        region: "dag",
-        title: "Сулакский каньон + Бархан Сарыкум",
-        attractionId: "dag1",
-        price: 3700,
-        duration: "1 день (10–12 часов)",
-        includes: [
-            "Трансфер из Махачкалы",
-            "Гид",
-            "Прогулка на катере (опционально)",
-        ],
-        description:
-            "Однодневная экскурсия к самому глубокому каньону Европы с заездом на бархан Сарыкум.",
-    },
-    {
-        id: "t-dag-2",
-        type: "tour",
-        region: "dag",
-        title: "Гуниб и Карадахская теснина",
-        attractionId: "dag2",
-        price: 4500,
-        duration: "1 день (12 часов)",
-        includes: ["Внедорожник", "Гид", "Обед"],
-        description:
-            "Путешествие в исторический Гуниб с посещением крепостных стен и Карадахской теснины.",
-    },
-    {
-        id: "t-dag-3",
-        type: "ticket",
-        region: "dag",
-        title: "Сулакский каньон: смотровая площадка (Дубки)",
-        attractionId: "dag1",
-        price: 250,
-        duration: "Разовый билет",
-        includes: ["Вход на смотровую"],
-        description:
-            "Билет на оборудованную смотровую площадку в посёлке Дубки.",
-    },
-]
-
-// ============================================================
-// РАБОТА С API И АВТОРИЗАЦИЕЙ
-// ============================================================
+let places = []
+let tours = []
 
 let accessToken = null
 let currentUser = null
@@ -890,10 +110,6 @@ async function initAuth() {
     }
 }
 
-// ============================================================
-// ИЗБРАННОЕ
-// ============================================================
-
 const STORAGE_FAV = "caucasus_favorites"
 const STORAGE_ORDERS = "caucasus_orders"
 const STORAGE_USER = "caucasus_user"
@@ -911,10 +127,6 @@ function saveFavorites(ids) {
 
 let favorites = loadFavorites()
 
-// ============================================================
-// ПОЛЬЗОВАТЕЛЬ И ЗАКАЗЫ
-// ============================================================
-
 function getOrders() {
     try {
         return JSON.parse(localStorage.getItem(STORAGE_ORDERS)) || []
@@ -926,10 +138,6 @@ function saveOrders(orders) {
     localStorage.setItem(STORAGE_ORDERS, JSON.stringify(orders))
 }
 
-// ============================================================
-// УТИЛИТЫ
-// ============================================================
-
 function findItem(type, id) {
     const list = type === "attraction" ? attractions : places
     return list.find((item) => item.id === id)
@@ -940,6 +148,7 @@ function findTour(id) {
 function isFavorite(id) {
     return favorites.includes(id)
 }
+
 async function toggleFavorite(id, type) {
     const isFav = isFavorite(id)
 
@@ -990,10 +199,6 @@ async function toggleFavorite(id, type) {
     }
 }
 
-// ============================================================
-// ФИЛЬТР ПО РЕГИОНУ
-// ============================================================
-
 let currentRegion = "all"
 
 function initRegionFilter() {
@@ -1007,10 +212,6 @@ function filterByRegion(items) {
     if (currentRegion === "all") return items
     return items.filter((item) => item.region === currentRegion)
 }
-
-// ============================================================
-// РЕНДЕРИНГ КАРТОЧЕК
-// ============================================================
 
 function createCard(item) {
     const fav = isFavorite(item.id)
@@ -1055,8 +256,12 @@ function createTourCard(tour) {
     const regionName = REGIONS[tour.region] || ""
     const typeLabel = tour.type === "tour" ? "Тур" : "Билет"
 
+    const imageHtml = tour.imageUrl
+        ? `<img src="${tour.imageUrl}" alt="${tour.title}" class="card-img-real" />`
+        : `<div class="card-img">${tour.type === "tour" ? "🧭" : "🎫"}</div>`
+
     card.innerHTML = `
-    <div class="card-img">${tour.type === "tour" ? "🧭" : "🎫"}</div>
+    ${imageHtml}
     <div class="card-body">
       <div class="card-region">${regionName}</div>
       <div class="card-category">${typeLabel}</div>
@@ -1122,10 +327,6 @@ function renderAll() {
     renderFavorites()
 }
 
-// ============================================================
-// ВКЛАДКИ
-// ============================================================
-
 function initTabs() {
     const tabs = document.querySelectorAll(".tab-btn")
     const panels = {
@@ -1154,21 +355,15 @@ function initTabs() {
     })
 }
 
-// ============================================================
-// ДЕТАЛЬНАЯ СТРАНИЦА
-// ============================================================
-
 function renderDetailPage(type, id) {
     const item = findItem(type, id)
     const detailView = document.getElementById("detailView")
 
-    // 1. Если объекта нет — показываем ошибку и ВЫХОДИМ из функции
     if (!item) {
         detailView.innerHTML = `<a href="#" class="back-btn">← Назад</a><div class="empty-state"><span class="icon">🤷</span>Не найдено.</div>`
         return
     }
 
-    // 2. Если объект есть, теперь безопасно создаем картинку или эмодзи
     const heroImageHtml = item.imageUrl
         ? `<img src="${item.imageUrl}" alt="${item.title}" class="hero-img-real" />`
         : `<div class="hero-emoji">${item.emoji || "📍"}</div>`
@@ -1195,8 +390,9 @@ function renderDetailPage(type, id) {
         })
         .join("")
 
-    // Туры/билеты, привязанные к этому месту
-    const relatedTours = tours.filter((t) => t.attractionId === item.id)
+    const relatedTours = tours.filter(
+        (t) => String(t.attraction_id) === String(item.id),
+    )
     let relatedToursHtml = ""
     if (relatedTours.length > 0) {
         relatedToursHtml = `
@@ -1217,11 +413,10 @@ function renderDetailPage(type, id) {
     `
     }
 
-    // 3. Рендерим страницу, вставляя heroImageHtml
     detailView.innerHTML = `
     <a href="#" class="back-btn" id="backBtn">← Назад к списку</a>
     <div class="detail-hero">
-      ${heroImageHtml} <!-- ВСТАВЛЯЕМ НАШУ ПЕРЕМЕННУЮ СЮДА -->
+      ${heroImageHtml}
       <div class="hero-text">
         <div class="hero-region">${regionName}</div>
         <div class="hero-cat">${item.category}</div>
@@ -1246,15 +441,10 @@ function renderDetailPage(type, id) {
         .getElementById("heroFav")
         .addEventListener("click", () => toggleFavorite(item.id, item.type))
 
-    // Кнопки покупки в блоке туров
     detailView.querySelectorAll(".buy-btn[data-tour-id]").forEach((btn) => {
         btn.addEventListener("click", () => openOrderModal(btn.dataset.tourId))
     })
 }
-
-// ============================================================
-// МОДАЛЬНОЕ ОКНО ЗАКАЗА
-// ============================================================
 
 let currentTourForOrder = null
 
@@ -1309,7 +499,6 @@ function openOrderModal(tourId) {
             const contact =
                 document.getElementById("orderContact").value.trim() || "—"
 
-            // Формируем данные для отправки на сервер
             const payload = {
                 tour_id: String(tour.id),
                 tour_title: tour.title,
@@ -1330,7 +519,6 @@ function openOrderModal(tourId) {
                 })
 
                 if (res.status === 201) {
-                    // Успешный ответ (показываем окошко успеха)
                     body.innerHTML = `
               <div class="success-msg">
                 <span class="big-icon">✅</span>
@@ -1361,10 +549,6 @@ function closeModal() {
     currentTourForOrder = null
 }
 
-// ============================================================
-// ЛИЧНЫЙ КАБИНЕТ И АВТОРИЗАЦИЯ
-// ============================================================
-
 async function renderAccount() {
     const content = document.getElementById("accountContent")
 
@@ -1375,7 +559,6 @@ async function renderAccount() {
         <button class="tab-btn" id="tabRegister" style="box-shadow: none;">Регистрация</button>
       </div>
 
-      <!-- Форма входа -->
       <form class="auth-form" id="loginForm">
         <label>Имя пользователя (username)</label>
         <input type="text" id="loginUsername" required>
@@ -1385,7 +568,6 @@ async function renderAccount() {
         <p id="loginError" style="color: #e74c3c; margin-top: 0.5rem; display: none;"></p>
       </form>
 
-      <!-- Форма регистрации (скрыта по умолчанию) -->
       <form class="auth-form" id="registerForm" style="display: none;">
         <label>Имя пользователя (username)</label>
         <input type="text" id="regUsername" required>
@@ -1527,6 +709,7 @@ async function renderAccount() {
     <div class="orders-list">${ordersHtml}</div>
 
     <h3 style="color:#0b3b5c; margin:2rem 0 1rem;">⭐ Избранное (${favorites.length})</h3>
+    <div class="cards-grid" id="accountFavGrid"></div>
   `
 
     const favGrid = document.getElementById("accountFavGrid")
@@ -1562,17 +745,13 @@ async function renderAccount() {
     })
 }
 
-// ============================================================
-// РОУТЕР
-// ============================================================
-
 function renderRoute() {
     const mainView = document.getElementById("mainView")
     const detailView = document.getElementById("detailView")
     const accountView = document.getElementById("accountView")
     const hash = location.hash
 
-    const detailMatch = hash.match(/^#\/(attraction|place)\/([a-z0-9]+)$/i)
+    const detailMatch = hash.match(/^#\/(attraction|place|tour)\/([a-z0-9]+)$/i)
     if (detailMatch) {
         mainView.classList.add("page-hidden")
         accountView.classList.remove("active")
@@ -1602,27 +781,49 @@ function renderRoute() {
     }
 }
 
-// ============================================================
-// ЗАПУСК
-// ============================================================
-
 async function loadAttractions() {
     try {
         const response = await fetch("/api/attractions/")
         if (response.ok) {
             const data = await response.json()
-            attractions = data.map((item) => ({
-                ...item,
-                id: String(item.id),
-                type: "attraction",
-                shortDesc: item.short_desc,
-                imageUrl: item.image_url,
-            }))
+
+            attractions = data
+                .filter((i) => i.item_type === "attraction" || !i.item_type)
+                .map((i) => ({
+                    ...i,
+                    id: String(i.id),
+                    type: "attraction",
+                    shortDesc: i.short_desc,
+                    imageUrl: i.image_url,
+                }))
+
+            places = data
+                .filter((i) => i.item_type === "place")
+                .map((i) => ({
+                    ...i,
+                    id: String(i.id),
+                    type: "place",
+                    shortDesc: i.short_desc,
+                    imageUrl: i.image_url,
+                }))
+
+            tours = data
+                .filter((i) => i.item_type === "tour")
+                .map((i) => ({
+                    ...i,
+                    id: String(i.id),
+                    type: "tour",
+                    price: i.price || 0,
+                    duration: "Тур",
+                    includes: ["Трансфер", "Гид"],
+                    description: i.short_desc,
+                    imageUrl: i.image_url,
+                }))
 
             renderAll()
         }
     } catch (error) {
-        console.error("Error loading attractions:", error)
+        console.error("Error loading data:", error)
     }
 }
 

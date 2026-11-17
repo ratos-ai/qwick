@@ -187,6 +187,16 @@ textarea {
   background: #0b3b5c;
 }
 
+#itemType {
+  background-color: #f8fafc;
+  font-weight: 600;
+  color: #0b3b5c;
+  cursor: pointer;
+}
+#itemType:hover {
+  background-color: #e2eaf3;
+}
+
 /* ================= ТАБЛИЦА ЗАКАЗОВ ================= */
 .table-card {
   background: #fff;
@@ -275,3 +285,4 @@ tr:hover {
   color: #c0392b;
   border: 1px solid #c0392b;
 }
+
