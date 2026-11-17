@@ -11,6 +11,12 @@ services:
       API_PORT: 8000
       AUTH__PRIVATE_KEY_PATH: "certs/private-key.pem"
       AUTH__PUBLIC_KEY_PATH: "certs/public-key.pem"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     depends_on:
       db:
         condition: service_healthy
@@ -45,6 +51,9 @@ services:
   nginx:
     image: nginx:alpine
     container_name: qwick_nginx
+    depends_on:
+      backend:
+        condition: service_healthy
     volumes:
       - "./frontend:/usr/share/nginx/html"
       - "./uploads:/usr/share/nginx/html/uploads"
