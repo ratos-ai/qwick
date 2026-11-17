@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет | Северный Кавказ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/account.css">
+</head>
+<body>
+
+    <nav class="nav-bar nav-light" id="mainNav">
+        <a href="/" class="nav-logo">Северный Кавказ</a>
+        <ul class="nav-links nav-links--simple">
+            <li><span id="userNameDisplay" class="nav-user-name"></span></li>
+            <li><a href="/">На главную</a></li>
+            <li><button class="nav-logout-btn" id="logoutBtn">Выйти</button></li>
+        </ul>
+    </nav>
+
+    <main class="container account-container">
+        <div class="account-header">
+            <h1 class="account-title">Личный кабинет</h1>
+        </div>
+
+        <div class="account-tabs">
+            <button class="account-tab active" data-account-tab="orders">Мои заказы</button>
+            <button class="account-tab" data-account-tab="favorites">Избранное</button>
+        </div>
+
+        <div id="accountContent" class="account-content">
+            <div class="account-loading">Загрузка...</div>
+        </div>
+    </main>
+
+    <footer class="site-footer" style="padding-top: 3rem;">
+        <div class="footer-bottom" style="padding-top: 0; border: none;">
+            <p class="footer-copy">&copy; 2026 Путеводитель по Кавказу.</p>
+        </div>
+    </footer>
+
+    <div class="auth-modal-overlay" id="logoutModal">
+        <div class="auth-modal">
+            <h2>Выйти из аккаунта?</h2>
+            <p>Вы уверены, что хотите завершить текущую сессию?</p>
+            <div class="auth-modal-actions">
+                <button class="auth-modal-btn cancel" id="cancelLogoutBtn">Отмена</button>
+                <button class="auth-modal-btn danger" id="confirmLogoutBtn">Выйти</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/account.js"></script>
+</body>
+</html>
