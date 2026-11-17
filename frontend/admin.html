@@ -4,44 +4,39 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Админ-панель | Управление</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/admin.css" />
   </head>
   <body>
     <aside class="sidebar">
       <div class="sidebar-header">
-        <h2>⚙️ Админ-панель</h2>
+        <h2>Панель управления</h2>
       </div>
       <nav class="sidebar-nav">
-        <button
-          class="nav-btn active"
-          id="tabBtnAttractions"
-          title="Достопримечательности"
-        >
-          📍 Контент
-        </button>
-        <button class="nav-btn" id="tabBtnOrders">
-          🧾 Управление заказами
-        </button>
+        <button class="nav-btn active" id="tabBtnAttractions">Контент</button>
+        <button class="nav-btn" id="tabBtnOrders">Заказы</button>
       </nav>
       <div class="sidebar-footer">
-        <a href="/" class="back-link">← На главную</a>
+        <a href="/" class="back-link">На главную</a>
       </div>
     </aside>
 
     <main class="main-content">
       <div id="sectionAttractions">
-        <h1 class="page-title">Добавление нового контента</h1>
+        <h1 class="page-title">Управление контентом</h1>
 
         <div class="form-card">
           <form id="addForm">
             <div class="form-grid">
               
-              <div class="form-group full-width" style="margin-bottom: 0.5rem;">
-                <label style="font-size: 1.1rem; color: #1d6a96; font-weight: 700;">Что вы хотите добавить?</label>
-                <select id="itemType" required style="font-size: 1.05rem; padding: 0.9rem; border: 2px solid #1d6a96; background-color: #f8fafc; font-weight: 600; color: #0b3b5c; cursor: pointer;">
-                  <option value="attraction">📍 Достопримечательность</option>
-                  <option value="place">🍽 Заведение (Ресторан/Кафе)</option>
-                  <option value="tour">🎫 Тур / Экскурсия</option>
+              <div class="form-group full-width">
+                <label>Тип контента</label>
+                <select id="itemType" required>
+                  <option value="attraction">Достопримечательность</option>
+                  <option value="place">Заведение</option>
+                  <option value="tour">Тур / Экскурсия</option>
                 </select>
               </div>
 
@@ -65,12 +60,12 @@
 
               <div class="form-group">
                 <label>Категория</label>
-                <input type="text" id="category" required placeholder="Природа · Горы" />
+                <input type="text" id="category" required placeholder="Природа, Горы" />
               </div>
 
               <div class="form-group">
-                <label>Эмодзи (иконка)</label>
-                <input type="text" id="emoji" required value="🏔" maxlength="5" />
+                <label>Символ (если нет фото)</label>
+                <input type="text" id="emoji" required value="К" maxlength="5" />
               </div>
 
               <div class="form-group full-width">
@@ -79,41 +74,39 @@
               </div>
 
               <div class="form-group full-width">
-                <label>Локация (meta)</label>
-                <input type="text" id="meta" required placeholder="📍 Приэльбрусье" />
+                <label>Локация</label>
+                <input type="text" id="meta" required placeholder="Приэльбрусье" />
               </div>
 
               <div class="form-group full-width" id="priceGroup" style="display: none;">
                 <label>Цена (в рублях)</label>
-                <input type="number" id="price" step="0.01" placeholder="Например: 2500" />
+                <input type="number" id="price" step="0.01" placeholder="2500" />
               </div>
 
               <div class="form-group full-width">
-                <label>Факты (JSON)</label>
+                <label>Факты (JSON формат)</label>
                 <textarea id="facts" required>[{"label": "Высота", "value": "5642 м"}]</textarea>
-                <div class="hint">Формат: [{"label": "...", "value": "..."}]</div>
               </div>
 
               <div class="form-group full-width">
-                <label>Секции (JSON)</label>
+                <label>Секции (JSON формат)</label>
                 <textarea id="sections" required>[{"heading": "Курорт", "text": "Круглогодичный курорт."}]</textarea>
-                <div class="hint">Формат: [{"heading": "...", "text": "..."}]</div>
               </div>
             </div>
 
-            <div class="form-group full-width">
-              <label>Фотография (необязательно)</label>
+            <div class="form-group full-width" style="margin-top: 1rem;">
+              <label>Обложка (картинка)</label>
               <input type="file" id="imageFile" accept="image/*" />
             </div>
 
-            <button type="submit" class="submit-btn">Сохранить в базу данных</button>
+            <button type="submit" class="submit-btn">Опубликовать</button>
           </form>
           <div id="message"></div>
         </div>
       </div>
 
       <div id="sectionOrders" style="display: none">
-        <h1 class="page-title">Все заказы пользователей</h1>
+        <h1 class="page-title">Входящие заказы</h1>
         <div class="table-card">
           <table>
             <thead>
@@ -121,7 +114,7 @@
                 <th>ID</th>
                 <th>Тур</th>
                 <th>Клиент</th>
-                <th>Дата / Кол-во</th>
+                <th>Дата</th>
                 <th>Сумма</th>
                 <th>Статус</th>
                 <th>Действие</th>
@@ -137,197 +130,7 @@
       </div>
     </main>
 
-    <script>
-      let token = null;
-      const msgDiv = document.getElementById("message");
-
-      const itemTypeSelect = document.getElementById("itemType");
-      const priceGroup = document.getElementById("priceGroup");
-
-      itemTypeSelect.addEventListener("change", () => {
-        if (itemTypeSelect.value === "tour") {
-          priceGroup.style.display = "block";
-        } else {
-          priceGroup.style.display = "none";
-          document.getElementById("price").value = "";
-        }
-      });
-
-      async function initAuth() {
-        try {
-          const res = await fetch("/api/auth/refresh", {
-            method: "POST",
-            credentials: "include",
-          });
-          if (res.ok) {
-            const data = await res.json();
-            token = data.access_token;
-            const userRes = await fetch("/api/auth/me", {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            if (userRes.ok) {
-              const userData = await userRes.json();
-              if (!userData.is_superuser) {
-                alert("У вас нет прав для доступа к этой странице.");
-                window.location.href = "/";
-              }
-            }
-          } else {
-            showMessage("Вы не авторизованы. Войдите на главной странице.", "error");
-          }
-        } catch (e) {
-          showMessage("Ошибка соединения с сервером", "error");
-        }
-      }
-
-      const btnAttr = document.getElementById("tabBtnAttractions");
-      const btnOrders = document.getElementById("tabBtnOrders");
-      const secAttr = document.getElementById("sectionAttractions");
-      const secOrders = document.getElementById("sectionOrders");
-
-      btnAttr.addEventListener("click", () => {
-        btnAttr.classList.add("active");
-        btnOrders.classList.remove("active");
-        secAttr.style.display = "block";
-        secOrders.style.display = "none";
-      });
-
-      btnOrders.addEventListener("click", () => {
-        btnOrders.classList.add("active");
-        btnAttr.classList.remove("active");
-        secAttr.style.display = "none";
-        secOrders.style.display = "block";
-        loadAdminOrders();
-      });
-
-      document.getElementById("addForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        if (!token) return showMessage("Нет доступа.", "error");
-
-        const fileInput = document.getElementById("imageFile");
-        let imageUrl = null;
-
-        if (fileInput.files.length > 0) {
-          const formData = new FormData();
-          formData.append("file", fileInput.files[0]);
-
-          try {
-            const uploadRes = await fetch("/api/attractions/upload", {
-              method: "POST",
-              headers: { Authorization: `Bearer ${token}` },
-              body: formData,
-            });
-
-            if (uploadRes.ok) {
-              const uploadData = await uploadRes.json();
-              imageUrl = uploadData.image_url;
-            } else {
-              return showMessage("Ошибка загрузки картинки", "error");
-            }
-          } catch (err) {
-            return showMessage("Ошибка сети при загрузке картинки", "error");
-          }
-        }
-
-        const payload = {
-          title: document.getElementById("title").value,
-          region: document.getElementById("region").value,
-          category: document.getElementById("category").value,
-          emoji: document.getElementById("emoji").value,
-          short_desc: document.getElementById("short_desc").value,
-          meta: document.getElementById("meta").value,
-          image_url: imageUrl,
-          item_type: document.getElementById("itemType").value,
-          price: parseFloat(document.getElementById("price").value) || null,
-          facts: JSON.parse(document.getElementById("facts").value || "[]"),
-          sections: JSON.parse(document.getElementById("sections").value || "[]"),
-        };
-
-        try {
-          const res = await fetch("/api/attractions/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(payload),
-          });
-
-          if (res.status === 201) {
-            showMessage("Контент успешно добавлен!", "success");
-            document.getElementById("addForm").reset();
-            itemTypeSelect.dispatchEvent(new Event('change'));
-          } else {
-            const err = await res.json();
-            showMessage(`Ошибка: ${JSON.stringify(err.detail)}`, "error");
-          }
-        } catch (error) {
-          showMessage("Ошибка при отправке данных.", "error");
-        }
-      });
-
-      async function loadAdminOrders() {
-        const tbody = document.getElementById("adminOrdersBody");
-        tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>Загрузка...</td></tr>";
-
-        try {
-          const res = await fetch("/api/orders/admin/all", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          if (res.ok) {
-            const orders = await res.json();
-            if (orders.length === 0) {
-              tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>В системе пока нет заказов.</td></tr>";
-              return;
-            }
-
-            tbody.innerHTML = orders.map((o) => `
-              <tr>
-                <td>#${o.id}</td>
-                <td><b>${o.tour_title}</b><br><small style="color:#7a8ea3">${o.region}</small></td>
-                <td>${o.name}<br><small style="color:#7a8ea3">${o.contact}</small></td>
-                <td>${o.date}<br><small style="color:#7a8ea3">${o.quantity} чел.</small></td>
-                <td><b>${o.total_price.toLocaleString("ru-RU")} ₽</b></td>
-                <td>
-                  <span class="status-badge ${o.is_paid ? "status-paid" : "status-unpaid"}">
-                    ${o.is_paid ? "Оплачен" : "Не оплачен"}
-                  </span>
-                </td>
-                <td>
-                  <button class="btn-delete" onclick="deleteAdminOrder(${o.id})">Удалить</button>
-                </td>
-              </tr>
-            `).join("");
-          } else {
-            tbody.innerHTML = "<tr><td colspan='7' style='color:red; text-align:center;'>Ошибка загрузки.</td></tr>";
-          }
-        } catch (e) {
-          tbody.innerHTML = "<tr><td colspan='7' style='color:red; text-align:center;'>Ошибка сети.</td></tr>";
-        }
-      }
-
-      async function deleteAdminOrder(id) {
-        if (!confirm(`Вы уверены, что хотите удалить заказ #${id}?`)) return;
-        try {
-          const res = await fetch(`/api/orders/admin/${id}`, {
-            method: "DELETE",
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          if (res.ok) loadAdminOrders();
-          else alert("Ошибка удаления");
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      function showMessage(text, type) {
-        msgDiv.textContent = text;
-        msgDiv.className = type;
-        msgDiv.style.display = "block";
-      }
-
-      initAuth();
-    </script>
+    <script src="js/api.js"></script>
+    <script src="js/admin.js"></script>
   </body>
 </html>
