@@ -1529,6 +1529,19 @@ async function renderAccount() {
     <h3 style="color:#0b3b5c; margin:2rem 0 1rem;">⭐ Избранное (${favorites.length})</h3>
   `
 
+    const favGrid = document.getElementById("accountFavGrid")
+    const allItems = [...attractions, ...places]
+
+    const favItems = favorites
+        .map((id) => allItems.find((i) => String(i.id) === String(id)))
+        .filter(Boolean)
+
+    if (favItems.length === 0) {
+        favGrid.innerHTML = `<div class="empty-state"><span class="icon">💫</span>Вы пока ничего не добавили в избранное.</div>`
+    } else {
+        favItems.forEach((item) => favGrid.appendChild(createCard(item)))
+    }
+
     document.getElementById("logoutBtn").addEventListener("click", async () => {
         try {
             await fetch("/api/auth/logout", {
