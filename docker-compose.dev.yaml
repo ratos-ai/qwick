@@ -1,7 +1,6 @@
 services:
   backend:
     volumes:
-      - ".:/app"
       - "./uploads:/app/uploads"
     ports:
       - "8000:8000"

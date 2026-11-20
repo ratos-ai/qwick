@@ -84,13 +84,15 @@
               </div>
 
               <div class="form-group full-width">
-                <label>Факты (JSON формат)</label>
-                <textarea id="facts" required>[{"label": "Высота", "value": "5642 м"}]</textarea>
+                <label>Факты о месте</label>
+                <div id="factsContainer" class="dynamic-list"></div>
+                <button type="button" class="add-row-btn" onclick="addFactRow()">+ Добавить факт</button>
               </div>
 
               <div class="form-group full-width">
-                <label>Секции (JSON формат)</label>
-                <textarea id="sections" required>[{"heading": "Курорт", "text": "Круглогодичный курорт."}]</textarea>
+                <label>Секции (описание)</label>
+                <div id="sectionsContainer" class="dynamic-list"></div>
+                <button type="button" class="add-row-btn" onclick="addSectionRow()">+ Добавить секцию</button>
               </div>
             </div>
 
