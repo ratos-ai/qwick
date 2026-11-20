@@ -11,7 +11,7 @@ from backend.core.database import get_db
 from backend.models import User
 from backend.schemas import AttractionCreate, AttractionResponse
 
-from .crud import create_attraction, get_attractions
+from .crud import create_attraction, delete_attraction, get_attractions
 
 router = APIRouter(prefix="/attractions", tags=["Attractions"])
 
@@ -53,3 +53,14 @@ async def upload_image(
         await buffer.write(await file.read())
 
     return {"image_url": f"/uploads/{unique_filename}"}
+
+
+@router.delete("/{attraction_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_attraction_view(
+    attraction_id: int,
+    session: Annotated[AsyncSession, Depends(get_db)],
+    admin: Annotated[User, Depends(get_current_admin)],
+):
+    success = await delete_attraction(session, attraction_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Не найдено")

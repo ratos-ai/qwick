@@ -29,3 +29,12 @@ async def get_attractions(
 
     result = await session.scalars(stmt)
     return list(result.all())
+
+
+async def delete_attraction(session: AsyncSession, attraction_id: int) -> bool:
+    attraction = await session.get(Attraction, attraction_id)
+    if not attraction:
+        return False
+    await session.delete(attraction)
+    await session.commit()
+    return True
