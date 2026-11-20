@@ -15,7 +15,8 @@
         <h2>Панель управления</h2>
       </div>
       <nav class="sidebar-nav">
-        <button class="nav-btn active" id="tabBtnAttractions">Контент</button>
+        <button class="nav-btn active" id="tabBtnAttractions">Добавить</button>
+        <button class="nav-btn" id="tabBtnList">Список объектов</button>
         <button class="nav-btn" id="tabBtnOrders">Заказы</button>
       </nav>
       <div class="sidebar-footer">
@@ -104,6 +105,28 @@
             <button type="submit" class="submit-btn">Опубликовать</button>
           </form>
           <div id="message"></div>
+        </div>
+      </div>
+      
+      <div id="sectionList" style="display: none">
+        <h1 class="page-title">Все объекты</h1>
+        <div class="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Тип</th>
+                <th>Название</th>
+                <th>Регион</th>
+                <th>Действие</th>
+              </tr>
+            </thead>
+            <tbody id="adminContentBody">
+              <tr>
+                <td colspan="5" style="text-align: center; padding: 2rem">Загрузка...</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 

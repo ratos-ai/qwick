@@ -72,23 +72,41 @@ async function checkAdminAuth() {
 
 function initTabs() {
     const btnAttr = document.getElementById("tabBtnAttractions")
+    const btnList = document.getElementById("tabBtnList")
     const btnOrders = document.getElementById("tabBtnOrders")
+
     const secAttr = document.getElementById("sectionAttractions")
+    const secList = document.getElementById("sectionList")
     const secOrders = document.getElementById("sectionOrders")
 
-    if (!btnAttr || !btnOrders) return
+    if (!btnAttr || !btnList || !btnOrders) return
+
+    const hideAll = () => {
+        secAttr.style.display = "none"
+        secList.style.display = "none"
+        secOrders.style.display = "none"
+
+        btnAttr.classList.remove("active")
+        btnList.classList.remove("active")
+        btnOrders.classList.remove("active")
+    }
 
     btnAttr.addEventListener("click", () => {
+        hideAll()
         btnAttr.classList.add("active")
-        btnOrders.classList.remove("active")
         secAttr.style.display = "block"
-        secOrders.style.display = "none"
+    })
+
+    btnList.addEventListener("click", () => {
+        hideAll()
+        btnList.classList.add("active")
+        secList.style.display = "block"
+        loadAdminContent()
     })
 
     btnOrders.addEventListener("click", () => {
+        hideAll()
         btnOrders.classList.add("active")
-        btnAttr.classList.remove("active")
-        secAttr.style.display = "none"
         secOrders.style.display = "block"
         loadAdminOrders()
     })
@@ -242,6 +260,68 @@ async function deleteAdminOrder(id) {
         }
     } catch (e) {
         console.error(e)
+    }
+}
+
+async function loadAdminContent() {
+    const tbody = document.getElementById("adminContentBody")
+    if (!tbody) return
+    tbody.innerHTML =
+        "<tr><td colspan='5' style='text-align:center;'>Загрузка...</td></tr>"
+
+    try {
+        const res = await fetch("/api/attractions/")
+        if (res.ok) {
+            const data = await res.json()
+            if (data.length === 0) {
+                tbody.innerHTML =
+                    "<tr><td colspan='5' style='text-align:center;'>Объектов нет</td></tr>"
+                return
+            }
+
+            const typeMap = {
+                attraction: "Достопримечательность",
+                place: "Заведение",
+                tour: "Тур",
+            }
+
+            tbody.innerHTML = data
+                .map(
+                    (item) => `
+                <tr>
+                    <td>#${item.id}</td>
+                    <td>${typeMap[item.item_type] || "Достопримечательность"}</td>
+                    <td><b>${item.title}</b></td>
+                    <td>${item.region.toUpperCase()}</td>
+                    <td><button class="btn-delete" onclick="deleteAdminContent(${item.id})">Удалить</button></td>
+                </tr>
+            `,
+                )
+                .join("")
+        } else {
+            tbody.innerHTML =
+                "<tr><td colspan='5' style='color:red; text-align:center;'>Ошибка загрузки.</td></tr>"
+        }
+    } catch (e) {
+        tbody.innerHTML =
+            "<tr><td colspan='5' style='color:red; text-align:center;'>Ошибка сети.</td></tr>"
+    }
+}
+
+async function deleteAdminContent(id) {
+    if (!confirm(`Вы уверены, что хотите удалить объект #${id}?`)) return
+    try {
+        const res = await apiRequest(`/api/attractions/${id}`, {
+            method: "DELETE",
+        })
+        if (res.status === 204 || res.ok) {
+            loadAdminContent()
+        } else {
+            alert("Ошибка удаления")
+        }
+    } catch (e) {
+        console.error(e)
+        alert("Ошибка сети")
     }
 }
 
