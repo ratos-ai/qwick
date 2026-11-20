@@ -10,6 +10,7 @@ body {
     color: #E2E8F0;
     display: flex;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .sidebar {
@@ -322,6 +323,13 @@ tr:hover {
     background: rgba(59, 130, 246, 0.1);
 }
 
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+
 @media (max-width: 1024px) {
     .sidebar {
         width: 240px;
@@ -340,6 +348,7 @@ tr:hover {
     body {
         flex-direction: column;
     }
+
     .sidebar {
         position: relative;
         width: 100%;
@@ -347,16 +356,68 @@ tr:hover {
         border-right: none;
         border-bottom: 1px solid #334155;
     }
-    .sidebar-nav {
-        flex-direction: row;
+
+    .sidebar-header {
         padding: 1rem;
     }
+
+    .sidebar-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 0.5rem 1rem;
+        gap: 0.5rem;
+        white-space: nowrap;
+    }
+
+    .nav-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+
     .sidebar-footer {
         display: none;
     }
+
     .main-content {
         margin-left: 0;
         width: 100%;
-        padding: 1.5rem;
+        padding: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-card, .table-card {
+        padding: 1.2rem;
+    }
+
+    .table-responsive table {
+        min-width: 600px;
+    }
+
+    th, td {
+        padding: 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .dynamic-row {
+        flex-direction: column;
+        align-items: stretch;
+        border-bottom: 1px dashed #334155;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .dynamic-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+
+    .remove-row-btn {
+        width: 100%;
+        height: 35px;
     }
 }
