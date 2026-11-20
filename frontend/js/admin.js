@@ -6,6 +6,49 @@ function showMessage(text, type) {
     msgDiv.style.display = "block"
 }
 
+function addFactRow(label = "", value = "") {
+    const container = document.getElementById("factsContainer")
+    const row = document.createElement("div")
+    row.className = "dynamic-row"
+    row.innerHTML = `
+        <input type="text" placeholder="Название (Высота)" value="${label}" class="fact-label" required>
+        <input type="text" placeholder="Значение (5642 м)" value="${value}" class="fact-value" required>
+        <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">✕</button>
+    `
+    container.appendChild(row)
+}
+
+function addSectionRow(heading = "", text = "") {
+    const container = document.getElementById("sectionsContainer")
+    const row = document.createElement("div")
+    row.className = "dynamic-row"
+    row.innerHTML = `
+        <input type="text" placeholder="Заголовок (История)" value="${heading}" class="section-heading" required>
+        <input type="text" placeholder="Текст описания" value="${text}" class="section-text" required>
+        <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">✕</button>
+    `
+    container.appendChild(row)
+}
+
+function serializeDynamicList(
+    containerId,
+    labelClass,
+    valueClass,
+    labelKey,
+    valueKey,
+) {
+    const rows = document.querySelectorAll(`#${containerId} .dynamic-row`)
+    const result = []
+    rows.forEach((row) => {
+        const l = row.querySelector(`.${labelClass}`).value.trim()
+        const v = row.querySelector(`.${valueClass}`).value.trim()
+        if (l && v) {
+            result.push({ [labelKey]: l, [valueKey]: v })
+        }
+    })
+    return result
+}
+
 async function checkAdminAuth() {
     const isRefreshed = await tryRefreshToken()
     if (!isRefreshed) {
@@ -94,16 +137,20 @@ async function handleFormSubmit(e) {
         }
     }
 
-    let parsedFacts = []
-    let parsedSections = []
-    try {
-        parsedFacts = JSON.parse(document.getElementById("facts").value || "[]")
-        parsedSections = JSON.parse(
-            document.getElementById("sections").value || "[]",
-        )
-    } catch (err) {
-        return showMessage("Ошибка в формате JSON (факты или секции)", "error")
-    }
+    const parsedFacts = serializeDynamicList(
+        "factsContainer",
+        "fact-label",
+        "fact-value",
+        "label",
+        "value",
+    )
+    const parsedSections = serializeDynamicList(
+        "sectionsContainer",
+        "section-heading",
+        "section-text",
+        "heading",
+        "text",
+    )
 
     const payload = {
         title: document.getElementById("title").value,
@@ -204,6 +251,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     initTabs()
     initItemTypeToggle()
+
+    if (document.getElementById("factsContainer").children.length === 0) {
+        addFactRow()
+    }
+    if (document.getElementById("sectionsContainer").children.length === 0) {
+        addSectionRow()
+    }
 
     const form = document.getElementById("addForm")
     if (form) {
