@@ -1,111 +1,467 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Северный Кавказ | Путеводитель</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/index.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <nav class="nav-bar" id="mainNav">
-        <a href="/" class="nav-logo">Северный Кавказ</a>
-        
-        <ul class="nav-links nav-links--desktop">
-            <li><a href="#explore">Исследовать</a></li>
-            <li><a href="/account.html" class="account-btn">Личный кабинет</a></li>
-            <li><a href="/admin.html" id="adminBtn" class="admin-link" style="display: none;">Админ-панель</a></li>
-        </ul>
+    <title>Qwick — Путеводитель по Северному Кавказу</title>
 
-        <button class="nav-toggle" aria-label="Toggle navigation">
-            <span></span><span></span><span></span>
-        </button>
+    <meta
+      name="description"
+      content="Откройте Северный Кавказ вместе с Qwick. Достопримечательности, интересные места, заведения и туры в одном путеводителе."
+    />
+
+    <meta name="theme-color" content="#0f172a" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/home.css" />
+  </head>
+
+  <body>
+    <!-- Navigation -->
+
+    <nav class="nav-bar home-nav" id="mainNav">
+      <a href="/" class="nav-logo"> QWICK </a>
+
+      <ul class="nav-links nav-links--desktop">
+        <li>
+          <a href="#about">О проекте</a>
+        </li>
+
+        <li>
+          <a href="#regions">Направления</a>
+        </li>
+
+        <li>
+          <a href="#features">Возможности</a>
+        </li>
+
+        <li>
+          <a href="/catalog.html"> Каталог </a>
+        </li>
+
+        <li>
+          <a href="/account.html" class="account-btn"> Личный кабинет </a>
+        </li>
+
+        <li>
+          <a
+            href="/admin.html"
+            id="adminBtn"
+            class="admin-link"
+            style="display: none"
+          >
+            Админ-панель
+          </a>
+        </li>
+      </ul>
+
+      <button
+        class="nav-toggle"
+        aria-label="Открыть меню"
+        aria-expanded="false"
+        type="button"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </nav>
 
-    <section class="hero" id="explore">
-        <div class="hero-image">
-            <img src="./images/hero.jpg" alt="Горы Кавказа">
+    <main>
+      <!-- Hero -->
+
+      <section class="home-hero" id="top">
+        <div class="home-hero__image">
+          <img
+            src="./images/hero.jpg"
+            alt="Панорама гор Северного Кавказа"
+            fetchpriority="high"
+          />
         </div>
-        <div class="hero-content">
-            <p class="hero-issue">Путеводитель по регионам</p>
-            <h1 class="hero-title">Открой для себя <em>Кавказ</em></h1>
-            <div class="hero-meta">
-                <span>Достопримечательности</span>
-                <span class="divider"></span>
-                <span>Заведения</span>
-                <span class="divider"></span>
-                <span>Туры и билеты</span>
+
+        <div class="home-hero__content">
+          <p class="home-hero__kicker">
+            Твой путеводитель по Северному Кавказу
+          </p>
+
+          <h1 class="home-hero__title">
+            Открой для себя
+            <em>Кавказ</em>
+          </h1>
+
+          <p class="home-hero__description">
+            Место, где величественные горы встречаются с богатой историей и
+            самобытной культурой. Исследуй новые направления и планируй
+            путешествие вместе с Qwick.
+          </p>
+
+          <div class="home-hero__actions">
+            <a href="/catalog.html" class="home-button">
+              Исследовать каталог
+              <span class="home-arrow">→</span>
+            </a>
+
+            <a href="#about" class="home-button home-button--outline">
+              Узнать больше
+            </a>
+          </div>
+        </div>
+
+        <div class="home-hero__bottom">Explore the North Caucasus</div>
+      </section>
+
+      <!-- About -->
+
+      <section class="home-section home-intro" id="about">
+        <div class="home-section__inner home-intro__layout">
+          <div class="home-intro__aside reveal">
+            <span class="home-eyebrow"> Открой новый мир </span>
+
+            <h2 class="home-section-title">Больше, чем просто путешествие</h2>
+
+            <p>
+              Северный Кавказ — это множество направлений, историй и
+              впечатлений, которые ждут своего открытия.
+            </p>
+          </div>
+
+          <div class="home-intro__text reveal">
+            <p>
+              Каждый регион Северного Кавказа обладает своим характером. Здесь
+              можно найти удивительные природные ландшафты, исторические
+              памятники, самобытные города и уникальные культурные традиции.
+            </p>
+
+            <p>
+              Мы создаём Qwick, чтобы сделать знакомство с этим регионом проще.
+              В одном месте собраны достопримечательности, интересные заведения,
+              экскурсии и туры.
+            </p>
+
+            <p>
+              Выбирай направление, изучай интересные места, сохраняй
+              понравившееся и планируй своё следующее путешествие.
+            </p>
+
+            <div class="home-intro__signature">
+              Путешествие начинается с интереса.
             </div>
+          </div>
         </div>
-    </section>
+      </section>
 
-    <div class="container" id="mainView">
-        
-        <div class="explore-header reveal">
-            <div class="region-filter">
-                <label for="regionSelect">Регион</label>
-                <select id="regionSelect">
-                    <option value="all">Весь Кавказ</option>
-                    <option value="rso">Северная Осетия</option>
-                    <option value="kbr">Кабардино-Балкария</option>
-                    <option value="kchr">Карачаево-Черкесия</option>
-                    <option value="stav">Ставропольский край</option>
-                    <option value="ing">Ингушетия</option>
-                    <option value="che">Чечня</option>
-                    <option value="dag">Дагестан</option>
-                </select>
+      <!-- Regions -->
+
+      <section class="home-section home-regions" id="regions">
+        <div class="home-section__inner">
+          <div class="home-regions__header reveal">
+            <div>
+              <span class="home-eyebrow"> Семь направлений </span>
+
+              <h2 class="home-section-title">Исследуй Северный Кавказ</h2>
+
+              <p class="home-section-description">
+                Выбери регион, с которого начнётся твоё знакомство с Кавказом.
+              </p>
             </div>
 
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="attractions">Места</button>
-                <button class="tab-btn" data-tab="places">Заведения</button>
-                <button class="tab-btn" data-tab="tours">Туры</button>
-                <button class="tab-btn" data-tab="favorites">Избранное (<span id="favCount">0</span>)</button>
+            <a href="/catalog.html" class="home-button">
+              Все направления
+              <span class="home-arrow">→</span>
+            </a>
+          </div>
+
+          <div class="home-regions__grid">
+            <a href="/catalog.html?region=rso" class="home-region-card reveal">
+              <span class="home-region-card__number">01 / 07</span>
+
+              <div class="home-region-card__content">
+                <h3 class="home-region-card__title">
+                  Северная Осетия — Алания
+                </h3>
+
+                <p class="home-region-card__description">
+                  Ущелья, горные аулы и впечатляющие пейзажи.
+                </p>
+              </div>
+
+              <span class="home-region-card__arrow">↗</span>
+            </a>
+
+            <a href="/catalog.html?region=kbr" class="home-region-card reveal">
+              <span class="home-region-card__number">02 / 07</span>
+
+              <div class="home-region-card__content">
+                <h3 class="home-region-card__title">Кабардино-Балкария</h3>
+
+                <p class="home-region-card__description">
+                  Высокогорные пейзажи и природные маршруты.
+                </p>
+              </div>
+
+              <span class="home-region-card__arrow">↗</span>
+            </a>
+
+            <a href="/catalog.html?region=kchr" class="home-region-card reveal">
+              <span class="home-region-card__number">03 / 07</span>
+
+              <div class="home-region-card__content">
+                <h3 class="home-region-card__title">Карачаево-Черкесия</h3>
+
+                <p class="home-region-card__description">
+                  Горные долины, озёра и курортные места.
+                </p>
+              </div>
+
+              <span class="home-region-card__arrow">↗</span>
+            </a>
+
+            <a href="/catalog.html?region=stav" class="home-region-card reveal">
+              <span class="home-region-card__number">04 / 07</span>
+
+              <div class="home-region-card__content">
+                <h3 class="home-region-card__title">Ставропольский край</h3>
+
+                <p class="home-region-card__description">
+                  Курортные города и исторические места.
+                </p>
+              </div>
+
+              <span class="home-region-card__arrow">↗</span>
+            </a>
+
+            <a href="/catalog.html?region=ing" class="home-region-card reveal">
+              <span class="home-region-card__number">05 / 07</span>
+
+              <div class="home-region-card__content">
+                <h3 class="home-region-card__title">Ингушетия</h3>
+
+                <p class="home-region-card__description">
+                  Башенные комплексы и горные долины.
+                </p>
+              </div>
+
+              <span class="home-region-card__arrow">↗</span>
+            </a>
+
+            <a href="/catalog.html?region=che" class="home-region-card reveal">
+              <span class="home-region-card__number">06 / 07</span>
+
+              <div class="home-region-card__content">
+                <h3 class="home-region-card__title">Чеченская Республика</h3>
+
+                <p class="home-region-card__description">
+                  Горные ландшафты и культурные маршруты.
+                </p>
+              </div>
+
+              <span class="home-region-card__arrow">↗</span>
+            </a>
+
+            <a href="/catalog.html?region=dag" class="home-region-card reveal">
+              <span class="home-region-card__number">07 / 07</span>
+
+              <div class="home-region-card__content">
+                <h3 class="home-region-card__title">Дагестан</h3>
+
+                <p class="home-region-card__description">
+                  Каспийское побережье, горы и старинные города.
+                </p>
+              </div>
+
+              <span class="home-region-card__arrow">↗</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured content -->
+
+      <section class="home-section home-featured" id="discover">
+        <div class="home-section__inner">
+          <div class="home-featured__header reveal">
+            <div>
+              <span class="home-eyebrow"> Вдохновение для поездки </span>
+
+              <h2 class="home-section-title">Места, которые стоит открыть</h2>
+
+              <p class="home-section-description">
+                Несколько объектов из нашего каталога, с которых можно начать
+                исследование региона.
+              </p>
             </div>
-        </div>
 
-        <div class="tab-panel active" id="panel-attractions">
-            <div class="gallery-grid" id="attractionsGrid"></div>
-        </div>
-        <div class="tab-panel" id="panel-places">
-            <div class="gallery-grid" id="placesGrid"></div>
-        </div>
-        <div class="tab-panel" id="panel-tours">
-            <div class="gallery-grid" id="toursGrid"></div>
-        </div>
-        <div class="tab-panel" id="panel-favorites">
-            <div class="gallery-grid" id="favoritesGrid"></div>
-        </div>
-    </div>
+            <a href="/catalog.html" class="home-button">
+              Весь каталог
+              <span class="home-arrow">→</span>
+            </a>
+          </div>
 
-    <div class="container detail-page" id="detailView" style="display: none;"></div>
-
-    <div class="modal-overlay" id="orderModal">
-        <div class="modal">
-            <button class="modal-close" id="modalClose">✕</button>
-            <h2 id="modalTitle">Оформление заказа</h2>
-            <div id="modalBody"></div>
-        </div>
-    </div>
-
-    <footer class="site-footer">
-        <div class="footer-top">
-            <div class="footer-brand">
-                <h3 class="footer-brand-title">Северный<br>Кавказ</h3>
-                <p class="footer-brand-desc">Достопримечательности, заведения, туры и билеты в одном путеводителе.</p>
+          <div class="home-featured__grid" id="featuredGrid" aria-live="polite">
+            <div class="home-featured__empty">
+              Загружаем интересные места...
             </div>
+          </div>
         </div>
-        <div class="footer-bottom">
-            <p class="footer-copy">&copy; 2026 Путеводитель по Кавказу.</p>
+      </section>
+
+      <!-- Categories -->
+
+      <section class="home-section home-categories">
+        <div class="home-section__inner">
+          <span class="home-eyebrow reveal">
+            Всё необходимое для путешествия
+          </span>
+
+          <h2 class="home-section-title reveal">
+            Один путеводитель — множество возможностей
+          </h2>
+
+          <div class="home-categories__grid">
+            <article class="home-category reveal">
+              <span class="home-category__number">01</span>
+
+              <h3>Достопримечательности</h3>
+
+              <p>
+                Открывай интересные места, изучай их историю и узнавай больше о
+                каждом направлении.
+              </p>
+            </article>
+
+            <article class="home-category reveal">
+              <span class="home-category__number">02</span>
+
+              <h3>Заведения</h3>
+
+              <p>
+                Находи интересные места, где можно отдохнуть, познакомиться с
+                местной кухней и атмосферой.
+              </p>
+            </article>
+
+            <article class="home-category reveal">
+              <span class="home-category__number">03</span>
+
+              <h3>Туры и экскурсии</h3>
+
+              <p>
+                Изучай доступные предложения, выбирай подходящие экскурсии и
+                оформляй заказы.
+              </p>
+            </article>
+          </div>
         </div>
+      </section>
+
+      <!-- Benefits -->
+
+      <section class="home-section home-benefits" id="features">
+        <div class="home-section__inner">
+          <span class="home-eyebrow reveal"> Почему Qwick </span>
+
+          <h2 class="home-section-title reveal">
+            Планировать путешествие стало проще
+          </h2>
+
+          <div class="home-benefits__grid">
+            <article class="home-benefit reveal">
+              <span class="home-benefit__number">01</span>
+
+              <h3>Всё в одном месте</h3>
+
+              <p>
+                Достопримечательности, заведения, туры и информация о регионах
+                собраны в одном каталоге.
+              </p>
+            </article>
+
+            <article class="home-benefit reveal">
+              <span class="home-benefit__number">02</span>
+
+              <h3>Сохраняй интересное</h3>
+
+              <p>
+                Добавляй понравившиеся места в избранное, чтобы не потерять их
+                во время планирования поездки.
+              </p>
+            </article>
+
+            <article class="home-benefit reveal">
+              <span class="home-benefit__number">03</span>
+
+              <h3>Выбирай свой маршрут</h3>
+
+              <p>
+                Исследуй регионы, знакомься с интересными объектами и выбирай
+                подходящие предложения.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Final CTA -->
+
+      <section class="home-cta">
+        <div class="home-cta__inner reveal">
+          <span class="home-eyebrow"> Твоё следующее приключение </span>
+
+          <h2 class="home-cta__title">Кавказ ждёт своего открытия</h2>
+
+          <p class="home-cta__description">
+            Начни знакомство с регионами, находи интересные места и создавай
+            собственную историю путешествий.
+          </p>
+
+          <a href="/catalog.html" class="home-button">
+            Перейти в каталог
+            <span class="home-arrow">→</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+
+    <footer class="site-footer home-footer">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <h3 class="footer-brand-title">Qwick</h3>
+
+          <p class="footer-brand-desc">
+            Путеводитель по Северному Кавказу. Открывай новые места и планируй
+            путешествия.
+          </p>
+        </div>
+
+        <div class="home-footer__links">
+          <a href="/">Главная</a>
+          <a href="/catalog.html">Каталог</a>
+          <a href="/account.html">Личный кабинет</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">
+          &copy; 2026 Qwick. Путеводитель по Северному Кавказу.
+        </p>
+      </div>
     </footer>
+
+    <!-- Scripts -->
 
     <script src="js/api.js"></script>
     <script src="js/ui.js"></script>
-    <script src="js/index.js"></script>
-</body>
+    <script src="js/home.js"></script>
+  </body>
 </html>

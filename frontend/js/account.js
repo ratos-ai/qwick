@@ -163,7 +163,7 @@ async function renderFavoritesList(container) {
             .map((item) => {
                 const type = item.item_type || "attraction"
                 return `
-                <div class="order-card" style="cursor: pointer;" onclick="window.location.href='/#/${type}/${item.id}'">
+                <div class="order-card" style="cursor: pointer;" onclick="window.location.href='/catalog.html#/${type}/${item.id}'">
                     <div class="order-info">
                         <div class="order-title">${item.title}</div>
                         <div class="order-meta">
