@@ -70,6 +70,8 @@ async def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    await session.execute(delete(RefreshToken).where(RefreshToken.user_id == user.id))
+
     access_token = security.encode_jwt({"sub": str(user.id)})
     refresh_token_str = str(uuid.uuid4())
     expires_at = datetime.now(UTC) + timedelta(
