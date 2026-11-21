@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="js/theme.js"></script>
     <title>Каталог | Путеводитель по Северному Кавказу</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,6 +16,7 @@
 
     <link rel="stylesheet" href="css/common.css" />
     <link rel="stylesheet" href="css/catalog.css" />
+    <link rel="stylesheet" href="css/theme.css" />
   </head>
   <body>
     <nav class="nav-bar nav-light catalog-nav" id="mainNav">
@@ -40,6 +42,17 @@
           </a>
         </li>
       </ul>
+
+      <button
+        class="theme-toggle"
+        type="button"
+        data-theme-toggle
+        aria-label="Включить тёмную тему"
+        aria-pressed="false"
+        title="Тёмная тема"
+      >
+        <span class="theme-toggle__icon" aria-hidden="true">☾</span>
+      </button>
 
       <button
         class="nav-toggle"
