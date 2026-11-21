@@ -17,11 +17,12 @@
     <link rel="stylesheet" href="css/catalog.css" />
   </head>
   <body>
-    <nav class="nav-bar" id="mainNav">
-      <a href="/" class="nav-logo">Северный Кавказ</a>
+    <nav class="nav-bar nav-light catalog-nav" id="mainNav">
+      <a href="/" class="nav-logo">QWICK</a>
 
       <ul class="nav-links nav-links--desktop">
         <li><a href="/">Главная</a></li>
+
         <li><a href="#catalog">Каталог</a></li>
 
         <li>
@@ -40,52 +41,69 @@
         </li>
       </ul>
 
-      <button class="nav-toggle" aria-label="Toggle navigation">
+      <button
+        class="nav-toggle"
+        aria-label="Открыть меню"
+        aria-expanded="false"
+        type="button"
+      >
         <span></span>
         <span></span>
         <span></span>
       </button>
     </nav>
 
-    <section class="hero" id="explore">
-      <div class="hero-image">
-        <img src="./images/hero.jpg" alt="Горы Кавказа" />
-      </div>
+    <div class="container catalog-page" id="mainView">
+      <header class="catalog-heading">
+        <div>
+          <span class="catalog-eyebrow"> Qwick / Путеводитель по Кавказу </span>
 
-      <div class="hero-content">
-        <p class="hero-issue">Путеводитель по регионам</p>
+          <h1 class="catalog-title">Исследуй Северный Кавказ</h1>
 
-        <h1 class="hero-title">Открой для себя <em>Кавказ</em></h1>
-
-        <div class="hero-meta">
-          <span>Достопримечательности</span>
-          <span class="divider"></span>
-          <span>Заведения</span>
-          <span class="divider"></span>
-          <span>Туры и билеты</span>
+          <p class="catalog-description">
+            Находи интересные места, открывай новые направления и выбирай
+            путешествия по душе.
+          </p>
         </div>
-      </div>
-    </section>
+      </header>
 
-    <div class="container" id="mainView">
-      <div class="explore-header reveal" id="catalog">
-        <div class="region-filter">
-          <label for="regionSelect">Регион</label>
+      <div class="explore-header catalog-toolbar" id="catalog">
+        <div class="catalog-controls">
+          <div class="region-filter">
+            <label for="regionSelect">Регион</label>
 
-          <select id="regionSelect">
-            <option value="all">Весь Кавказ</option>
-            <option value="rso">Северная Осетия</option>
-            <option value="kbr">Кабардино-Балкария</option>
-            <option value="kchr">Карачаево-Черкесия</option>
-            <option value="stav">Ставропольский край</option>
-            <option value="ing">Ингушетия</option>
-            <option value="che">Чечня</option>
-            <option value="dag">Дагестан</option>
-          </select>
+            <select id="regionSelect">
+              <option value="all">Весь Кавказ</option>
+              <option value="rso">Северная Осетия</option>
+              <option value="kbr">Кабардино-Балкария</option>
+              <option value="kchr">Карачаево-Черкесия</option>
+              <option value="stav">Ставропольский край</option>
+              <option value="ing">Ингушетия</option>
+              <option value="che">Чечня</option>
+              <option value="dag">Дагестан</option>
+            </select>
+          </div>
+
+          <div class="catalog-search">
+            <label for="catalogSearch"> Поиск по каталогу </label>
+
+            <div class="catalog-search__field">
+              <input
+                type="search"
+                id="catalogSearch"
+                placeholder="Название, место, регион..."
+                autocomplete="off"
+              />
+
+              <span aria-hidden="true">⌕</span>
+            </div>
+          </div>
         </div>
 
         <div class="tabs">
-          <button class="tab-btn active" data-tab="attractions">Места</button>
+          <button class="tab-btn active" data-tab="attractions">
+            Достопримечательности
+          </button>
 
           <button class="tab-btn" data-tab="places">Заведения</button>
 

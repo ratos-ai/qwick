@@ -13,6 +13,7 @@ let places = []
 let tours = []
 let favorites = JSON.parse(localStorage.getItem("caucasus_favorites")) || []
 let currentRegion = "all"
+let searchQuery = ""
 
 function saveFavorites(ids) {
     localStorage.setItem("caucasus_favorites", JSON.stringify(ids))
@@ -23,8 +24,27 @@ function isFavorite(id) {
 }
 
 function filterByRegion(items) {
-    if (currentRegion === "all") return items
-    return items.filter((item) => item.region === currentRegion)
+    return items.filter((item) => {
+        const matchesRegion =
+            currentRegion === "all" || item.region === currentRegion
+
+        const searchableText = [
+            item.title,
+            item.shortDesc,
+            item.short_desc,
+            item.description,
+            item.category,
+            REGIONS[item.region],
+        ]
+            .filter(Boolean)
+            .join(" ")
+            .toLocaleLowerCase("ru")
+
+        const matchesSearch =
+            !searchQuery || searchableText.includes(searchQuery)
+
+        return matchesRegion && matchesSearch
+    })
 }
 
 async function loadData() {
@@ -181,12 +201,19 @@ function renderFavorites() {
 
     grid.innerHTML = ""
     const allItems = [...attractions, ...places]
-    const favItems = favorites
-        .map((id) => allItems.find((i) => String(i.id) === String(id)))
-        .filter(Boolean)
+    const favItems = filterByRegion(
+        favorites
+            .map((id) => allItems.find((i) => String(i.id) === String(id)))
+            .filter(Boolean),
+    )
 
     if (favItems.length === 0) {
-        grid.innerHTML = `<div class="empty-state">Вы пока ничего не добавили в избранное</div>`
+        const message =
+            favorites.length === 0
+                ? "Вы пока ничего не добавили в избранное"
+                : "По вашему запросу ничего не найдено"
+
+        grid.innerHTML = `<div class="empty-state">${message}</div>`
     } else {
         favItems.forEach((item) => grid.appendChild(createCard(item)))
     }
@@ -559,11 +586,24 @@ function initRegionFilter() {
     })
 }
 
+function initCatalogSearch() {
+    const searchInput = document.getElementById("catalogSearch")
+
+    if (!searchInput) return
+
+    searchInput.addEventListener("input", () => {
+        searchQuery = searchInput.value.trim().toLocaleLowerCase("ru")
+
+        renderAll()
+    })
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     initScrollEffects()
     initMobileMenu()
     initTabs()
     initRegionFilter()
+    initCatalogSearch()
 
     const accountBtn = document.querySelector(".account-btn")
     if (accountBtn) {

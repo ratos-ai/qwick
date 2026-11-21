@@ -285,3 +285,122 @@
         display: none;
     } */
 }
+
+
+
+/* =========================================
+   ACCOUNT MOBILE NAVIGATION
+   ========================================= */
+
+.account-nav {
+    background: rgba(247, 249, 252, 0.97);
+    border-bottom: 1px solid var(--mist);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.account-nav.scrolled {
+    background: rgba(247, 249, 252, 0.97);
+    border-bottom: 1px solid var(--mist);
+}
+
+.account-nav .nav-logo,
+.account-nav .nav-links a,
+.account-nav .nav-user-name {
+    color: var(--slate);
+}
+
+.account-nav .nav-toggle span {
+    background: var(--slate);
+}
+
+.account-nav.scrolled .nav-logo,
+.account-nav.scrolled .nav-links a,
+.account-nav.scrolled .nav-user-name {
+    color: var(--slate);
+}
+
+.account-nav.scrolled .nav-toggle span {
+    background: var(--slate);
+}
+
+.account-nav .account-nav__links {
+    gap: 1.5rem;
+}
+
+.account-nav .nav-logout-btn {
+    font-family: var(--sans);
+}
+
+/* Mobile dropdown */
+
+@media (max-width: 768px) {
+
+    .account-nav {
+        padding: 0.85rem var(--gutter);
+    }
+
+    .account-nav.scrolled {
+        padding: 0.85rem var(--gutter);
+    }
+
+    .account-nav .account-nav__links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+
+        padding: 0.5rem var(--gutter) 1rem;
+
+        background: var(--snow);
+        border-bottom: 1px solid var(--mist);
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.1);
+    }
+
+    .account-nav .account-nav__links.active {
+        display: flex;
+    }
+
+    .account-nav .account-nav__links li {
+        width: 100%;
+    }
+
+    .account-nav .account-nav__links a {
+        display: block;
+        width: 100%;
+        padding: 0.9rem 0;
+
+        color: var(--slate);
+        font-size: 0.8rem;
+
+        border-bottom: 1px solid var(--mist);
+    }
+
+    .account-nav .account-nav__links .nav-user-name {
+        display: block;
+        padding: 0.8rem 0;
+
+        color: var(--cobalt);
+        font-size: 0.8rem;
+    }
+
+    .account-nav .nav-logout-btn {
+        width: 100%;
+        padding: 0.9rem 0;
+
+        border: none;
+        border-radius: 0;
+        border-bottom: 1px solid var(--mist);
+
+        background: transparent;
+        color: #EF4444;
+
+        text-align: left;
+        font-size: 0.8rem;
+    }
+}

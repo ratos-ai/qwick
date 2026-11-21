@@ -14,16 +14,32 @@
     <link rel="stylesheet" href="css/account.css" />
   </head>
   <body>
-    <nav class="nav-bar nav-light" id="mainNav">
-      <a href="/" class="nav-logo">Северный Кавказ</a>
-      <ul class="nav-links nav-links--simple">
+    <nav class="nav-bar nav-light account-nav" id="mainNav">
+      <a href="/" class="nav-logo">QWICK</a>
+
+      <button
+        class="nav-toggle"
+        aria-label="Открыть меню"
+        aria-expanded="false"
+        type="button"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links nav-links--desktop account-nav__links">
         <li>
           <span id="userNameDisplay" class="nav-user-name"></span>
         </li>
 
-        <li><a href="/">На главную</a></li>
+        <li>
+          <a href="/">На главную</a>
+        </li>
 
-        <li><a href="/catalog.html">Каталог</a></li>
+        <li>
+          <a href="/catalog.html">Каталог</a>
+        </li>
 
         <li>
           <button class="nav-logout-btn" id="logoutBtn">Выйти</button>

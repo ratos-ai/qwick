@@ -776,6 +776,23 @@
     .home-footer__links {
         justify-content: flex-start;
     }
+
+    .home-nav .nav-links--desktop.active {
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .home-nav .nav-links--desktop.active a:not(.admin-link) {
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .home-nav .nav-links--desktop.active a:hover {
+        color: #FFFFFF;
+    }
 }
 
 @media (max-width: 420px) {
