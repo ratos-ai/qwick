@@ -1,6 +1,8 @@
 let currentAccountTab = "orders"
 
 async function initAccount() {
+    initMobileMenu()
+
     const isRefreshed = await tryRefreshToken()
     if (!isRefreshed) {
         window.location.href = "/login.html"
