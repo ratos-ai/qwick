@@ -29,10 +29,6 @@ function filterByRegion(items) {
 
 async function loadData() {
     try {
-        if (typeof tryRefreshToken === "function") {
-            await tryRefreshToken()
-        }
-
         if (typeof accessToken !== "undefined" && accessToken) {
             const favRes = await apiRequest("/api/favorites/")
             if (favRes.ok) {
@@ -552,17 +548,28 @@ function initRegionFilter() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    initScrollEffects()
+    initMobileMenu()
     initTabs()
     initRegionFilter()
 
-    await loadData()
-
-    if (typeof updateHeaderUI === "function") {
-        await updateHeaderUI()
+    const accountBtn = document.querySelector(".account-btn")
+    if (accountBtn) {
+        accountBtn.style.pointerEvents = "none"
+        accountBtn.style.opacity = "0.5"
     }
 
-    renderRoute()
+    await tryRefreshToken()
+    await updateHeaderUI()
 
+    if (accountBtn) {
+        accountBtn.style.pointerEvents = "auto"
+        accountBtn.style.opacity = "1"
+    }
+
+    await loadData()
+
+    renderRoute()
     window.addEventListener("hashchange", renderRoute)
 
     const modalClose = document.getElementById("modalClose")
