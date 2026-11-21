@@ -1,20 +1,29 @@
 let accessToken = null
+let refreshPromise = null
 
 async function tryRefreshToken() {
-    try {
-        const response = await fetch("/api/auth/refresh", {
-            method: "POST",
-            credentials: "include",
-        })
-        if (response.ok) {
-            const data = await response.json()
-            accessToken = data.access_token
-            return true
+    if (refreshPromise) return refreshPromise
+
+    refreshPromise = (async () => {
+        try {
+            const response = await fetch("/api/auth/refresh", {
+                method: "POST",
+                credentials: "include",
+            })
+            if (response.ok) {
+                const data = await response.json()
+                accessToken = data.access_token
+                return true
+            }
+            return false
+        } catch (error) {
+            return false
+        } finally {
+            refreshPromise = null
         }
-        return false
-    } catch (error) {
-        return false
-    }
+    })()
+
+    return refreshPromise
 }
 
 async function apiRequest(url, options = {}) {

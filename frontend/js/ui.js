@@ -73,14 +73,3 @@ async function updateHeaderUI() {
         if (adminBtn) adminBtn.style.display = "none"
     }
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    initScrollEffects()
-    initMobileMenu()
-
-    if (typeof tryRefreshToken === "function") {
-        tryRefreshToken().then(() => {
-            updateHeaderUI()
-        })
-    }
-})
