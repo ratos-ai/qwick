@@ -1,48 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="js/theme.js"></script>
     <title>Вход | Северный Кавказ</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/auth.css">
-</head>
-<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/auth.css" />
+    <link rel="stylesheet" href="css/theme.css" />
+  </head>
+  <body>
     <nav class="nav-bar scrolled">
-        <a href="/" class="nav-logo">Северный Кавказ</a>
-        <ul class="nav-links nav-links--simple">
-            <li><a href="/">На главную</a></li>
-        </ul>
+      <a href="/" class="nav-logo">Северный Кавказ</a>
+      <ul class="nav-links nav-links--simple">
+        <li><a href="/">На главную</a></li>
+      </ul>
+
+      <button
+        class="theme-toggle"
+        type="button"
+        data-theme-toggle
+        aria-label="Включить тёмную тему"
+        aria-pressed="false"
+        title="Тёмная тема"
+      >
+        <span class="theme-toggle__icon" aria-hidden="true">☾</span>
+      </button>
     </nav>
 
     <div class="auth-container">
-        <div class="auth-card">
-            <h1 class="auth-title">Вход в систему</h1>
-            <p class="auth-subtitle">Войдите, чтобы бронировать туры и сохранять избранное</p>
-            
-            <form id="loginForm" class="auth-form">
-                <div class="form-group">
-                    <label for="username">Имя пользователя</label>
-                    <input type="text" id="username" required autocomplete="username">
-                </div>
-                <div class="form-group">
-                    <label for="password">Пароль</label>
-                    <input type="password" id="password" required autocomplete="current-password">
-                </div>
-                <p id="errorMsg" class="auth-error"></p>
-                <button type="submit" class="auth-btn">Войти</button>
-            </form>
+      <div class="auth-card">
+        <h1 class="auth-title">Вход в систему</h1>
+        <p class="auth-subtitle">
+          Войдите, чтобы бронировать туры и сохранять избранное
+        </p>
 
-            <p class="auth-switch">
-                Нет аккаунта? <a href="/register.html">Зарегистрироваться</a>
-            </p>
-        </div>
+        <form id="loginForm" class="auth-form">
+          <div class="form-group">
+            <label for="username">Имя пользователя</label>
+            <input type="text" id="username" required autocomplete="username" />
+          </div>
+          <div class="form-group">
+            <label for="password">Пароль</label>
+            <input
+              type="password"
+              id="password"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+          <p id="errorMsg" class="auth-error"></p>
+          <button type="submit" class="auth-btn">Войти</button>
+        </form>
+
+        <p class="auth-switch">
+          Нет аккаунта? <a href="/register.html">Зарегистрироваться</a>
+        </p>
+      </div>
     </div>
 
     <script src="js/api.js"></script>
     <script src="js/login.js"></script>
-</body>
+  </body>
 </html>

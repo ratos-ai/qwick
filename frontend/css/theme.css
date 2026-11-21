@@ -1,0 +1,423 @@
+
+/* =========================================
+   QWICK THEME SYSTEM
+   ========================================= */
+
+/* ---------- Light theme ---------- */
+
+:root {
+    color-scheme: light;
+
+    --navy: #0F172A;
+    --accent-bg: #0047AB;
+    --control-bg: #F8FAFC;
+}
+
+/* ---------- Dark theme palette ---------- */
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+
+    --glacier: #0B1220;
+    --snow: #142033;
+    --slate: #E7EEF8;
+    --cobalt: #83B4FF;
+    --mist: #2C3B52;
+    --stone: #A6B5C9;
+
+    --navy: #070D18;
+    --accent-bg: #245DB7;
+    --control-bg: #0E1A2B;
+}
+
+/* ---------- Global ---------- */
+
+html[data-theme="dark"] body {
+    background-color: var(--glacier);
+    color: var(--slate);
+}
+
+html[data-theme="dark"] .site-footer {
+    background: var(--navy);
+    color: #FFFFFF;
+}
+
+/* Dark dropdown background only on mobile */
+
+@media (max-width: 768px) {
+    html[data-theme="dark"] .nav-links--desktop {
+        background: var(--navy);
+    }
+}
+
+/* ---------- Theme toggle ---------- */
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 40px;
+    height: 40px;
+
+    padding: 0;
+    border: 1px solid var(--mist);
+    border-radius: 50%;
+
+    background: transparent;
+    color: var(--slate);
+
+    font-family: var(--sans);
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--snow);
+    border-color: var(--cobalt);
+    transform: rotate(12deg);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--cobalt);
+    outline-offset: 3px;
+}
+
+.theme-toggle__icon {
+    line-height: 1;
+}
+
+.home-nav .theme-toggle {
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.45);
+}
+
+.home-nav .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.nav-light .theme-toggle {
+    color: var(--slate);
+    border-color: var(--mist);
+}
+
+.nav-bar.scrolled:not(.nav-light) .theme-toggle {
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ---------- Landing page ---------- */
+
+html[data-theme="dark"] .home-hero {
+    background: var(--navy);
+}
+
+html[data-theme="dark"] .home-button:not(.home-button--outline) {
+    background: var(--accent-bg);
+}
+
+html[data-theme="dark"] .home-button:not(.home-button--outline):hover {
+    background: #194A91;
+}
+
+html[data-theme="dark"] .home-button--outline:hover {
+    background: #FFFFFF;
+    color: #0F172A;
+}
+
+html[data-theme="dark"] .home-intro,
+html[data-theme="dark"] .home-featured {
+    background: var(--snow);
+}
+
+html[data-theme="dark"] .home-regions,
+html[data-theme="dark"] .home-categories {
+    background: var(--glacier);
+}
+
+/* Region cards */
+
+html[data-theme="dark"] .home-region-card {
+    color: var(--slate);
+    background: linear-gradient(
+        145deg,
+        #1B2A40,
+        #142033 75%
+    );
+    border-color: var(--mist);
+}
+
+html[data-theme="dark"] .home-region-card:nth-child(n) {
+    background: linear-gradient(
+        145deg,
+        #1B2A40,
+        #142033 75%
+    );
+}
+
+html[data-theme="dark"] .home-region-card__description {
+    color: var(--stone);
+}
+
+/* Featured cards */
+
+html[data-theme="dark"] .home-featured-card,
+html[data-theme="dark"] .home-category {
+    background: var(--snow);
+    color: var(--slate);
+}
+
+html[data-theme="dark"] .home-featured-card {
+    border-color: var(--mist);
+}
+
+html[data-theme="dark"] .home-category {
+    border-color: var(--cobalt);
+}
+
+html[data-theme="dark"] .home-featured-card__image,
+html[data-theme="dark"] .home-featured-card__placeholder {
+    background: var(--glacier);
+}
+
+/* Benefits section */
+
+html[data-theme="dark"] .home-benefits {
+    background: var(--navy);
+    color: #FFFFFF;
+}
+
+/* ---------- Catalog page ---------- */
+
+html[data-theme="dark"] .catalog-nav {
+    background: rgba(11, 18, 32, 0.96);
+    border-color: var(--mist);
+}
+
+html[data-theme="dark"] .catalog-nav.scrolled {
+    background: rgba(11, 18, 32, 0.96);
+}
+
+html[data-theme="dark"] .catalog-toolbar {
+    background: rgba(20, 32, 51, 0.97);
+    border-color: var(--mist);
+    box-shadow: 0 7px 18px rgba(0, 0, 0, 0.25);
+}
+
+html[data-theme="dark"] .catalog-toolbar .region-filter select,
+html[data-theme="dark"] .catalog-toolbar .catalog-search__field input {
+    background: var(--control-bg);
+    color: var(--slate);
+    border-color: var(--mist);
+}
+
+html[data-theme="dark"] .catalog-toolbar .catalog-search__field input:focus {
+    background: var(--snow);
+    border-color: var(--cobalt);
+}
+
+html[data-theme="dark"] .catalog-search__field input::placeholder {
+    color: var(--stone);
+}
+
+html[data-theme="dark"] .catalog-toolbar .tabs .tab-btn {
+    color: var(--stone);
+}
+
+html[data-theme="dark"] .catalog-toolbar .tabs .tab-btn.active {
+    color: var(--cobalt);
+    border-bottom-color: var(--cobalt);
+}
+
+html[data-theme="dark"] .catalog-nav .nav-links--desktop.active {
+    background: rgba(11, 18, 32, 0.96);
+}
+
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .detail-hero,
+html[data-theme="dark"] .detail-content,
+html[data-theme="dark"] .modal {
+    background: var(--snow);
+    color: var(--slate);
+}
+
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .detail-hero,
+html[data-theme="dark"] .detail-content {
+    border-color: var(--mist);
+}
+
+html[data-theme="dark"] .card-title,
+html[data-theme="dark"] .hero-text h2,
+html[data-theme="dark"] .detail-content h3,
+html[data-theme="dark"] .info-value,
+html[data-theme="dark"] .tour-name,
+html[data-theme="dark"] .modal h2,
+html[data-theme="dark"] .success-title {
+    color: var(--slate);
+}
+
+html[data-theme="dark"] .buy-btn,
+html[data-theme="dark"] .confirm-btn,
+html[data-theme="dark"] .modal-action-btn {
+    background: var(--navy);
+    color: #FFFFFF;
+}
+
+html[data-theme="dark"] .hero-fav {
+    background: var(--snow);
+    color: var(--slate);
+}
+
+html[data-theme="dark"] .modal input {
+    background: var(--control-bg);
+    color: var(--slate);
+    border-color: var(--mist);
+}
+
+html[data-theme="dark"] .order-summary,
+html[data-theme="dark"] .info-item,
+html[data-theme="dark"] .tour-row,
+html[data-theme="dark"] .receipt-box {
+    background: var(--glacier);
+    color: var(--slate);
+}
+
+html[data-theme="dark"] .catalog-toolbar .region-filter select {
+    background: var(--control-bg);
+}
+
+/* ---------- Account ---------- */
+
+html[data-theme="dark"] .account-nav {
+    background: rgba(11, 18, 32, 0.96);
+    border-color: var(--mist);
+}
+
+html[data-theme="dark"] .account-nav.scrolled {
+    background: rgba(11, 18, 32, 0.96);
+}
+
+html[data-theme="dark"] .account-nav .account-nav__links {
+    background: var(--snow);
+    border-color: var(--mist);
+}
+
+html[data-theme="dark"] .account-nav .account-nav__links a,
+html[data-theme="dark"] .account-nav .account-nav__links .nav-user-name {
+    color: var(--slate);
+}
+
+html[data-theme="dark"] .order-card,
+html[data-theme="dark"] .empty-account,
+html[data-theme="dark"] .auth-modal {
+    background: var(--snow);
+    color: var(--slate);
+    border-color: var(--mist);
+}
+
+html[data-theme="dark"] .order-title,
+html[data-theme="dark"] .auth-modal h2 {
+    color: var(--slate);
+}
+
+html[data-theme="dark"] .auth-modal-btn.cancel {
+    background: var(--mist);
+    color: var(--slate);
+}
+
+/* ---------- Login and registration ---------- */
+
+html[data-theme="dark"] .auth-card {
+    background: var(--snow);
+    border-color: var(--mist);
+}
+
+html[data-theme="dark"] .form-group input {
+    background: var(--control-bg);
+    color: var(--slate);
+    border-color: var(--mist);
+}
+
+html[data-theme="dark"] .form-group input:focus {
+    background: var(--snow);
+}
+
+html[data-theme="dark"] .auth-btn {
+    background: var(--navy);
+    color: #FFFFFF;
+}
+
+
+
+/* =========================================
+   DARK THEME — HOME NAVIGATION
+   ========================================= */
+
+/* Keep the logo visible over the hero image */
+
+html[data-theme="dark"] .home-nav .nav-logo {
+    color: #FFFFFF;
+}
+
+/* Transparent desktop navigation */
+
+@media (min-width: 769px) {
+    html[data-theme="dark"] .home-nav .nav-links--desktop {
+        background: transparent;
+    }
+}
+
+/* Dark translucent navigation after scrolling */
+
+html[data-theme="dark"] .home-nav.scrolled {
+    background: rgba(7, 13, 24, 0.82);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+
+
+/* =========================================
+   DARK THEME — INTERACTIVE CARDS
+   ========================================= */
+
+/* Base shadows */
+
+html[data-theme="dark"] .home-region-card,
+html[data-theme="dark"] .home-featured-card {
+    border-color: #344761;
+
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* Strong hover effect */
+
+html[data-theme="dark"] .home-region-card:hover,
+html[data-theme="dark"] .home-featured-card:hover {
+    border-color: rgba(131, 180, 255, 0.65);
+
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.48),
+        0 0 0 1px rgba(131, 180, 255, 0.18);
+
+    transform: translateY(-7px);
+}
+
+/* Keyboard accessibility */
+
+html[data-theme="dark"] .home-region-card:focus-visible,
+html[data-theme="dark"] .home-featured-card:focus-visible {
+    outline: 2px solid var(--cobalt);
+    outline-offset: 4px;
+
+    border-color: var(--cobalt);
+}

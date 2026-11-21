@@ -1114,14 +1114,32 @@
 }
 
 
-/* Sticky catalog toolbar alignment */
 
-.catalog-toolbar {
-    top: 50px;
+/* =========================================
+   CATALOG — STICKY HEADER ALIGNMENT
+   ========================================= */
+
+/* Desktop */
+
+.catalog-nav.scrolled {
+    height: 64px;
+    padding: 0 var(--gutter);
 }
 
+.catalog-toolbar {
+    top: 64px;
+}
+
+/* Mobile */
+
 @media (max-width: 768px) {
+
+    .catalog-nav.scrolled {
+        height: 56px;
+        padding: 0 var(--gutter);
+    }
+
     .catalog-toolbar {
-        top: 55px;
+        top: 56px;
     }
 }
