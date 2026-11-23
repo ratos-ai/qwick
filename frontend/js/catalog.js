@@ -47,7 +47,7 @@ function filterByRegion(items) {
 }
 
 async function loadData() {
-  const staticItems = (window.QWICK_STATIC_ITEMS || []).map((item) => ({
+  const staticAttractions = (window.QWICK_STATIC_ITEMS || []).map((item) => ({
     ...item,
     id: String(item.id),
     type: "attraction",
@@ -55,16 +55,34 @@ async function loadData() {
     imageUrl: item.imageUrl || item.image_url || "",
   }))
 
-  attractions = staticItems
-  places = []
-  tours = []
+  const staticPlaces = (window.QWICK_STATIC_PLACES || []).map((item) => ({
+    ...item,
+    id: String(item.id),
+    type: "place",
+    shortDesc: item.shortDesc || item.short_desc || "",
+    imageUrl: item.imageUrl || item.image_url || "",
+  }))
+
+  const staticTours = (window.QWICK_STATIC_TOURS || []).map((item) => ({
+    ...item,
+    id: String(item.id),
+    type: "tour",
+    description: item.description || item.shortDesc || "",
+    price: Number(item.price) || 0,
+    imageUrl: item.imageUrl || item.image_url || "",
+  }))
+
+  attractions = staticAttractions
+  places = staticPlaces
+  tours = staticTours
 
   try {
     if (typeof accessToken !== "undefined" && accessToken) {
       const favRes = await apiRequest("/api/favorites/")
       if (favRes.ok) {
         const favData = await favRes.json()
-        favorites = favData.map((fav) => String(fav.item_id))
+        const serverFavorites = favData.map((fav) => String(fav.item_id))
+        favorites = [...new Set([...serverFavorites, ...favorites])]
         saveFavorites(favorites)
       }
     }
@@ -84,14 +102,7 @@ async function loadData() {
           imageUrl: i.image_url,
         }))
 
-      const staticIds = new Set(staticItems.map((item) => String(item.id)))
-
-      attractions = [
-        ...backendAttractions.filter((item) => !staticIds.has(String(item.id))),
-        ...staticItems,
-      ]
-
-      places = data
+      const backendPlaces = data
         .filter((i) => i.item_type === "place")
         .map((i) => ({
           ...i,
@@ -101,7 +112,7 @@ async function loadData() {
           imageUrl: i.image_url,
         }))
 
-      tours = data
+      const backendTours = data
         .filter((i) => i.item_type === "tour")
         .map((i) => ({
           ...i,
@@ -113,8 +124,10 @@ async function loadData() {
           description: i.short_desc,
           imageUrl: i.image_url,
         }))
-    } else {
-      console.error("Не удалось загрузить данные каталога:", response.status)
+
+      attractions = [...backendAttractions, ...staticAttractions]
+      places = [...backendPlaces, ...staticPlaces]
+      tours = [...backendTours, ...staticTours]
     }
   } catch (error) {
     console.error("Ошибка загрузки данных:", error)
@@ -288,14 +301,13 @@ async function toggleFavorite(id, type) {
   if (favPanel && favPanel.classList.contains("active")) {
     renderFavorites()
   }
+  const selectedItem = [...attractions, ...places].find(
+    (item) => String(item.id) === stringId,
+  )
 
-  if (
-    !attractions.some(
-      (item) => String(item.id) === stringId && item.is_static,
-    ) &&
-    typeof accessToken !== "undefined" &&
-    accessToken
-  ) {
+  const isStaticItem = selectedItem?.is_static === true
+
+  if (!isStaticItem && typeof accessToken !== "undefined" && accessToken) {
     try {
       if (isFav) {
         await apiRequest(`/api/favorites/${stringId}`, {
