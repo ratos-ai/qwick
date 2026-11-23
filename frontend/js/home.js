@@ -1,138 +1,164 @@
 const HOME_REGIONS = {
-    rso: "Северная Осетия — Алания",
-    kbr: "Кабардино-Балкария",
-    kchr: "Карачаево-Черкесия",
-    stav: "Ставропольский край",
-    ing: "Ингушетия",
-    che: "Чечня",
-    dag: "Дагестан",
+  rso: "Северная Осетия — Алания",
+  kbr: "Кабардино-Балкария",
+  kchr: "Карачаево-Черкесия",
+  stav: "Ставропольский край",
+  ing: "Ингушетия",
+  che: "Чечня",
+  dag: "Дагестан",
 }
 
 function createFeaturedCard(item) {
-    const type = ["attraction", "place", "tour"].includes(item.item_type)
-        ? item.item_type
-        : "attraction"
+  const type = item.item_type || item.type || "attraction"
 
-    const card = document.createElement("a")
-    card.className = "home-featured-card"
-    card.href = `/catalog.html#/${type}/${encodeURIComponent(item.id)}`
+  const card = document.createElement("a")
+  card.className = "home-featured-card"
+  card.href = `/catalog.html#/${type}/${encodeURIComponent(item.id)}`
 
-    // Image
-    const imageContainer = document.createElement("div")
-    imageContainer.className = "home-featured-card__image"
+  const imageContainer = document.createElement("div")
+  imageContainer.className = "home-featured-card__image"
 
-    if (item.image_url) {
-        const image = document.createElement("img")
-        image.src = item.image_url
-        image.alt = item.title || "Объект Северного Кавказа"
-        image.loading = "lazy"
+  const imageUrl = item.image_url || item.imageUrl || ""
 
-        image.addEventListener("error", () => {
-            image.remove()
+  if (imageUrl) {
+    const image = document.createElement("img")
+    image.src = imageUrl
+    image.alt = item.title || "Qwick"
+    image.loading = "lazy"
 
-            const placeholder = document.createElement("div")
-            placeholder.className = "home-featured-card__placeholder"
-            placeholder.textContent = "Q"
+    image.addEventListener("error", () => {
+      image.remove()
+      const placeholder = document.createElement("div")
+      placeholder.className = "home-featured-card__placeholder"
+      placeholder.textContent = "Q"
+      imageContainer.appendChild(placeholder)
+    })
 
-            imageContainer.appendChild(placeholder)
-        })
+    imageContainer.appendChild(image)
+  } else {
+    const placeholder = document.createElement("div")
+    placeholder.className = "home-featured-card__placeholder"
+    placeholder.textContent = "Q"
+    imageContainer.appendChild(placeholder)
+  }
 
-        imageContainer.appendChild(image)
-    } else {
-        const placeholder = document.createElement("div")
-        placeholder.className = "home-featured-card__placeholder"
-        placeholder.textContent = "Q"
+  const body = document.createElement("div")
+  body.className = "home-featured-card__body"
 
-        imageContainer.appendChild(placeholder)
-    }
+  const region = document.createElement("span")
+  region.className = "home-featured-card__region"
+  region.textContent = HOME_REGIONS[item.region] || "Северный Кавказ"
 
-    // Card body
-    const body = document.createElement("div")
-    body.className = "home-featured-card__body"
+  const title = document.createElement("h3")
+  title.className = "home-featured-card__title"
+  title.textContent = item.title || "Интересное место"
 
-    const region = document.createElement("span")
-    region.className = "home-featured-card__region"
-    region.textContent = HOME_REGIONS[item.region] || "Северный Кавказ"
+  const description = document.createElement("p")
+  description.className = "home-featured-card__description"
+  description.textContent =
+    item.short_desc ||
+    item.shortDesc ||
+    item.description ||
+    "Откройте подробную информацию об этом объекте."
 
-    const title = document.createElement("h3")
-    title.className = "home-featured-card__title"
-    title.textContent = item.title || "Интересное место"
+  const link = document.createElement("div")
+  link.className = "home-featured-card__link"
 
-    const description = document.createElement("p")
-    description.className = "home-featured-card__description"
-    description.textContent =
-        item.short_desc || "Откройте подробную информацию об этом объекте."
+  const linkText = document.createElement("span")
+  linkText.textContent = type === "tour" ? "Смотреть тур" : "Подробнее"
 
-    const link = document.createElement("div")
-    link.className = "home-featured-card__link"
+  const arrow = document.createElement("span")
+  arrow.textContent = "↗"
 
-    const linkText = document.createElement("span")
-    linkText.textContent = "Подробнее"
+  link.append(linkText, arrow)
+  body.append(region, title, description, link)
+  card.append(imageContainer, body)
 
-    const arrow = document.createElement("span")
-    arrow.textContent = "↗"
+  return card
+}
 
-    link.append(linkText, arrow)
-    body.append(region, title, description, link)
-    card.append(imageContainer, body)
+function getStaticHomeItems() {
+  const attractions = (window.QWICK_STATIC_ITEMS || []).map((item) => ({
+    ...item,
+    item_type: "attraction",
+  }))
 
-    return card
+  const places = (window.QWICK_STATIC_PLACES || []).map((item) => ({
+    ...item,
+    item_type: "place",
+  }))
+
+  const tours = (window.QWICK_STATIC_TOURS || []).map((item) => ({
+    ...item,
+    item_type: "tour",
+  }))
+
+  return [...attractions, ...places, ...tours]
 }
 
 async function loadFeaturedItems() {
-    const grid = document.getElementById("featuredGrid")
+  const grid = document.getElementById("featuredGrid")
+  if (!grid) return
 
-    if (!grid) return
+  let backendItems = []
 
-    try {
-        const response = await fetch("/api/attractions/")
+  try {
+    const response = await fetch("/api/attractions/")
 
-        if (!response.ok) {
-            throw new Error(`Ошибка API: ${response.status}`)
-        }
-
-        const data = await response.json()
-
-        const items = data
-            .filter((item) => item && item.id && item.title)
-            .slice(0, 3)
-
-        grid.innerHTML = ""
-
-        if (items.length === 0) {
-            const empty = document.createElement("div")
-            empty.className = "home-featured__empty"
-            empty.textContent = "Пока нет опубликованных объектов."
-            grid.appendChild(empty)
-            return
-        }
-
-        items.forEach((item) => {
-            grid.appendChild(createFeaturedCard(item))
-        })
-    } catch (error) {
-        console.error("Ошибка загрузки объектов на главной:", error)
-
-        grid.innerHTML = ""
-
-        const errorMessage = document.createElement("div")
-        errorMessage.className = "home-featured__empty"
-        errorMessage.textContent =
-            "Не удалось загрузить объекты. Попробуйте открыть каталог."
-
-        grid.appendChild(errorMessage)
+    if (response.ok) {
+      backendItems = await response.json()
     }
+  } catch (error) {
+    console.error("Ошибка загрузки объектов:", error)
+  }
+
+  const staticItems = getStaticHomeItems()
+
+  const allItems = [...backendItems, ...staticItems]
+    .filter((item) => item && item.id && item.title)
+    .filter((item, index, array) => {
+      const key = `${item.item_type || item.type}-${item.id}`
+      return (
+        array.findIndex(
+          (other) => `${other.item_type || other.type}-${other.id}` === key,
+        ) === index
+      )
+    })
+
+  grid.innerHTML = ""
+
+  if (allItems.length === 0) {
+    grid.innerHTML =
+      '<div class="home-featured__empty">Пока нет объектов для отображения.</div>'
+    return
+  }
+
+  const track = document.createElement("div")
+  track.className = "home-featured__track"
+
+  allItems.forEach((item) => {
+    track.appendChild(createFeaturedCard(item))
+  })
+
+  allItems.forEach((item) => {
+    const clone = createFeaturedCard(item)
+    clone.setAttribute("aria-hidden", "true")
+    clone.tabIndex = -1
+    clone.querySelectorAll("a, button").forEach((element) => {
+      element.tabIndex = -1
+    })
+    track.appendChild(clone)
+  })
+
+  grid.appendChild(track)
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    // Common UI
-    initScrollEffects()
-    initMobileMenu()
+  initScrollEffects()
+  initMobileMenu()
 
-    // Restore authentication
-    await tryRefreshToken()
-    await updateHeaderUI()
+  await tryRefreshToken()
+  await updateHeaderUI()
 
-    // Dynamic homepage content
-    await loadFeaturedItems()
+  await loadFeaturedItems()
 })
