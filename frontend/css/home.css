@@ -843,3 +843,77 @@
     box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22);
   }
 }
+
+.home-featured__grid {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 0.5rem 0 1.5rem;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 4%,
+    black 96%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 4%,
+    black 96%,
+    transparent
+  );
+}
+
+.home-featured__track {
+  display: flex;
+  width: max-content;
+  gap: 1.5rem;
+  animation: qwickInfiniteScroll 120s linear infinite;
+}
+
+.home-featured__track:hover {
+  animation-play-state: paused;
+}
+
+.home-featured-card {
+  flex: 0 0 340px;
+  width: 340px;
+  min-height: 420px;
+}
+
+@keyframes qwickInfiniteScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .home-featured-card {
+    flex-basis: 280px;
+    width: 280px;
+    min-height: 390px;
+  }
+
+  .home-featured__track {
+    gap: 1rem;
+    animation-duration: 90s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-featured__track {
+    animation: none;
+  }
+
+  .home-featured__grid {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
