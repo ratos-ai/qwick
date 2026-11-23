@@ -1,11 +1,11 @@
 const REGIONS = {
-    rso: "Северная Осетия — Алания",
-    kbr: "Кабардино-Балкария",
-    kchr: "Карачаево-Черкесия",
-    stav: "Ставропольский край",
-    ing: "Ингушетия",
-    che: "Чечня",
-    dag: "Дагестан",
+  rso: "Северная Осетия — Алания",
+  kbr: "Кабардино-Балкария",
+  kchr: "Карачаево-Черкесия",
+  stav: "Ставропольский край",
+  ing: "Ингушетия",
+  che: "Чечня",
+  dag: "Дагестан",
 }
 
 let attractions = []
@@ -16,104 +16,106 @@ let currentRegion = "all"
 let searchQuery = ""
 
 function saveFavorites(ids) {
-    localStorage.setItem("caucasus_favorites", JSON.stringify(ids))
+  localStorage.setItem("caucasus_favorites", JSON.stringify(ids))
 }
 
 function isFavorite(id) {
-    return favorites.includes(String(id))
+  return favorites.includes(String(id))
 }
 
 function filterByRegion(items) {
-    return items.filter((item) => {
-        const matchesRegion =
-            currentRegion === "all" || item.region === currentRegion
+  return items.filter((item) => {
+    const matchesRegion =
+      currentRegion === "all" || item.region === currentRegion
 
-        const searchableText = [
-            item.title,
-            item.shortDesc,
-            item.short_desc,
-            item.description,
-            item.category,
-            REGIONS[item.region],
-        ]
-            .filter(Boolean)
-            .join(" ")
-            .toLocaleLowerCase("ru")
+    const searchableText = [
+      item.title,
+      item.shortDesc,
+      item.short_desc,
+      item.description,
+      item.category,
+      REGIONS[item.region],
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLocaleLowerCase("ru")
 
-        const matchesSearch =
-            !searchQuery || searchableText.includes(searchQuery)
+    const matchesSearch = !searchQuery || searchableText.includes(searchQuery)
 
-        return matchesRegion && matchesSearch
-    })
+    return matchesRegion && matchesSearch
+  })
 }
 
 async function loadData() {
-    try {
-        if (typeof accessToken !== "undefined" && accessToken) {
-            const favRes = await apiRequest("/api/favorites/")
-            if (favRes.ok) {
-                const favData = await favRes.json()
-                favorites = favData.map((fav) => String(fav.item_id))
-                saveFavorites(favorites)
-            }
-        }
-
-        const response = await fetch("/api/attractions/")
-        if (response.ok) {
-            const data = await response.json()
-
-            attractions = data
-                .filter((i) => i.item_type === "attraction" || !i.item_type)
-                .map((i) => ({
-                    ...i,
-                    id: String(i.id),
-                    type: "attraction",
-                    shortDesc: i.short_desc,
-                    imageUrl: i.image_url,
-                }))
-
-            places = data
-                .filter((i) => i.item_type === "place")
-                .map((i) => ({
-                    ...i,
-                    id: String(i.id),
-                    type: "place",
-                    shortDesc: i.short_desc,
-                    imageUrl: i.image_url,
-                }))
-
-            tours = data
-                .filter((i) => i.item_type === "tour")
-                .map((i) => ({
-                    ...i,
-                    id: String(i.id),
-                    type: "tour",
-                    price: i.price || 0,
-                    duration: "Тур",
-                    includes: ["Трансфер", "Гид"],
-                    description: i.short_desc,
-                    imageUrl: i.image_url,
-                }))
-
-            renderAll()
-        }
-    } catch (error) {
-        console.error("Ошибка загрузки данных:", error)
+  try {
+    if (typeof accessToken !== "undefined" && accessToken) {
+      const favRes = await apiRequest("/api/favorites/")
+      if (favRes.ok) {
+        const favData = await favRes.json()
+        favorites = favData.map((fav) => String(fav.item_id))
+        saveFavorites(favorites)
+      }
     }
+
+    const response = await fetch("/api/attractions/")
+    if (response.ok) {
+      const data = await response.json()
+
+      attractions = data
+        .filter((i) => i.item_type === "attraction" || !i.item_type)
+        .map((i) => ({
+          ...i,
+          id: String(i.id),
+          type: "attraction",
+          shortDesc: i.short_desc,
+          imageUrl: i.image_url,
+        }))
+
+      places = data
+        .filter((i) => i.item_type === "place")
+        .map((i) => ({
+          ...i,
+          id: String(i.id),
+          type: "place",
+          shortDesc: i.short_desc,
+          imageUrl: i.image_url,
+        }))
+
+      tours = data
+        .filter((i) => i.item_type === "tour")
+        .map((i) => ({
+          ...i,
+          id: String(i.id),
+          type: "tour",
+          price: i.price || 0,
+          duration: "Тур",
+          includes: ["Трансфер", "Гид"],
+          description: i.short_desc,
+          imageUrl: i.image_url,
+        }))
+
+      const staticItems = window.QWICK_STATIC_ITEMS || []
+
+      attractions = [...attractions, ...staticItems]
+      renderAll()
+    }
+  } catch (error) {
+    console.error("Ошибка загрузки данных:", error)
+  }
 }
 
 function createCard(item) {
-    const fav = isFavorite(item.id)
-    const card = document.createElement("div")
-    card.className = "card"
-    const regionName = REGIONS[item.region] || ""
+  const fav = isFavorite(item.id)
+  const card = document.createElement("div")
+  card.className = "card"
+  const regionName = REGIONS[item.region] || ""
 
-    let imageHtml = `<div class="card-img-placeholder">${item.title.charAt(0).toUpperCase()}</div>`
-    if (item.imageUrl) {
-        imageHtml = `<img src="${item.imageUrl}" alt="${item.title}" class="card-img-real" />`
-    }
+  let imageHtml = `<div class="card-img-placeholder">${item.title.charAt(0).toUpperCase()}</div>`
+  if (item.imageUrl) {
+    imageHtml = `<img src="${item.imageUrl}" alt="${item.title}" class="card-img-real" />`
+  }
 
-    card.innerHTML = `
+  card.innerHTML = `
     ${imageHtml}
     <div class="card-body">
       <div class="card-region">${regionName}</div>
@@ -128,29 +130,29 @@ function createCard(item) {
     </div>
   `
 
-    card.querySelector(".fav-btn").addEventListener("click", (e) => {
-        e.stopPropagation()
-        toggleFavorite(item.id, item.type)
-    })
+  card.querySelector(".fav-btn").addEventListener("click", (e) => {
+    e.stopPropagation()
+    toggleFavorite(item.id, item.type)
+  })
 
-    card.addEventListener("click", () => {
-        location.hash = `#/${item.type}/${item.id}`
-    })
+  card.addEventListener("click", () => {
+    location.hash = `#/${item.type}/${item.id}`
+  })
 
-    return card
+  return card
 }
 
 function createTourCard(tour) {
-    const card = document.createElement("div")
-    card.className = "card"
-    const regionName = REGIONS[tour.region] || ""
+  const card = document.createElement("div")
+  card.className = "card"
+  const regionName = REGIONS[tour.region] || ""
 
-    let imageHtml = `<div class="card-img-placeholder">${tour.title.charAt(0).toUpperCase()}</div>`
-    if (tour.imageUrl) {
-        imageHtml = `<img src="${tour.imageUrl}" alt="${tour.title}" class="card-img-real" />`
-    }
+  let imageHtml = `<div class="card-img-placeholder">${tour.title.charAt(0).toUpperCase()}</div>`
+  if (tour.imageUrl) {
+    imageHtml = `<img src="${tour.imageUrl}" alt="${tour.title}" class="card-img-real" />`
+  }
 
-    card.innerHTML = `
+  card.innerHTML = `
     ${imageHtml}
     <div class="card-body">
       <div class="card-region">${regionName}</div>
@@ -163,217 +165,238 @@ function createTourCard(tour) {
     </div>
   `
 
-    card.querySelector(".buy-btn").addEventListener("click", (e) => {
-        e.stopPropagation()
-        openOrderModal(tour.id)
-    })
+  card.querySelector(".buy-btn").addEventListener("click", (e) => {
+    e.stopPropagation()
+    openOrderModal(tour.id)
+  })
 
-    return card
+  return card
 }
 
 function renderGrid(containerId, items) {
-    const grid = document.getElementById(containerId)
-    if (!grid) return
-    grid.innerHTML = ""
-    if (items.length === 0) {
-        grid.innerHTML = `<div class="empty-state">Ничего не найдено</div>`
-        return
-    }
-    items.forEach((item) => grid.appendChild(createCard(item)))
+  const grid = document.getElementById(containerId)
+  if (!grid) return
+  grid.innerHTML = ""
+  if (items.length === 0) {
+    grid.innerHTML = `<div class="empty-state">Ничего не найдено</div>`
+    return
+  }
+  items.forEach((item) => grid.appendChild(createCard(item)))
 }
 
 function renderTours() {
-    const grid = document.getElementById("toursGrid")
-    if (!grid) return
-    grid.innerHTML = ""
-    const filtered = filterByRegion(tours)
-    if (filtered.length === 0) {
-        grid.innerHTML = `<div class="empty-state">Туров по этому региону пока нет</div>`
-        return
-    }
-    filtered.forEach((tour) => grid.appendChild(createTourCard(tour)))
+  const grid = document.getElementById("toursGrid")
+  if (!grid) return
+  grid.innerHTML = ""
+  const filtered = filterByRegion(tours)
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty-state">Туров по этому региону пока нет</div>`
+    return
+  }
+  filtered.forEach((tour) => grid.appendChild(createTourCard(tour)))
 }
 
 function renderFavorites() {
-    const grid = document.getElementById("favoritesGrid")
-    const favCount = document.getElementById("favCount")
-    if (!grid) return
+  const grid = document.getElementById("favoritesGrid")
+  const favCount = document.getElementById("favCount")
+  if (!grid) return
 
-    grid.innerHTML = ""
-    const allItems = [...attractions, ...places]
-    const favItems = filterByRegion(
-        favorites
-            .map((id) => allItems.find((i) => String(i.id) === String(id)))
-            .filter(Boolean),
-    )
+  grid.innerHTML = ""
+  const allItems = [...attractions, ...places]
+  const favItems = filterByRegion(
+    favorites
+      .map((id) => allItems.find((i) => String(i.id) === String(id)))
+      .filter(Boolean),
+  )
 
-    if (favItems.length === 0) {
-        const message =
-            favorites.length === 0
-                ? "Вы пока ничего не добавили в избранное"
-                : "По вашему запросу ничего не найдено"
+  if (favItems.length === 0) {
+    const message =
+      favorites.length === 0
+        ? "Вы пока ничего не добавили в избранное"
+        : "По вашему запросу ничего не найдено"
 
-        grid.innerHTML = `<div class="empty-state">${message}</div>`
-    } else {
-        favItems.forEach((item) => grid.appendChild(createCard(item)))
-    }
-    if (favCount) favCount.textContent = favorites.length
+    grid.innerHTML = `<div class="empty-state">${message}</div>`
+  } else {
+    favItems.forEach((item) => grid.appendChild(createCard(item)))
+  }
+  if (favCount) favCount.textContent = favorites.length
 }
 
 function renderAll() {
-    renderGrid("attractionsGrid", filterByRegion(attractions))
-    renderGrid("placesGrid", filterByRegion(places))
-    renderTours()
-    renderFavorites()
+  renderGrid("attractionsGrid", filterByRegion(attractions))
+  renderGrid("placesGrid", filterByRegion(places))
+  renderTours()
+  renderFavorites()
 }
 
 async function toggleFavorite(id, type) {
-    const stringId = String(id)
-    const isFav = isFavorite(stringId)
+  const stringId = String(id)
+  const isFav = isFavorite(stringId)
 
+  if (isFav) {
+    favorites = favorites.filter((f) => f !== stringId)
+  } else {
+    favorites.push(stringId)
+  }
+  saveFavorites(favorites)
+
+  const buttons = document.querySelectorAll(`.fav-btn[data-id="${stringId}"]`)
+  buttons.forEach((btn) => {
     if (isFav) {
-        favorites = favorites.filter((f) => f !== stringId)
+      btn.classList.remove("active")
+      btn.querySelector("svg").setAttribute("fill", "none")
     } else {
-        favorites.push(stringId)
+      btn.classList.add("active")
+      btn.querySelector("svg").setAttribute("fill", "currentColor")
     }
-    saveFavorites(favorites)
+  })
 
-    const buttons = document.querySelectorAll(`.fav-btn[data-id="${stringId}"]`)
-    buttons.forEach((btn) => {
-        if (isFav) {
-            btn.classList.remove("active")
-            btn.querySelector("svg").setAttribute("fill", "none")
-        } else {
-            btn.classList.add("active")
-            btn.querySelector("svg").setAttribute("fill", "currentColor")
-        }
-    })
-
-    const heroFav = document.getElementById("heroFav")
-    if (heroFav && location.hash.includes(stringId)) {
-        if (isFav) {
-            heroFav.classList.remove("active")
-            heroFav.textContent = "♡"
-        } else {
-            heroFav.classList.add("active")
-            heroFav.textContent = "♥"
-        }
+  const heroFav = document.getElementById("heroFav")
+  if (heroFav && location.hash.includes(stringId)) {
+    if (isFav) {
+      heroFav.classList.remove("active")
+      heroFav.textContent = "♡"
+    } else {
+      heroFav.classList.add("active")
+      heroFav.textContent = "♥"
     }
+  }
 
-    const favCount = document.getElementById("favCount")
-    if (favCount) favCount.textContent = favorites.length
+  const favCount = document.getElementById("favCount")
+  if (favCount) favCount.textContent = favorites.length
 
-    const favPanel = document.getElementById("panel-favorites")
-    if (favPanel && favPanel.classList.contains("active")) {
-        renderFavorites()
+  const favPanel = document.getElementById("panel-favorites")
+  if (favPanel && favPanel.classList.contains("active")) {
+    renderFavorites()
+  }
+
+  if (
+    !attractions.some(
+      (item) => String(item.id) === stringId && item.is_static,
+    ) &&
+    typeof accessToken !== "undefined" &&
+    accessToken
+  ) {
+    try {
+      if (isFav) {
+        await apiRequest(`/api/favorites/${stringId}`, {
+          method: "DELETE",
+        })
+      } else {
+        await apiRequest("/api/favorites/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            item_id: stringId,
+            item_type: type,
+          }),
+        })
+      }
+    } catch (error) {
+      console.error("Ошибка синхронизации избранного:", error)
     }
-
-    if (typeof accessToken !== "undefined" && accessToken) {
-        try {
-            if (isFav) {
-                await apiRequest(`/api/favorites/${stringId}`, {
-                    method: "DELETE",
-                })
-            } else {
-                await apiRequest("/api/favorites/", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        item_id: stringId,
-                        item_type: type,
-                    }),
-                })
-            }
-        } catch (error) {
-            console.error("Ошибка синхронизации избранного:", error)
-        }
-    }
+  }
 }
 
 function findItem(type, id) {
-    const list = type === "attraction" ? attractions : places
-    return list.find((item) => String(item.id) === String(id))
+  const list = type === "attraction" ? attractions : places
+  return list.find((item) => String(item.id) === String(id))
 }
 
 function findTour(id) {
-    return tours.find((t) => String(t.id) === String(id))
+  return tours.find((t) => String(t.id) === String(id))
 }
 
 function renderDetailPage(type, id) {
-    const detailView = document.getElementById("detailView")
-    const mainView = document.getElementById("mainView")
-    if (!detailView || !mainView) return
+  const detailView = document.getElementById("detailView")
+  const mainView = document.getElementById("mainView")
+  if (!detailView || !mainView) return
 
-    let item
-    if (type === "tour") {
-        item = findTour(id)
-    } else {
-        item = findItem(type, id)
-    }
+  let item
+  if (type === "tour") {
+    item = findTour(id)
+  } else {
+    item = findItem(type, id)
+  }
 
-    if (!item) {
-        detailView.innerHTML = `<a href="#" class="back-btn" id="backBtn">Назад</a><div class="empty-state">Не найдено</div>`
-        return
-    }
+  if (!item) {
+    detailView.innerHTML = `<a href="#" class="back-btn" id="backBtn">Назад</a><div class="empty-state">Не найдено</div>`
+    return
+  }
 
-    const fav = isFavorite(item.id)
-    const regionName = REGIONS[item.region] || ""
-    const imageUrl = item.imageUrl || item.image_url
-    const title = item.title
-    const category = item.category || "Тур"
-    const meta = item.meta || item.duration
-    const shortDesc = item.shortDesc || item.description
+  const fav = isFavorite(item.id)
+  const regionName = REGIONS[item.region] || ""
+  const imageUrl = item.imageUrl || item.image_url
+  const credit = item.image_credit
 
-    let heroImageHtml = `<div class="hero-emoji">${item.emoji || title.charAt(0).toUpperCase()}</div>`
-    if (imageUrl) {
-        heroImageHtml = `<img src="${imageUrl}" alt="${title}" class="hero-img-real" />`
-    }
+  const imageCreditHtml = credit
+    ? `
+    <div class="image-credit">
+      Фото: <a href="${credit.source_url}" target="_blank" rel="noopener noreferrer">${credit.author}</a>
+      · ${credit.title}
+      <br>
+      Лицензия:
+      <a href="${credit.license_url}" target="_blank" rel="noopener noreferrer">${credit.license}</a>
+      · ${credit.changes}
+    </div>
+  `
+    : ""
+  const title = item.title
+  const category = item.category || "Тур"
+  const meta = item.meta || item.duration
+  const shortDesc = item.shortDesc || item.description
 
-    const factsHtml = (item.facts || [])
-        .map(
-            (f) =>
-                `<div class="info-item"><div class="info-label">${f.label}</div><div class="info-value">${f.value}</div></div>`,
-        )
-        .join("")
+  let heroImageHtml = `<div class="hero-emoji">${item.emoji || title.charAt(0).toUpperCase()}</div>`
+  if (imageUrl) {
+    heroImageHtml = `<img src="${imageUrl}" alt="${title}" class="hero-img-real" />`
+  }
 
-    const sectionsHtml = (item.sections || [])
-        .map((s) => {
-            let inner = ""
-            if (s.heading) inner += `<h3>${s.heading}</h3>`
-            if (s.text) inner += `<p>${s.text}</p>`
-            if (s.bullets)
-                inner += `<ul>${s.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`
-            return inner
-        })
-        .join("")
-
-    const relatedTours = tours.filter(
-        (t) => String(t.attraction_id) === String(item.id),
+  const factsHtml = (item.facts || [])
+    .map(
+      (f) =>
+        `<div class="info-item"><div class="info-label">${f.label}</div><div class="info-value">${f.value}</div></div>`,
     )
-    let relatedToursHtml = ""
-    if (relatedTours.length > 0 && type !== "tour") {
-        relatedToursHtml = `
+    .join("")
+
+  const sectionsHtml = (item.sections || [])
+    .map((s) => {
+      let inner = ""
+      if (s.heading) inner += `<h3>${s.heading}</h3>`
+      if (s.text) inner += `<p>${s.text}</p>`
+      if (s.bullets)
+        inner += `<ul>${s.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`
+      return inner
+    })
+    .join("")
+
+  const relatedTours = tours.filter(
+    (t) => String(t.attraction_id) === String(item.id),
+  )
+  let relatedToursHtml = ""
+  if (relatedTours.length > 0 && type !== "tour") {
+    relatedToursHtml = `
       <h3>Туры и билеты</h3>
       <div class="detail-tours">
         ${relatedTours
-            .map(
-                (t) => `
+          .map(
+            (t) => `
           <div class="tour-row">
             <span class="tour-name">${t.title}</span>
             <span class="tour-price">${t.price.toLocaleString("ru-RU")} ₽</span>
             <button class="buy-btn" data-tour-id="${t.id}">Купить</button>
           </div>
         `,
-            )
-            .join("")}
+          )
+          .join("")}
       </div>
     `
-    }
+  }
 
-    detailView.innerHTML = `
+  detailView.innerHTML = `
     <a href="#" class="back-btn" id="backBtn">Назад к списку</a>
     <div class="detail-hero">
       ${heroImageHtml}
+      ${imageCreditHtml}
       <div class="hero-text">
         <div class="hero-region">${regionName}</div>
         <div class="hero-cat">${category}</div>
@@ -390,37 +413,37 @@ function renderDetailPage(type, id) {
     </div>
   `
 
-    document.getElementById("backBtn").addEventListener("click", (e) => {
-        e.preventDefault()
-        location.hash = ""
-    })
+  document.getElementById("backBtn").addEventListener("click", (e) => {
+    e.preventDefault()
+    location.hash = ""
+  })
 
-    document.getElementById("heroFav").addEventListener("click", () => {
-        toggleFavorite(item.id, type)
-    })
+  document.getElementById("heroFav").addEventListener("click", () => {
+    toggleFavorite(item.id, type)
+  })
 
-    detailView.querySelectorAll(".buy-btn[data-tour-id]").forEach((btn) => {
-        btn.addEventListener("click", () => openOrderModal(btn.dataset.tourId))
-    })
+  detailView.querySelectorAll(".buy-btn[data-tour-id]").forEach((btn) => {
+    btn.addEventListener("click", () => openOrderModal(btn.dataset.tourId))
+  })
 }
 
 let currentTourForOrder = null
 
 function openOrderModal(tourId) {
-    const tour = findTour(tourId)
-    if (!tour) return
-    currentTourForOrder = tour
+  const tour = findTour(tourId)
+  if (!tour) return
+  currentTourForOrder = tour
 
-    const modal = document.getElementById("orderModal")
-    const body = document.getElementById("modalBody")
-    const title = document.getElementById("modalTitle")
+  const modal = document.getElementById("orderModal")
+  const body = document.getElementById("modalBody")
+  const title = document.getElementById("modalTitle")
 
-    if (!modal || !body) return
+  if (!modal || !body) return
 
-    title.textContent = "Оформление заказа"
-    const today = new Date().toISOString().split("T")[0]
+  title.textContent = "Оформление заказа"
+  const today = new Date().toISOString().split("T")[0]
 
-    body.innerHTML = `
+  body.innerHTML = `
     <div class="order-summary">
       <div class="sum-row"><span>${tour.title}</span></div>
       <div class="sum-row"><span>Цена за 1 чел.</span><strong>${tour.price.toLocaleString("ru-RU")} ₽</strong></div>
@@ -437,53 +460,51 @@ function openOrderModal(tourId) {
     <button class="confirm-btn" id="confirmOrderBtn">Подтвердить заказ</button>
   `
 
-    modal.classList.add("open")
+  modal.classList.add("open")
 
-    const qtyInput = document.getElementById("orderQty")
-    const totalEl = document.getElementById("modalTotal")
-    qtyInput.addEventListener("input", () => {
-        const qty = Math.max(1, Math.min(20, parseInt(qtyInput.value) || 1))
-        totalEl.innerHTML = `<span>Итого</span><span>${(tour.price * qty).toLocaleString("ru-RU")} ₽</span>`
-    })
+  const qtyInput = document.getElementById("orderQty")
+  const totalEl = document.getElementById("modalTotal")
+  qtyInput.addEventListener("input", () => {
+    const qty = Math.max(1, Math.min(20, parseInt(qtyInput.value) || 1))
+    totalEl.innerHTML = `<span>Итого</span><span>${(tour.price * qty).toLocaleString("ru-RU")} ₽</span>`
+  })
 
-    document
-        .getElementById("confirmOrderBtn")
-        .addEventListener("click", async () => {
-            if (typeof accessToken === "undefined" || !accessToken) {
-                alert("Необходимо войти в аккаунт")
-                window.location.href = "/login.html"
-                return
-            }
+  document
+    .getElementById("confirmOrderBtn")
+    .addEventListener("click", async () => {
+      if (typeof accessToken === "undefined" || !accessToken) {
+        alert("Необходимо войти в аккаунт")
+        window.location.href = "/login.html"
+        return
+      }
 
-            const date = document.getElementById("orderDate").value
-            const qty = Math.max(1, Math.min(20, parseInt(qtyInput.value) || 1))
-            const name =
-                document.getElementById("orderName").value.trim() || "Гость"
-            const contact =
-                document.getElementById("orderContact").value.trim() ||
-                "Не указан"
+      const date = document.getElementById("orderDate").value
+      const qty = Math.max(1, Math.min(20, parseInt(qtyInput.value) || 1))
+      const name = document.getElementById("orderName").value.trim() || "Гость"
+      const contact =
+        document.getElementById("orderContact").value.trim() || "Не указан"
 
-            const payload = {
-                tour_id: String(tour.id),
-                tour_title: tour.title,
-                region: REGIONS[tour.region],
-                date: date,
-                quantity: qty,
-                total_price: tour.price * qty,
-                name: name,
-                contact: contact,
-                is_paid: false,
-            }
+      const payload = {
+        tour_id: String(tour.id),
+        tour_title: tour.title,
+        region: REGIONS[tour.region],
+        date: date,
+        quantity: qty,
+        total_price: tour.price * qty,
+        name: name,
+        contact: contact,
+        is_paid: false,
+      }
 
-            try {
-                const res = await apiRequest("/api/orders/", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload),
-                })
+      try {
+        const res = await apiRequest("/api/orders/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        })
 
-                if (res.status === 201) {
-                    body.innerHTML = `
+        if (res.status === 201) {
+          body.innerHTML = `
                     <div class="success-view">
                         <div class="success-icon">✓</div>
                         <h3 class="success-title">Заказ оформлен</h3>
@@ -497,140 +518,140 @@ function openOrderModal(tourId) {
                         <a href="/account.html" class="modal-action-btn">Перейти в личный кабинет</a>
                     </div>
                 `
-                } else {
-                    alert("Ошибка при создании заказа. Попробуйте позже.")
-                }
-            } catch (e) {
-                console.error(e)
-                alert("Ошибка сети")
-            }
-        })
+        } else {
+          alert("Ошибка при создании заказа. Попробуйте позже.")
+        }
+      } catch (e) {
+        console.error(e)
+        alert("Ошибка сети")
+      }
+    })
 }
 
 function closeModal() {
-    const modal = document.getElementById("orderModal")
-    if (modal) {
-        modal.classList.remove("open")
-    }
-    currentTourForOrder = null
+  const modal = document.getElementById("orderModal")
+  if (modal) {
+    modal.classList.remove("open")
+  }
+  currentTourForOrder = null
 }
 
 function renderRoute() {
-    const mainView = document.getElementById("mainView")
-    const detailView = document.getElementById("detailView")
-    const hash = location.hash
+  const mainView = document.getElementById("mainView")
+  const detailView = document.getElementById("detailView")
+  const hash = location.hash
 
-    if (!mainView || !detailView) return
+  if (!mainView || !detailView) return
 
-    const detailMatch = hash.match(/^#\/(attraction|place|tour)\/([a-z0-9]+)$/i)
-    if (detailMatch) {
-        mainView.style.display = "none"
-        detailView.style.display = "block"
-        renderDetailPage(detailMatch[1].toLowerCase(), detailMatch[2])
-        return
-    }
+  const detailMatch = hash.match(/^#\/(attraction|place|tour)\/([a-z0-9]+)$/i)
+  if (detailMatch) {
+    mainView.style.display = "none"
+    detailView.style.display = "block"
+    renderDetailPage(detailMatch[1].toLowerCase(), detailMatch[2])
+    return
+  }
 
-    detailView.style.display = "none"
-    mainView.style.display = "block"
+  detailView.style.display = "none"
+  mainView.style.display = "block"
 }
 
 function initTabs() {
-    const tabs = document.querySelectorAll(".tab-btn")
-    const panels = {
-        attractions: document.getElementById("panel-attractions"),
-        places: document.getElementById("panel-places"),
-        tours: document.getElementById("panel-tours"),
-        favorites: document.getElementById("panel-favorites"),
-    }
+  const tabs = document.querySelectorAll(".tab-btn")
+  const panels = {
+    attractions: document.getElementById("panel-attractions"),
+    places: document.getElementById("panel-places"),
+    tours: document.getElementById("panel-tours"),
+    favorites: document.getElementById("panel-favorites"),
+  }
 
-    if (tabs.length === 0) return
+  if (tabs.length === 0) return
 
-    tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-            if (
-                location.hash.startsWith("#/attraction/") ||
-                location.hash.startsWith("#/place/")
-            ) {
-                location.hash = ""
-            }
-            const target = tab.dataset.tab
-            tabs.forEach((t) => t.classList.remove("active"))
-            tab.classList.add("active")
-            Object.values(panels).forEach((p) => {
-                if (p) p.classList.remove("active")
-            })
-            if (panels[target]) panels[target].classList.add("active")
-        })
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      if (
+        location.hash.startsWith("#/attraction/") ||
+        location.hash.startsWith("#/place/")
+      ) {
+        location.hash = ""
+      }
+      const target = tab.dataset.tab
+      tabs.forEach((t) => t.classList.remove("active"))
+      tab.classList.add("active")
+      Object.values(panels).forEach((p) => {
+        if (p) p.classList.remove("active")
+      })
+      if (panels[target]) panels[target].classList.add("active")
     })
+  })
 }
 
 function initRegionFilter() {
-    const select = document.getElementById("regionSelect")
+  const select = document.getElementById("regionSelect")
 
-    if (!select) return
+  if (!select) return
 
-    const params = new URLSearchParams(window.location.search)
-    const regionFromUrl = params.get("region")
+  const params = new URLSearchParams(window.location.search)
+  const regionFromUrl = params.get("region")
 
-    if (
-        regionFromUrl === "all" ||
-        Object.prototype.hasOwnProperty.call(REGIONS, regionFromUrl)
-    ) {
-        currentRegion = regionFromUrl
-        select.value = regionFromUrl
-    }
+  if (
+    regionFromUrl === "all" ||
+    Object.prototype.hasOwnProperty.call(REGIONS, regionFromUrl)
+  ) {
+    currentRegion = regionFromUrl
+    select.value = regionFromUrl
+  }
 
-    select.addEventListener("change", () => {
-        currentRegion = select.value
-        renderAll()
-    })
+  select.addEventListener("change", () => {
+    currentRegion = select.value
+    renderAll()
+  })
 }
 
 function initCatalogSearch() {
-    const searchInput = document.getElementById("catalogSearch")
+  const searchInput = document.getElementById("catalogSearch")
 
-    if (!searchInput) return
+  if (!searchInput) return
 
-    searchInput.addEventListener("input", () => {
-        searchQuery = searchInput.value.trim().toLocaleLowerCase("ru")
+  searchInput.addEventListener("input", () => {
+    searchQuery = searchInput.value.trim().toLocaleLowerCase("ru")
 
-        renderAll()
-    })
+    renderAll()
+  })
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    initScrollEffects()
-    initMobileMenu()
-    initTabs()
-    initRegionFilter()
-    initCatalogSearch()
+  initScrollEffects()
+  initMobileMenu()
+  initTabs()
+  initRegionFilter()
+  initCatalogSearch()
 
-    const accountBtn = document.querySelector(".account-btn")
-    if (accountBtn) {
-        accountBtn.style.pointerEvents = "none"
-        accountBtn.style.opacity = "0.5"
-    }
+  const accountBtn = document.querySelector(".account-btn")
+  if (accountBtn) {
+    accountBtn.style.pointerEvents = "none"
+    accountBtn.style.opacity = "0.5"
+  }
 
-    await tryRefreshToken()
-    await updateHeaderUI()
+  await tryRefreshToken()
+  await updateHeaderUI()
 
-    if (accountBtn) {
-        accountBtn.style.pointerEvents = "auto"
-        accountBtn.style.opacity = "1"
-    }
+  if (accountBtn) {
+    accountBtn.style.pointerEvents = "auto"
+    accountBtn.style.opacity = "1"
+  }
 
-    await loadData()
+  await loadData()
 
-    renderRoute()
-    window.addEventListener("hashchange", renderRoute)
+  renderRoute()
+  window.addEventListener("hashchange", renderRoute)
 
-    const modalClose = document.getElementById("modalClose")
-    const orderModal = document.getElementById("orderModal")
+  const modalClose = document.getElementById("modalClose")
+  const orderModal = document.getElementById("orderModal")
 
-    if (modalClose) modalClose.addEventListener("click", closeModal)
-    if (orderModal) {
-        orderModal.addEventListener("click", (e) => {
-            if (e.target === orderModal) closeModal()
-        })
-    }
+  if (modalClose) modalClose.addEventListener("click", closeModal)
+  if (orderModal) {
+    orderModal.addEventListener("click", (e) => {
+      if (e.target === orderModal) closeModal()
+    })
+  }
 })
