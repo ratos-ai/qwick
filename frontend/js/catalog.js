@@ -47,6 +47,18 @@ function filterByRegion(items) {
 }
 
 async function loadData() {
+  const staticItems = (window.QWICK_STATIC_ITEMS || []).map((item) => ({
+    ...item,
+    id: String(item.id),
+    type: "attraction",
+    shortDesc: item.shortDesc || item.short_desc || "",
+    imageUrl: item.imageUrl || item.image_url || "",
+  }))
+
+  attractions = staticItems
+  places = []
+  tours = []
+
   try {
     if (typeof accessToken !== "undefined" && accessToken) {
       const favRes = await apiRequest("/api/favorites/")
@@ -58,10 +70,11 @@ async function loadData() {
     }
 
     const response = await fetch("/api/attractions/")
+
     if (response.ok) {
       const data = await response.json()
 
-      attractions = data
+      const backendAttractions = data
         .filter((i) => i.item_type === "attraction" || !i.item_type)
         .map((i) => ({
           ...i,
@@ -70,6 +83,13 @@ async function loadData() {
           shortDesc: i.short_desc,
           imageUrl: i.image_url,
         }))
+
+      const staticIds = new Set(staticItems.map((item) => String(item.id)))
+
+      attractions = [
+        ...backendAttractions.filter((item) => !staticIds.has(String(item.id))),
+        ...staticItems,
+      ]
 
       places = data
         .filter((i) => i.item_type === "place")
@@ -93,15 +113,14 @@ async function loadData() {
           description: i.short_desc,
           imageUrl: i.image_url,
         }))
-
-      const staticItems = window.QWICK_STATIC_ITEMS || []
-
-      attractions = [...attractions, ...staticItems]
-      renderAll()
+    } else {
+      console.error("Не удалось загрузить данные каталога:", response.status)
     }
   } catch (error) {
     console.error("Ошибка загрузки данных:", error)
   }
+
+  renderAll()
 }
 
 function createCard(item) {
@@ -610,11 +629,12 @@ function initRegionFilter() {
 function initCatalogSearch() {
   const searchInput = document.getElementById("catalogSearch")
 
-  if (!searchInput) return
+  if (!searchInput) {
+    return
+  }
 
-  searchInput.addEventListener("input", () => {
-    searchQuery = searchInput.value.trim().toLocaleLowerCase("ru")
-
+  searchInput.addEventListener("input", (event) => {
+    searchQuery = event.target.value.trim().toLocaleLowerCase("ru")
     renderAll()
   })
 }
