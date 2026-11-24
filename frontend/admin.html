@@ -4,9 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Админ-панель | Управление</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="css/admin.css" />
   </head>
   <body>
@@ -31,7 +34,6 @@
         <div class="form-card">
           <form id="addForm">
             <div class="form-grid">
-              
               <div class="form-group full-width">
                 <label>Тип контента</label>
                 <select id="itemType" required>
@@ -43,7 +45,12 @@
 
               <div class="form-group">
                 <label>Название</label>
-                <input type="text" id="title" required placeholder="Например: Эльбрус" />
+                <input
+                  type="text"
+                  id="title"
+                  required
+                  placeholder="Например: Эльбрус"
+                />
               </div>
 
               <div class="form-group">
@@ -61,43 +68,85 @@
 
               <div class="form-group">
                 <label>Категория</label>
-                <input type="text" id="category" required placeholder="Природа, Горы" />
+                <input
+                  type="text"
+                  id="category"
+                  required
+                  placeholder="Природа, Горы"
+                />
               </div>
 
               <div class="form-group">
                 <label>Символ (если нет фото)</label>
-                <input type="text" id="emoji" required value="К" maxlength="5" />
+                <input
+                  type="text"
+                  id="emoji"
+                  required
+                  value="К"
+                  maxlength="5"
+                />
               </div>
 
               <div class="form-group full-width">
                 <label>Краткое описание</label>
-                <input type="text" id="short_desc" required placeholder="Высочайшая вершина Европы." />
+                <input
+                  type="text"
+                  id="short_desc"
+                  required
+                  placeholder="Высочайшая вершина Европы."
+                />
               </div>
 
               <div class="form-group full-width">
                 <label>Локация</label>
-                <input type="text" id="meta" required placeholder="Приэльбрусье" />
+                <input
+                  type="text"
+                  id="meta"
+                  required
+                  placeholder="Приэльбрусье"
+                />
               </div>
 
-              <div class="form-group full-width" id="priceGroup" style="display: none;">
+              <div
+                class="form-group full-width"
+                id="priceGroup"
+                style="display: none"
+              >
                 <label>Цена (в рублях)</label>
-                <input type="number" id="price" step="0.01" placeholder="2500" />
+                <input
+                  type="number"
+                  id="price"
+                  step="0.01"
+                  placeholder="2500"
+                />
               </div>
 
               <div class="form-group full-width">
                 <label>Факты о месте</label>
                 <div id="factsContainer" class="dynamic-list"></div>
-                <button type="button" class="add-row-btn" onclick="addFactRow()">+ Добавить факт</button>
+                <button
+                  type="button"
+                  class="add-row-btn"
+                  onclick="addFactRow()"
+                >
+                  + Добавить факт
+                </button>
               </div>
 
               <div class="form-group full-width">
                 <label>Секции (описание)</label>
                 <div id="sectionsContainer" class="dynamic-list"></div>
-                <button type="button" class="add-row-btn" onclick="addSectionRow()">+ Добавить секцию</button>
+                <button
+                  type="button"
+                  class="add-row-btn"
+                  onclick="addSectionRow()"
+                >
+                  + Добавить секцию
+                </button>
               </div>
             </div>
 
-            <div class="form-group full-width" style="margin-top: 1rem;">
+            <div class="form-group full-width" style="margin-top: 1rem">
               <label>Обложка (картинка)</label>
               <input type="file" id="imageFile" accept="image/*" />
             </div>
@@ -107,7 +156,7 @@
           <div id="message"></div>
         </div>
       </div>
-      
+
       <div id="sectionList" style="display: none">
         <h1 class="page-title">Все объекты</h1>
         <div class="table-card">
@@ -119,12 +168,15 @@
                   <th>Тип</th>
                   <th>Название</th>
                   <th>Регион</th>
+                  <th>Источник</th>
                   <th>Действие</th>
                 </tr>
               </thead>
               <tbody id="adminContentBody">
                 <tr>
-                  <td colspan="5" style="text-align: center; padding: 2rem">Загрузка...</td>
+                  <td colspan="6" style="text-align: center; padding: 2rem">
+                    Загрузка...
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -150,7 +202,9 @@
               </thead>
               <tbody id="adminOrdersBody">
                 <tr>
-                  <td colspan="7" style="text-align: center; padding: 2rem">Загрузка...</td>
+                  <td colspan="7" style="text-align: center; padding: 2rem">
+                    Загрузка...
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -160,6 +214,22 @@
     </main>
 
     <script src="js/api.js"></script>
+
+    <script src="js/data/rso.js"></script>
+    <script src="js/data/kbr.js"></script>
+    <script src="js/data/kchr.js"></script>
+    <script src="js/data/stav.js"></script>
+    <script src="js/data/ing.js"></script>
+    <script src="js/data/dag.js"></script>
+    <script src="js/data/che.js"></script>
+
+    <script src="js/data/rso-extras.js"></script>
+    <script src="js/data/kbr-extras.js"></script>
+    <script src="js/data/kchr-extras.js"></script>
+    <script src="js/data/ing-extras.js"></script>
+    <script src="js/data/che-extras.js"></script>
+    <script src="js/data/dag-extras.js"></script>
+
     <script src="js/admin.js"></script>
   </body>
 </html>
