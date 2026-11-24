@@ -96,6 +96,214 @@ function getStaticHomeItems() {
   return [...attractions, ...places, ...tours]
 }
 
+function initFeaturedCarousel(grid, items) {
+  grid.innerHTML = ""
+
+  const viewport = document.createElement("div")
+  viewport.className = "home-featured__viewport"
+
+  const track = document.createElement("div")
+  track.className = "home-featured__track"
+
+  items.forEach((item) => {
+    track.appendChild(createFeaturedCard(item))
+  })
+
+  viewport.appendChild(track)
+
+  const prevButton = document.createElement("button")
+  prevButton.className = "home-featured__arrow home-featured__arrow--prev"
+  prevButton.type = "button"
+  prevButton.setAttribute("aria-label", "Предыдущие карточки")
+  prevButton.innerHTML = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M15 18l-6-6 6-6" />
+  </svg>
+`
+
+  const nextButton = document.createElement("button")
+  nextButton.className = "home-featured__arrow home-featured__arrow--next"
+  nextButton.type = "button"
+  nextButton.setAttribute("aria-label", "Следующие карточки")
+  nextButton.innerHTML = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M9 18l6-6-6-6" />
+  </svg>
+`
+
+  grid.append(prevButton, viewport, nextButton)
+
+  if (items.length <= 1) {
+    prevButton.disabled = true
+    nextButton.disabled = true
+    return
+  }
+
+  let isAnimating = false
+  let autoplayTimer = null
+  let restartTimer = null
+  let pointerStartX = 0
+  let pointerStartY = 0
+  let suppressClick = false
+
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches
+
+  function getStep() {
+    const card = track.querySelector(".home-featured-card")
+    if (!card) return 0
+
+    const gap = parseFloat(getComputedStyle(track).gap) || 0
+    return card.getBoundingClientRect().width + gap
+  }
+
+  function moveNext() {
+    if (isAnimating) return
+
+    const step = getStep()
+    if (!step) return
+
+    isAnimating = true
+    track.style.transition = "transform 700ms ease"
+    track.style.transform = `translateX(-${step}px)`
+
+    let finished = false
+
+    function finish() {
+      if (finished) return
+      finished = true
+
+      track.appendChild(track.firstElementChild)
+      track.style.transition = "none"
+      track.style.transform = "translateX(0)"
+      isAnimating = false
+    }
+
+    track.addEventListener("transitionend", function handler(event) {
+      if (event.propertyName !== "transform") return
+      track.removeEventListener("transitionend", handler)
+      finish()
+    })
+
+    setTimeout(finish, 800)
+  }
+
+  function movePrev() {
+    if (isAnimating) return
+
+    const step = getStep()
+    if (!step) return
+
+    isAnimating = true
+
+    track.style.transition = "none"
+    track.prepend(track.lastElementChild)
+    track.style.transform = `translateX(-${step}px)`
+
+    track.offsetHeight
+
+    track.style.transition = "transform 700ms ease"
+    track.style.transform = "translateX(0)"
+
+    let finished = false
+
+    function finish() {
+      if (finished) return
+      finished = true
+      isAnimating = false
+    }
+
+    track.addEventListener("transitionend", function handler(event) {
+      if (event.propertyName !== "transform") return
+      track.removeEventListener("transitionend", handler)
+      finish()
+    })
+
+    setTimeout(finish, 800)
+  }
+
+  function stopAutoplay() {
+    clearInterval(autoplayTimer)
+    clearTimeout(restartTimer)
+  }
+
+  function startAutoplay() {
+    stopAutoplay()
+
+    if (reducedMotion || document.hidden) return
+
+    autoplayTimer = setInterval(moveNext, 6500)
+  }
+
+  function restartAutoplay() {
+    stopAutoplay()
+
+    if (reducedMotion) return
+
+    restartTimer = setTimeout(startAutoplay, 2500)
+  }
+
+  nextButton.addEventListener("click", () => {
+    moveNext()
+    restartAutoplay()
+  })
+
+  prevButton.addEventListener("click", () => {
+    movePrev()
+    restartAutoplay()
+  })
+
+  viewport.addEventListener("pointerdown", (event) => {
+    if (event.target.closest("button")) return
+
+    pointerStartX = event.clientX
+    pointerStartY = event.clientY
+  })
+
+  viewport.addEventListener("pointerup", (event) => {
+    const deltaX = event.clientX - pointerStartX
+    const deltaY = event.clientY - pointerStartY
+
+    if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      suppressClick = true
+
+      if (deltaX < 0) {
+        moveNext()
+      } else {
+        movePrev()
+      }
+
+      setTimeout(() => {
+        suppressClick = false
+      }, 350)
+    }
+
+    restartAutoplay()
+  })
+
+  viewport.addEventListener(
+    "click",
+    (event) => {
+      if (suppressClick) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+    },
+    true,
+  )
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      stopAutoplay()
+    } else {
+      startAutoplay()
+    }
+  })
+
+  startAutoplay()
+}
+
 async function loadFeaturedItems() {
   const grid = document.getElementById("featuredGrid")
   if (!grid) return
@@ -118,6 +326,7 @@ async function loadFeaturedItems() {
     .filter((item) => item && item.id && item.title)
     .filter((item, index, array) => {
       const key = `${item.item_type || item.type}-${item.id}`
+
       return (
         array.findIndex(
           (other) => `${other.item_type || other.type}-${other.id}` === key,
@@ -125,32 +334,13 @@ async function loadFeaturedItems() {
       )
     })
 
-  grid.innerHTML = ""
-
   if (allItems.length === 0) {
     grid.innerHTML =
       '<div class="home-featured__empty">Пока нет объектов для отображения.</div>'
     return
   }
 
-  const track = document.createElement("div")
-  track.className = "home-featured__track"
-
-  allItems.forEach((item) => {
-    track.appendChild(createFeaturedCard(item))
-  })
-
-  allItems.forEach((item) => {
-    const clone = createFeaturedCard(item)
-    clone.setAttribute("aria-hidden", "true")
-    clone.tabIndex = -1
-    clone.querySelectorAll("a, button").forEach((element) => {
-      element.tabIndex = -1
-    })
-    track.appendChild(clone)
-  })
-
-  grid.appendChild(track)
+  initFeaturedCarousel(grid, allItems)
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
